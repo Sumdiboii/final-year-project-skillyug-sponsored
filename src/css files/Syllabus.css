@@ -1,0 +1,38 @@
+.syllabus-page {
+  min-height: 80vh;
+  width: 100vw;
+  background: #0a174e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', Arial, sans-serif;
+}
+
+.syllabus-title {
+  color: orange;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.syllabus-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-width: 400px;
+  width: 100%;
+}
+
+.syllabus-item {
+  color: #fff;
+  background: rgba(255,140,0,0.12);
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  text-align: center;
+}
