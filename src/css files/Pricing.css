@@ -67,6 +67,130 @@
     gap:20px;
 }
 
+/* Make the students card a positioning context for overlay */
+.pricing-container-1 {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Ensure rows inside students card are not positioning contexts */
+.pricing-container-1 .pricing-container-1-bottom-1,
+.pricing-container-1 .pricing-container-1-bottom-2,
+.pricing-container-1 .pricing-container-1-bottom-3 {
+    position: static !important;
+    overflow: visible !important;
+}
+
+/* Disable row-level collapse/expand for students card */
+.pricing-container-1 .pricing-container-1-bottom-1:hover > div,
+.pricing-container-1 .pricing-container-1-bottom-2:hover > div,
+.pricing-container-1 .pricing-container-1-bottom-3:hover > div {
+    flex: 1 1 0% !important;
+}
+
+/* Smooth hover feedback */
+.pricing-container-1 .pricing-container-1-bottom-1 > div,
+.pricing-container-1 .pricing-container-1-bottom-2 > div,
+.pricing-container-1 .pricing-container-1-bottom-3 > div {
+    transition: transform 600ms ease, box-shadow 600ms ease, border-radius 600ms ease, opacity 600ms ease;
+}
+
+/* On hover, the cell overlays and fills the entire students card */
+.pricing-container-1 .pricing-container-1-bottom-1 > div:hover,
+.pricing-container-1 .pricing-container-1-bottom-2 > div:hover,
+.pricing-container-1 .pricing-container-1-bottom-3 > div:hover {
+    position: absolute;
+    inset: 0; /* top:0; right:0; bottom:0; left:0 */
+    margin: 0;
+    border-radius: 1.5rem;
+    z-index: 200;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    /* slightly faster, still visible fill animation */
+    animation: cellFill 0.7s ease forwards;
+}
+
+@keyframes cellFill {
+    0% {
+        transform: scale(0.6);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ===== Hover expand animation for pricing cells ===== */
+/* Target each row container */
+.pricing-container-1-bottom-1,
+.pricing-container-1-bottom-2,
+.pricing-container-1-bottom-3,
+.pricing-container-2-bottom-1,
+.pricing-container-2-bottom-2,
+.pricing-container-2-bottom-3,
+.pricing-container-3-bottom {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Default children sizing + animation props */
+.pricing-container-1-bottom-1 > div,
+.pricing-container-1-bottom-2 > div,
+.pricing-container-1-bottom-3 > div,
+.pricing-container-2-bottom-1 > div,
+.pricing-container-2-bottom-2 > div,
+.pricing-container-2-bottom-3 > div,
+.pricing-container-3-bottom > div {
+    flex: 1 1 0%;
+    height: 100%;
+    transition: flex-basis 280ms ease, flex 280ms ease;
+}
+
+/* Remove inter-box gap during interaction so hovered fills completely */
+.pricing-container-1-bottom-1:hover,
+.pricing-container-1-bottom-2:hover,
+.pricing-container-1-bottom-3:hover,
+.pricing-container-2-bottom-1:hover,
+.pricing-container-2-bottom-2:hover,
+.pricing-container-2-bottom-3:hover,
+.pricing-container-3-bottom:hover {
+    gap: 0;
+}
+
+/* Collapse all siblings on row hover */
+.pricing-container-1-bottom-1:hover > div,
+.pricing-container-1-bottom-2:hover > div,
+.pricing-container-1-bottom-3:hover > div,
+.pricing-container-2-bottom-1:hover > div,
+.pricing-container-2-bottom-2:hover > div,
+.pricing-container-2-bottom-3:hover > div,
+.pricing-container-3-bottom:hover > div {
+    flex: 0 0 0%;
+}
+
+/* Expand hovered item to take full width of the row */
+.pricing-container-1-bottom-1:hover > div:hover,
+.pricing-container-1-bottom-2:hover > div:hover,
+.pricing-container-1-bottom-3:hover > div:hover,
+.pricing-container-2-bottom-1:hover > div:hover,
+.pricing-container-2-bottom-2:hover > div:hover,
+.pricing-container-2-bottom-3:hover > div:hover,
+.pricing-container-3-bottom:hover > div:hover {
+    flex: 1 1 100%;
+}
+
+/* Available Plans: when hovering one row, fully hide the other two */
+.pricing-container-3-bottom > div {
+    transition: opacity 400ms ease, flex-basis 280ms ease, flex 280ms ease;
+}
+.pricing-container-3-bottom:hover > div {
+    opacity: 0;
+    pointer-events: none;
+}
+.pricing-container-3-bottom:hover > div:hover {
+    opacity: 1;
+    pointer-events: auto;
+}
 .pricing-container-1-top, .pricing-container-2-top, .pricing-container-3-top {
     display: flex;
     flex:2;
@@ -139,6 +263,60 @@ display: flex;
     z-index: 60;
 }
 
+/* Students inner cell content */
+.student-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 0.5rem;
+}
+.student-cell-top {
+    font-size: 2.25rem;
+    line-height: 1;
+}
+.student-cell-bottom {
+    color: #e6e6e6;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Summary vs. details states */
+.student-summary { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+.student-details { display: none; text-align: left; padding: 1rem 1.25rem; }
+.student-details h2 { margin: 0 0 0.5rem 0; font-size: 1.35rem; color: #fff; }
+.student-details p { margin: 0; color: #d9d9e3; line-height: 1.45; }
+
+/* When a Students cell overlays (hover), show details and hide summary */
+.pricing-container-1 .pricing-container-1-bottom-1 > div:hover .student-summary,
+.pricing-container-1 .pricing-container-1-bottom-2 > div:hover .student-summary,
+.pricing-container-1 .pricing-container-1-bottom-3 > div:hover .student-summary {
+    display: none;
+}
+.pricing-container-1 .pricing-container-1-bottom-1 > div:hover .student-details,
+.pricing-container-1 .pricing-container-1-bottom-2 > div:hover .student-details,
+.pricing-container-1 .pricing-container-1-bottom-3 > div:hover .student-details {
+    display: block;
+}
+
+/* Guardians summary/details mirroring */
+.guardian-cell { display: flex; flex-direction: column; align-items: center; justify-content: center; width:100%; height:100%; gap: 0.75rem; }
+.guardian-cell-top { font-size: 2.1rem; line-height: 1; }
+.guardian-cell-bottom { color: #e6e6e6; font-size: 1rem; font-weight: 600; }
+.guardian-summary { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+.guardian-details { display: none; text-align: left; padding: 1rem 1.25rem; }
+.guardian-details h2 { margin: 0 0 0.5rem 0; font-size: 1.35rem; color: #fff; }
+.guardian-details p { margin: 0; color: #d9d9e3; line-height: 1.45; }
+
+.pricing-container-2 .pricing-container-2-bottom-1 > div:hover .guardian-summary,
+.pricing-container-2 .pricing-container-2-bottom-2 > div:hover .guardian-summary,
+.pricing-container-2 .pricing-container-2-bottom-3 > div:hover .guardian-summary { display: none; }
+.pricing-container-2 .pricing-container-2-bottom-1 > div:hover .guardian-details,
+.pricing-container-2 .pricing-container-2-bottom-2 > div:hover .guardian-details,
+.pricing-container-2 .pricing-container-2-bottom-3 > div:hover .guardian-details { display: block; }
+
 .pricing-container-2-bottom-1-1, .pricing-container-2-bottom-1-2, .pricing-container-2-bottom-1-3, .pricing-container-2-bottom-2-1, .pricing-container-2-bottom-2-2, .pricing-container-2-bottom-2-3, .pricing-container-2-bottom-3-1, .pricing-container-2-bottom-3-2, .pricing-container-2-bottom-3-3 {
     display: flex;
     flex: 1 1 0;
@@ -169,6 +347,39 @@ display: flex;
     gap:20px;
 }
 
+/* Overlay-on-hover for Guardians container */
+.pricing-container-2 { position: relative; overflow: hidden; }
+.pricing-container-2 .pricing-container-2-bottom-1,
+.pricing-container-2 .pricing-container-2-bottom-2,
+.pricing-container-2 .pricing-container-2-bottom-3 {
+    position: static !important;
+    overflow: visible !important;
+}
+/* Disable row-level collapse for Guardians */
+.pricing-container-2 .pricing-container-2-bottom-1:hover > div,
+.pricing-container-2 .pricing-container-2-bottom-2:hover > div,
+.pricing-container-2 .pricing-container-2-bottom-3:hover > div {
+    flex: 1 1 0% !important;
+}
+/* Smooth transitions on Guardians cells */
+.pricing-container-2 .pricing-container-2-bottom-1 > div,
+.pricing-container-2 .pricing-container-2-bottom-2 > div,
+.pricing-container-2 .pricing-container-2-bottom-3 > div {
+    transition: transform 600ms ease, box-shadow 600ms ease, border-radius 600ms ease, opacity 600ms ease;
+}
+/* Hovered Guardians cell fills entire container */
+.pricing-container-2 .pricing-container-2-bottom-1 > div:hover,
+.pricing-container-2 .pricing-container-2-bottom-2 > div:hover,
+.pricing-container-2 .pricing-container-2-bottom-3 > div:hover {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    border-radius: 1.5rem;
+    z-index: 200;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    animation: cellFill 0.7s ease forwards;
+}
+
 /* Pricing Page Styles */
 .pricing-container-3 {
     display: flex;
@@ -184,3 +395,21 @@ display: flex;
     padding:1rem;
     gap:20px;
 }
+
+/* Available Plans summary/details */
+.plan-cell { display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; gap:0.75rem; }
+.plan-cell-top { font-size: 1.75rem; line-height: 1; }
+.plan-cell-bottom { color:#e6e6e6; font-size:1.05rem; font-weight:700; }
+.plan-summary { display:flex; flex-direction:column; align-items:center; gap:0.4rem; }
+.plan-details { display:none; text-align:left; padding: 1rem 1.25rem; }
+.plan-details h2 { margin:0 0 0.5rem 0; font-size:1.3rem; color:#fff; }
+.plan-details ul { margin:0; padding-left: 1.25rem; color:#d9d9e3; line-height:1.45; }
+.plan-details li { margin: 0.15rem 0; }
+
+/* Show details on hover/expand and hide summary */
+.pricing-container-3-bottom-1:hover .plan-summary,
+.pricing-container-3-bottom-2:hover .plan-summary,
+.pricing-container-3-bottom-3:hover .plan-summary { display:none; }
+.pricing-container-3-bottom-1:hover .plan-details,
+.pricing-container-3-bottom-2:hover .plan-details,
+.pricing-container-3-bottom-3:hover .plan-details { display:block; }
