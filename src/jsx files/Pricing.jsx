@@ -32,8 +32,16 @@ const Pricing = () => {
                       <div className="student-cell-bottom">test</div>
                     </div>
                     <div className="student-details">
-                      <h2>Brain Training Games</h2>
-                      <p>Fun mini-games to improve memory, attention, and problem-solving skills with adaptive difficulty.</p>
+                        <div className="student-details-1-top">
+                          <h2>Personalized Dashboard</h2>
+                          <p>See your progress, strengths, and next steps at a glance.</p>
+                        </div>
+                        <div className="student-details-1-bottom">
+                          <ul>
+                            <li>Track badges and achievements</li>
+                            <li>Instant feedback on quizzes</li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -44,8 +52,16 @@ const Pricing = () => {
                       <div className="student-cell-bottom">test</div>
                     </div>
                     <div className="student-details">
-                      <h2>Skill Targeting</h2>
-                      <p>Focus on weak areas with personalized challenges and clear goals for steady progress.</p>
+                        <div className="student-details-2-top">
+                          <h2>Skill Targeting</h2>
+                          <p>Focus on weak areas with personalized challenges and clear goals for steady progress.</p>
+                        </div>
+                        <div className="student-details-2-bottom">
+                          <ul>
+                            <li>Adaptive quizzes</li>
+                            <li>Goal setting tools</li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -58,8 +74,16 @@ const Pricing = () => {
                       <div className="student-cell-bottom">test</div>
                     </div>
                     <div className="student-details">
-                      <h2>Learning Library</h2>
-                      <p>Short, engaging lessons across subjects designed to build understanding step by step.</p>
+                        <div className="student-details-3-top">
+                          <h2>Learning Library</h2>
+                          <p>Short, engaging lessons across subjects designed to build understanding step by step.</p>
+                        </div>
+                        <div className="student-details-3-bottom">
+                          <ul>
+                            <li>Hundreds of bite-sized lessons</li>
+                            <li>Progressive difficulty</li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -70,8 +94,16 @@ const Pricing = () => {
                       <div className="student-cell-bottom">test</div>
                     </div>
                     <div className="student-details">
-                      <h2>Puzzle Mode</h2>
-                      <p>Creative puzzles that encourage critical thinking and pattern recognition.</p>
+                        <div className="student-details-4-top">
+                          <h2>Puzzle Mode</h2>
+                          <p>Creative puzzles that encourage critical thinking and pattern recognition.</p>
+                        </div>
+                        <div className="student-details-4-bottom">
+                          <ul>
+                            <li>Logic puzzles</li>
+                            <li>Pattern games</li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -84,8 +116,16 @@ const Pricing = () => {
                       <div className="student-cell-bottom">test</div>
                     </div>
                     <div className="student-details">
-                      <h2>Level-Up Rewards</h2>
-                      <p>Unlock badges and rewards as you complete lessons and challenges.</p>
+                        <div className="student-details-5-top">
+                          <h2>Level-Up Rewards</h2>
+                          <p>Unlock badges and rewards as you complete lessons and challenges.</p>
+                        </div>
+                        <div className="student-details-5-bottom">
+                          <ul>
+                            <li>Earn badges</li>
+                            <li>Unlock new levels</li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -96,8 +136,16 @@ const Pricing = () => {
                       <div className="student-cell-bottom">test</div>
                     </div>
                     <div className="student-details">
-                      <h2>Playful Practice</h2>
-                      <p>Practice through games that make learning enjoyable and stress-free.</p>
+                        <div className="student-details-6-top">
+                          <h2>Playful Practice</h2>
+                          <p>Practice through games that make learning enjoyable and stress-free.</p>
+                        </div>
+                        <div className="student-details-6-bottom">
+                          <ul>
+                            <li>Fun mini-games</li>
+                            <li>Stress-free practice</li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -115,8 +163,16 @@ const Pricing = () => {
                       <div className="guardian-cell-bottom">test</div>
                     </div>
                     <div className="guardian-details">
-                      <h2>Progress Tracking</h2>
-                      <p>Clear dashboards to monitor growth, strengths, and areas to improve over time.</p>
+                        <div className="guardian-details-1-top">
+                          <h2>Progress Tracking</h2>
+                          <p>Clear dashboards to monitor growth, strengths, and areas to improve over time.</p>
+                        </div>
+                        <div className="guardian-details-1-bottom">
+                          <ul>
+                            <li>Growth charts</li>
+                            <li>Strength/weakness analysis</li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -127,8 +183,16 @@ const Pricing = () => {
                       <div className="guardian-cell-bottom">test</div>
                     </div>
                     <div className="guardian-details">
-                      <h2>Smart Alerts</h2>
-                      <p>Helpful notifications to keep you updated on milestones and learning streaks.</p>
+                        <div className="guardian-details-2-top">
+                          <h2>Smart Alerts</h2>
+                          <p>Helpful notifications to keep you updated on milestones and learning streaks.</p>
+                        </div>
+                        <div className="guardian-details-2-bottom">
+                          <ul>
+                            <li>Milestone notifications</li>
+                            <li>Learning streak reminders</li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -141,8 +205,16 @@ const Pricing = () => {
                       <div className="guardian-cell-bottom">test</div>
                     </div>
                     <div className="guardian-details">
-                      <h2>Weekly Reports</h2>
-                      <p>Simple summaries of learning time, achievements, and recommended next steps.</p>
+                        <div className="guardian-details-3-top">
+                          <h2>Weekly Reports</h2>
+                          <p>Simple summaries of learning time, achievements, and recommended next steps.</p>
+                        </div>
+                        <div className="guardian-details-3-bottom">
+                          <ul>
+                            <li>Time spent learning</li>
+                            <li>Achievements summary</li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -153,8 +225,16 @@ const Pricing = () => {
                       <div className="guardian-cell-bottom">test</div>
                     </div>
                     <div className="guardian-details">
-                      <h2>Privacy & Safety</h2>
-                      <p>Child-safe design with privacy controls and no distracting or unsafe content.</p>
+                        <div className="guardian-details-4-top">
+                          <h2>Privacy & Safety</h2>
+                          <p>Child-safe design with privacy controls and no distracting or unsafe content.</p>
+                        </div>
+                        <div className="guardian-details-4-bottom">
+                          <ul>
+                            <li>Privacy controls</li>
+                            <li>No ads or unsafe content</li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -167,8 +247,16 @@ const Pricing = () => {
                       <div className="guardian-cell-bottom">test</div>
                     </div>
                     <div className="guardian-details">
-                      <h2>Family Goals</h2>
-                      <p>Set goals together and celebrate achievements with family-friendly challenges.</p>
+                        <div className="guardian-details-5-top">
+                          <h2>Family Goals</h2>
+                          <p>Set goals together and celebrate achievements with family-friendly challenges.</p>
+                        </div>
+                        <div className="guardian-details-5-bottom">
+                          <ul>
+                            <li>Collaborative goal setting</li>
+                            <li>Family challenges</li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -179,8 +267,16 @@ const Pricing = () => {
                       <div className="guardian-cell-bottom">test</div>
                     </div>
                     <div className="guardian-details">
-                      <h2>Insights</h2>
-                      <p>Understand learning patterns with insights that inform better support at home.</p>
+                        <div className="guardian-details-6-top">
+                          <h2>Insights</h2>
+                          <p>Understand learning patterns with insights that inform better support at home.</p>
+                        </div>
+                        <div className="guardian-details-6-bottom">
+                          <ul>
+                            <li>Learning pattern analysis</li>
+                            <li>Support recommendations</li>
+                          </ul>
+                        </div>
                     </div>
                   </div>
                 </div>
