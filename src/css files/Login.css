@@ -15,7 +15,7 @@
 .login-card {
   position: relative;
   z-index: 1;
-  width: 25%;
+  width: 300px;
   height:fit-content;
   background: #fff;
   border-radius: 16px;

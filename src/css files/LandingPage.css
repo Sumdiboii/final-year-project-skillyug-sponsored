@@ -1,3 +1,9 @@
+/* Hide right-container-landingpage-1 on small screens */
+@media (max-width: 600px) {
+    .right-container-landingpage-1 {
+        display: none !important;
+    }
+}
 /* Skillyug logo flipcard */
 .skillyug-flip-wrap {
     perspective: 1200px;

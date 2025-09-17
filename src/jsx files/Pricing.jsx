@@ -13,18 +13,18 @@ const features = [
 
 const Pricing = () => {
   return (
-    <div className="pricing-page">
-        <Navbar />
-         <ParticleBackground />
-    <div className="pricing-title">
-        <h1><img src="/assets/PrepMark.png" alt="PrepMark Logo" className="prepmark-logo2" />Pricing Plans</h1>
-      
-    </div>
-         <div className="pricing-containers">
-      <div className="pricing-container-1">
-         <div className="pricing-container-1-top"><h1>What do Students Get?</h1></div>
-          <div className="pricing-container-1-bottom">
-            <div className="pricing-container-1-bottom-1">
+    <>
+      <Navbar />
+      <div className="pricing-page">
+        <ParticleBackground />
+        <div className="pricing-title">
+          <h1><img src="/assets/PrepMark.png" alt="PrepMark Logo" className="prepmark-logo2" />Pricing Plans</h1>
+        </div>
+        <div className="pricing-containers">
+          <div className="pricing-container-1">
+            <div className="pricing-container-1-top"><h1>What do Students Get?</h1></div>
+            <div className="pricing-container-1-bottom">
+              <div className="pricing-container-1-bottom-1">
                 <div className="pricing-container-1-bottom-1-1">
                   <div className="student-cell">
                     <div className="student-summary">
@@ -32,16 +32,16 @@ const Pricing = () => {
                       <div className="student-cell-bottom">test</div>
                     </div>
                     <div className="student-details">
-                        <div className="student-details-1-top">
-                          <h2>Personalized Dashboard</h2>
-                          <p>See your progress, strengths, and next steps at a glance.</p>
-                        </div>
-                        <div className="student-details-1-bottom">
-                          <ul>
-                            <li>Track badges and achievements</li>
-                            <li>Instant feedback on quizzes</li>
-                          </ul>
-                        </div>
+                      <div className="student-details-1-top">
+                        <h2>Personalized Dashboard</h2>
+                        <p>See your progress, strengths, and next steps at a glance.</p>
+                      </div>
+                      <div className="student-details-1-bottom">
+                        <ul>
+                          <li>Track badges and achievements</li>
+                          <li>Instant feedback on quizzes</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -52,21 +52,21 @@ const Pricing = () => {
                       <div className="student-cell-bottom">test</div>
                     </div>
                     <div className="student-details">
-                        <div className="student-details-2-top">
-                          <h2>Skill Targeting</h2>
-                          <p>Focus on weak areas with personalized challenges and clear goals for steady progress.</p>
-                        </div>
-                        <div className="student-details-2-bottom">
-                          <ul>
-                            <li>Adaptive quizzes</li>
-                            <li>Goal setting tools</li>
-                          </ul>
-                        </div>
+                      <div className="student-details-2-top">
+                        <h2>Skill Targeting</h2>
+                        <p>Focus on weak areas with personalized challenges and clear goals for steady progress.</p>
+                      </div>
+                      <div className="student-details-2-bottom">
+                        <ul>
+                          <li>Adaptive quizzes</li>
+                          <li>Goal setting tools</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
-            </div>
-            <div className="pricing-container-1-bottom-2">
+              </div>
+              <div className="pricing-container-1-bottom-2">
                 <div className="pricing-container-1-bottom-2-1">
                   <div className="student-cell">
                     <div className="student-summary">
@@ -74,11 +74,11 @@ const Pricing = () => {
                       <div className="student-cell-bottom">test</div>
                     </div>
                     <div className="student-details">
-                        <div className="student-details-3-top">
-                          <h2>Learning Library</h2>
-                          <p>Short, engaging lessons across subjects designed to build understanding step by step.</p>
-                        </div>
-                        <div className="student-details-3-bottom">
+                      <div className="student-details-3-top">
+                        <h2>Learning Library</h2>
+                        <p>Short, engaging lessons across subjects designed to build understanding step by step.</p>
+                      </div>
+                      <div className="student-details-3-bottom">
                           <ul>
                             <li>Hundreds of bite-sized lessons</li>
                             <li>Progressive difficulty</li>
@@ -336,11 +336,11 @@ const Pricing = () => {
             </div>
           </div>
       </div>
-      </div>
-        .
 
-      <Footer />
+      </div>
     </div>
+    <Footer />
+    </>
   );
 };
 
