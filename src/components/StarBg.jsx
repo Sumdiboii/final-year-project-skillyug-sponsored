@@ -18,10 +18,10 @@ const ParticleBackground = () => {
       particleColor: "rgba(255, 255, 255, 1)",
       lineColor: "rgba(255, 255, 255, 1)",
       particleAmount: 30,
-      defaultSpeed: 2,
+      defaultSpeed: 1,
       variantSpeed: 1,
-      defaultRadius: 3,
-      variantRadius: 3,
+      defaultRadius: 2,
+      variantRadius: 2,
       linkRadius: 200
     };
 

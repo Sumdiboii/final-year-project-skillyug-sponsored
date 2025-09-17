@@ -4,10 +4,29 @@ import "../css files/LandingPage.css";
 import Navbar from "../components/Navbar";
 import ParticleBackground from "../components/StarBg";
 import Footer from "../components/Footer";
+import AstronautSVG from "../components/Astronaut";
+import Ship from "../components/Astronaut";
+import HexagonProfileSlider from "../components/VerticalSlider";
 
 
 const LandingPage = () => {
     const navigate = useNavigate();
+    const [scrolledDown, setScrolledDown] = React.useState(false);
+    const lastScroll = React.useRef(window.scrollY);
+
+    React.useEffect(() => {
+        const handleScroll = () => {
+            const curr = window.scrollY;
+            if (curr > lastScroll.current + 10) {
+                setScrolledDown(true);
+            } else if (curr < lastScroll.current - 10) {
+                setScrolledDown(false);
+            }
+            lastScroll.current = curr;
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
     return (
 		<div className="landing-page">
             <Navbar />
@@ -33,11 +52,9 @@ const LandingPage = () => {
                     </div>
                 </div>
                 <div className="right-container-landingpage-1">
-                    
-                    <div className="square-1"></div>
-                    <div className="square-2"></div>
-                    <div className="square-3"></div>
-                    <div className="square-4"></div>
+                    <div className={`red-scroll-box${scrolledDown ? ' out' : ''}`}>
+                        <Ship />
+                    </div>
                 </div>
             </div>
 
@@ -46,82 +63,104 @@ const LandingPage = () => {
                                      <img src="/assets/skillyug-logo-removebg-preview.png" alt="Skillyug Logo" className="skillyug-logo" />
                                 </div>
                 <div className="right-container-landingpage-2">
-                  <div className="right-container-landingpage-2-top">
-                    <div className="right-container-landingpage-2-top-1">
-                        <div className="right-container-landingpage-2-top-1-top">
-                            <img src="/assets/leaf.png" alt="Brain" className="brain-img" />
-                        </div>
-                        <div className="right-container-landingpage-2-top-1-bottom">
-                           
-                                <span className="app-feature-desc">Interactive games for fun learning.</span>
-                                
-                            
-                        </div>
-                    </div>
-                    <div className="right-container-landingpage-2-top-2">
-                        <div className="right-container-landingpage-2-top-2-top">
-                             <img src="/assets/leaf.png" alt="Brain" className="brain-img" />
-                        </div>
-                        <div className="right-container-landingpage-2-top-2-bottom">
-                            <span className="app-feature-desc">Personalized analytics to track progress.</span>
-                                
-                        </div>
-                    </div>
-                  </div>
-                  <div className="right-container-landingpage-2-bottom">
-                    <div className="right-container-landingpage-2-bottom-1">
-                        <div className="right-container-landingpage-2-bottom-1-top">
-                             <img src="/assets/leaf.png" alt="Brain" className="brain-img" />
-                        </div>
-                        <div className="right-container-landingpage-2-bottom-1-bottom">
-                            <span className="app-feature-desc">Adaptive content for every skill level.</span>
-                               
-                        </div>
-                    </div>
-                    <div className="right-container-landingpage-2-bottom-2">
-                        <div className="right-container-landingpage-2-bottom-2-top">
-                             <img src="/assets/leaf.png" alt="Brain" className="brain-img" />
-                        </div>
-                        <div className="right-container-landingpage-2-bottom-2-bottom">
-                             <span className="app-feature-desc">Safe, child-friendly environment.</span>
-                        </div>
-                    </div>
-                  </div>
+                                    <div className="right-container-landingpage-2-top">
+                                        <div className="flipcard">
+                                            <div className="flipcard-inner">
+                                                <div className="flipcard-front">
+                                                    <div className="right-container-landingpage-2-top-1">
+                                                        <div className="right-container-landingpage-2-top-1-top">
+                                                            <img src="/assets/leaf.png" alt="Brain" className="brain-img" />
+                                                        </div>
+                                                        <div className="right-container-landingpage-2-top-1-bottom">
+                                                            <span className="app-feature-desc">Interactive games for fun learning.</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flipcard-back">
+                                                    <span className="app-feature-back">Flip for fun fact: Games help boost memory and logic!</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flipcard">
+                                            <div className="flipcard-inner">
+                                                <div className="flipcard-front">
+                                                    <div className="right-container-landingpage-2-top-2">
+                                                        <div className="right-container-landingpage-2-top-2-top">
+                                                            <img src="/assets/leaf.png" alt="Brain" className="brain-img" />
+                                                        </div>
+                                                        <div className="right-container-landingpage-2-top-2-bottom">
+                                                            <span className="app-feature-desc">Personalized analytics to track progress.</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flipcard-back">
+                                                    <span className="app-feature-back">Flip for fun fact: Analytics show your improvement over time!</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="right-container-landingpage-2-bottom">
+                                        <div className="flipcard">
+                                            <div className="flipcard-inner">
+                                                <div className="flipcard-front">
+                                                    <div className="right-container-landingpage-2-bottom-1">
+                                                        <div className="right-container-landingpage-2-bottom-1-top">
+                                                            <img src="/assets/leaf.png" alt="Brain" className="brain-img" />
+                                                        </div>
+                                                        <div className="right-container-landingpage-2-bottom-1-bottom">
+                                                            <span className="app-feature-desc">Adaptive content for every skill level.</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flipcard-back">
+                                                    <span className="app-feature-back">Flip for fun fact: Content adapts to your learning speed!</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flipcard">
+                                            <div className="flipcard-inner">
+                                                <div className="flipcard-front">
+                                                    <div className="right-container-landingpage-2-bottom-2">
+                                                        <div className="right-container-landingpage-2-bottom-2-top">
+                                                            <img src="/assets/leaf.png" alt="Brain" className="brain-img" />
+                                                        </div>
+                                                        <div className="right-container-landingpage-2-bottom-2-bottom">
+                                                            <span className="app-feature-desc">Safe, child-friendly environment.</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flipcard-back">
+                                                    <span className="app-feature-back">Flip for fun fact: Our platform is ad-free and secure!</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                 </div>
             </div>
 
             {/* New section: App video (left) + vertical gallery (right) */}
             <div className="landingpage-2-5">
+                 <div className="lp25-right">
+                    <HexagonProfileSlider />
+                 </div>
                 <div className="lp25-left">
+                    <div className="vid-title-text">Experience our app in action</div>
                     <div className="lp25-video-wrap">
-                        <video className="lp25-video" src="/assets/app-demo.mp4" controls playsInline preload="metadata" poster="/assets/app-poster.jpg"></video>
+                        <video
+                                                                                    className="lp25-video"
+                                                                                    src="/assets/276047_small.mp4"
+                                                                                    autoPlay
+                                                                                    loop
+                                                                                    muted
+                                                                                    controls
+                                                                                    playsInline
+                                                                                    preload="metadata"
+                                                                                    poster="/assets/app-poster.jpg"
+                                                                                ></video>
                     </div>
                 </div>
                 <div className="lp25-right">
-                    <div className="lp25-gallery-mask">
-                                                <div className="lp25-gallery-track">
-                                                        {[
-                                                            "/assets/app-1.png",
-                                                            "/assets/app-2.png",
-                                                            "/assets/app-3.png",
-                                                            "/assets/app-4.png",
-                                                            "/assets/app-5.png",
-                                                        ].map((src, i) => (
-                                                            <img key={`g1-${i}`} className="lp25-shot" src={src} alt={`App screen ${i+1}`} loading="lazy" />
-                                                        ))}
-                                                        <div aria-hidden="true">
-                                                            {[
-                                                                "/assets/app-1.png",
-                                                                "/assets/app-2.png",
-                                                                "/assets/app-3.png",
-                                                                "/assets/app-4.png",
-                                                                "/assets/app-5.png",
-                                                            ].map((src, i) => (
-                                                                <img key={`g2-${i}`} className="lp25-shot" src={src} alt="" loading="lazy" />
-                                                            ))}
-                                                        </div>
-                                                </div>
-                    </div>
+                    <HexagonProfileSlider />
                 </div>
             </div>
 

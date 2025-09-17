@@ -1,7 +1,8 @@
 /* Landing page 2.5: video + vertical gallery */
 .landingpage-2-5{ display:flex; flex-direction:row; align-items:center; justify-content:center; width:100vw; gap:2rem; padding:2rem 3rem; box-sizing:border-box; }
-.lp25-left, .lp25-right { flex:1; display:flex; align-items:center; justify-content:center; }
-.lp25-video-wrap{ width:100%; max-width: 720px; border-radius: 18px; overflow:hidden; border:1px solid rgba(255,255,255,.18); box-shadow: 0 12px 32px rgba(0,0,0,.25); background: rgba(255,255,255,.06); backdrop-filter: blur(6px); }
+.lp25-left, .lp25-right { flex:1; display:flex; align-items:center; justify-content:center; flex-direction: column; gap:2.5rem; }
+.vid-title-text { color: #ffffff; font-size: 2rem; font-weight: 700; text-align: center; font-family: 'Poppins', Arial, sans-serif; }
+.lp25-video-wrap{ width:100%; min-width: 720px; border-radius: 18px; overflow:hidden; border:1px solid rgba(255,255,255,.18); box-shadow: 0 12px 32px rgba(0,0,0,.25); background: rgba(255,255,255,.06); backdrop-filter: blur(6px); }
 .lp25-video{ width:100%; height:auto; display:block; }
 .lp25-gallery-mask{ height: 520px; width: 100%; max-width: 380px; overflow:hidden; border-radius: 18px; border:1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); box-shadow: 0 12px 32px rgba(0,0,0,.25); backdrop-filter: blur(6px); }
 .lp25-gallery-track{ display:flex; flex-direction:column; align-items:center; gap:10px; animation: lp25-scroll 22s linear infinite; padding:10px; }
@@ -182,11 +183,94 @@
 .right-container-landingpage-1{
     display: flex;
     flex-direction: column;
-    
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
     
     height: 100vh;
-    width: 40vw;
+       width: 40vw;
     background-color: transparent;
+    position: relative;
+    overflow: visible;
+
+}
+
+.flipcard {
+    background: transparent;
+    width: 280px;
+    height: 220px;
+    perspective: 1000px;
+    margin: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.flipcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.7s cubic-bezier(.7,.2,.2,1);
+    transform-style: preserve-3d;
+}
+.flipcard:hover .flipcard-inner, .flipcard:focus-within .flipcard-inner {
+    transform: rotateY(180deg);
+}
+.flipcard-front, .flipcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+.flipcard-front {
+    z-index: 2;
+}
+.flipcard-back {
+    transform: rotateY(180deg);
+    background: rgb(15, 5, 70);;
+    color: #fff;
+    font-size: 1.1rem;
+    box-sizing:border-box;
+    padding:1rem;
+    text-align: center;
+    z-index: 3;
+}
+.app-feature-back {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #fff;
+}
+.right-container-landingpage-2-top, .right-container-landingpage-2-bottom {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    width: 100%;
+    justify-content: center;
+}
+ 
+
+.red-scroll-box {
+    position: absolute;
+    margin-top:100%;
+    width: 35vw;
+    height: 80vh;
+    background: transparent;
+    border-radius: 1.5rem;
+    /* box-shadow: 0 8px 32px rgba(0,0,0,0.18); */
+    transform: translateY(-50%) translateX(0);
+    transition: transform 0.7s cubic-bezier(.7,.2,.2,1), opacity 0.7s cubic-bezier(.7,.2,.2,1);
+    z-index: 10;
+    opacity: 1;
+}
+.red-scroll-box.out {
+    transform: translateY(-50%) translateX(200%);
+    opacity: 0.5;
 }
     
 
@@ -204,52 +288,6 @@
     margin-top:50px;
 }
 
-.square-1{
-    position:absolute;
-    top:110px;
-    right:50px;
-    height: 40vh;
-    width: 40vh;
-    background-color: rgb(255, 255, 255);
-    border:1px solid black;
-    z-index:50;
-    
-}
-
-.square-2{
-   position:absolute;
-    top:310px;
-    right:200px;
-    height: 40vh;
-    width: 40vh;
-    background-color: rgb(255, 255, 255);
-    border:1px solid black;
-    z-index:49;
-    
-}
-
-.square-3{
-   position:absolute;
-    top:500px;
-    right:120px;
-    z-index:47;
-    height: 20vh;
-    width: 20vh;
-    background-color: rgb(255, 255, 255);
-    border:1px solid black;
-    
-} 
-
-.square-4{
-   position:absolute;
-    top:460px;
-    right:80px;    
-    height: 10vh;
-    width: 10vh;
-    background-color: rgb(255, 255, 255);
-    border:1px solid black;
-    z-index:46;
-} 
 
 .landingpage-2{
     display: flex;
@@ -269,7 +307,7 @@
     justify-content:center;
     box-sizing: border-box;
     height: 100vh;
-    width: 40vw;
+    width: 50vw;
     background-color: transparent;
     
 }
@@ -277,7 +315,7 @@
 .skillyug-logo {
     display: block;
     margin: 0 auto;
-    max-width: 450px;
+    max-width: 480px;
     width: 100%;
     height: auto;
 }
@@ -293,6 +331,7 @@
     width: 60vw;
     background-color: transparent;
     gap:2rem;
+    margin-right:2rem;
 }
 
 .right-container-landingpage-2-top{
