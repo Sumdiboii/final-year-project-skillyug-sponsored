@@ -20,10 +20,28 @@ const Login = () => {
   return (
     <div className="login-page">
       {/* Particles in the background */}
-      
-        <ParticleBackground />
-     
-
+      <ParticleBackground />
+      <button
+        className="login-back-btn"
+        style={{
+          position: 'absolute',
+          top: 32,
+          left: 32,
+          background: '#fff',
+          color: '#0a174e',
+          border: 'none',
+          borderRadius: '1.5rem',
+          padding: '0.6rem 1.6rem',
+          fontWeight: 600,
+          fontSize: '1rem',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+          cursor: 'pointer',
+          zIndex: 1000
+        }}
+        onClick={() => window.history.back()}
+      >
+        ← Back
+      </button>
       <div className="login-card">
         <div className="login-header">
           <img src="assets/PrepMark.png" alt="Skillyug" className="login-logo" />

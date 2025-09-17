@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css files/LandingPage.css";
 import Navbar from "../components/Navbar";
@@ -12,6 +12,7 @@ import HexagonProfileSlider from "../components/VerticalSlider";
 const LandingPage = () => {
     const navigate = useNavigate();
     const [scrolledDown, setScrolledDown] = React.useState(false);
+    const [skillyugFlipped, setSkillyugFlipped] = useState(false);
     const lastScroll = React.useRef(window.scrollY);
 
     React.useEffect(() => {
@@ -58,9 +59,37 @@ const LandingPage = () => {
                 </div>
             </div>
 
-            <div className="landingpage-2">
-                                 <div className="left-container-landingpage-2">
-                                     <img src="/assets/skillyug-logo-removebg-preview.png" alt="Skillyug Logo" className="skillyug-logo" />
+                        <div className="landingpage-2">
+                                <div className="left-container-landingpage-2 skillyug-flip-wrap"
+                                    onMouseEnter={() => setSkillyugFlipped(true)}
+                                    onMouseLeave={() => setSkillyugFlipped(false)}
+                                >
+                                    <div className={`skillyug-flipcard${skillyugFlipped ? ' flipped' : ''}`}>
+                                        <div className="skillyug-flipcard-inner">
+                                            <div className="skillyug-flipcard-front">
+                                                <img
+                                                    src="/assets/skillyug-logo-removebg-preview.png"
+                                                    alt="Skillyug Logo"
+                                                    className="skillyug-logo"
+                                                />
+                                            </div>
+                                            <div className="skillyug-flipcard-back">
+                                                <div className="skillyug-flipcard-content">
+                                                    <h1>Skillyug Education Academy</h1>
+                                                    <p>
+                                                        Skillyug Education Academy is a premier institution dedicated to empowering students with practical skills and knowledge for the modern world. Our programs focus on hands-on learning, mentorship, and real-world projects to ensure every learner is industry-ready.
+                                                    </p>
+                                                    <ul>
+                                                        <li>Expert faculty and mentors</li>
+                                                        <li>Industry-driven curriculum</li>
+                                                        <li>Workshops, internships, and live projects</li>
+                                                        <li>Personalized career guidance</li>
+                                                        <li>Vibrant student community</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                 <div className="right-container-landingpage-2">
                                     <div className="right-container-landingpage-2-top">
@@ -172,17 +201,19 @@ const LandingPage = () => {
                                             <svg className="lp3-chart" viewBox="0 0 420 260" role="img" aria-label="Traditional vs PrepMark scores">
                                                 <defs>
                                                     <linearGradient id="pmGrad" x1="0" x2="0" y1="0" y2="1">
-                                                        <stop offset="0%" stopColor="#35c7ff" />
-                                                        <stop offset="100%" stopColor="#2a5298" />
+                                                        <stop offset="0%" stopColor="#1a237e" />
+                                                        <stop offset="100%" stopColor="#283593" />
                                                     </linearGradient>
                                                 </defs>
+                                                {/* white background */}
+                                                <rect x="0" y="0" width="420" height="260" fill="#fff" />
                                                 {/* axes */}
-                                                <line x1="40" y1="220" x2="400" y2="220" stroke="#ffffff33" strokeWidth="2" />
-                                                <line x1="40" y1="30" x2="40" y2="220" stroke="#ffffff33" strokeWidth="2" />
+                                                <line x1="40" y1="220" x2="400" y2="220" stroke="#1a237e" strokeWidth="2" />
+                                                <line x1="40" y1="30" x2="40" y2="220" stroke="#1a237e" strokeWidth="2" />
                                                 {/* y grid lines */}
                                                 {Array.from({length:4}).map((_,i)=>{
                                                     const y = 220 - (i+1)*40;
-                                                    return <line key={i} x1="40" y1={y} x2="400" y2={y} stroke="#ffffff18" strokeWidth="1" />
+                                                    return <line key={i} x1="40" y1={y} x2="400" y2={y} stroke="#1a237e22" strokeWidth="1" />
                                                 })}
                                                 {/* categories */}
                                                 {[
@@ -196,21 +227,21 @@ const LandingPage = () => {
                                                     const pH = c.p * 1.6;
                                                     return (
                                                         <g key={c.label}>
-                                                            {/* Traditional bar */}
-                                                            <rect x={groupX} y={220 - tH} width="24" height={tH} fill="#ff715b" rx="4" />
-                                                            {/* PrepMark bar */}
-                                                            <rect x={groupX + 28} y={220 - pH} width="24" height={pH} fill="url(#pmGrad)" rx="4" />
+                                                            {/* Traditional bar (orange) */}
+                                                            <rect x={groupX} y={220 - tH} width="24" height={tH} fill="#cc4915" rx="4" />
+                                                            {/* PrepMark bar (green) */}
+                                                            <rect x={groupX + 28} y={220 - pH} width="24" height={pH} fill="rgb(13, 131, 23)" rx="4" />
                                                             {/* label */}
-                                                            <text x={groupX + 14} y="240" fill="#fff" fontSize="12" textAnchor="middle">{c.label}</text>
+                                                            <text x={groupX + 14} y="240" fill="#1a237e" fontSize="12" textAnchor="middle">{c.label}</text>
                                                         </g>
                                                     )
                                                 })}
                                                 {/* legend */}
-                                                <g className="lp3-legend">
-                                                    <rect x="240" y="34" width="12" height="12" fill="#ff715b" rx="2" />
-                                                    <text x="258" y="44" fill="#fff" fontSize="12">Traditional</text>
-                                                    <rect x="240" y="54" width="12" height="12" fill="url(#pmGrad)" rx="2" />
-                                                    <text x="258" y="64" fill="#fff" fontSize="12">PrepMark</text>
+                                                <g className="lp3-legend" >
+                                                    <rect x="240" y="34" width="12" height="12" fill="#b77a62ff;" rx="5" />
+                                                    <text x="258" y="44" fill="#1a237e" fontSize="12">Traditional</text>
+                                                    <rect x="240" y="54" width="12" height="12" fill="rgba(45, 214, 59, 1);" rx="5" />
+                                                    <text x="258" y="64" fill="#1a237e" fontSize="12">PrepMark</text>
                                                 </g>
                                             </svg>
                                         </div>
@@ -224,6 +255,14 @@ const LandingPage = () => {
                                          <div className="stat-card">
                                              <div className="stat-value">50k</div>
                                              <div className="stat-label">Users</div>
+                                         </div>
+                                         <div className="stat-card">
+                                             <div className="stat-value">92%</div>
+                                             <div className="stat-label">Avg. Score Lift</div>
+                                         </div>
+                                         <div className="stat-card">
+                                             <div className="stat-value">4.8★</div>
+                                             <div className="stat-label">App Rating</div>
                                          </div>
                                          <div className="stat-card">
                                              <div className="stat-value">92%</div>
@@ -309,31 +348,243 @@ const LandingPage = () => {
                         { q: 'How long are the lessons?', a: 'Most lessons take 10–15 minutes, perfect for daily practice without overload.' },
                         { q: 'Do parents get progress reports?', a: 'Yes. Parents can track performance via clear dashboards and weekly summaries.' },
                         { q: 'Is it safe for kids?', a: 'Absolutely. We provide a secure, ad-free, child-friendly environment.' },
+                        { q: 'Can I use PrepMark on a tablet or phone?', a: 'Yes! PrepMark works on all modern devices, including tablets and smartphones.' },
+                        { q: 'Are there live classes or only self-paced?', a: 'PrepMark offers both self-paced lessons and live interactive sessions.' },
+                        { q: 'How do I reset my password?', a: 'Click “Forgot password” on the login page and follow the instructions sent to your email.' },
+                        { q: 'Is there a free trial?', a: 'Yes, you can try PrepMark free for 7 days with no obligation.' },
+                        { q: 'How do I contact support?', a: 'You can reach our support team via the Help section in your dashboard or email us at support@prepmark.com.' },
+                        { q: 'Can parents monitor progress?', a: 'Absolutely! Parents have access to detailed progress reports and weekly summaries.' },
+                        { q: 'What subjects are covered?', a: 'PrepMark covers Math, Logic, Memory, Speed, and more, with new content added regularly.' },
+                        { q: 'Is my data safe?', a: 'We use industry-standard encryption and never share your data with third parties.' },
                     ];
-                    const FAQItem = ({ item, idx }) => {
-                        const [open, setOpen] = React.useState(idx === 0);
-                        return (
-                            <div className={`faq-item${open ? ' open' : ''}`}> 
-                                <button className="faq-q" onClick={() => setOpen(!open)}>
-                                    <span>{item.q}</span>
-                                    <span className={`chev${open ? ' up' : ''}`} aria-hidden>⌄</span>
-                                </button>
-                                <div className="faq-a" aria-hidden={!open}>{item.a}</div>
-                            </div>
-                        );
-                    };
+                    const [expandedIdx, setExpandedIdx] = React.useState(null);
+                                        const FAQItem = ({ item, idx }) => {
+                                                const isOpen = expandedIdx === idx;
+                                                // For expanded, absolutely position over .faqs-wrap
+                                                return (
+                                                        <div
+                                                            className={`faq-item${isOpen ? ' open expanded' : ''}`}
+                                                            style={
+                                                                isOpen
+                                                                    ? {
+                                                                            position: 'absolute',
+                                                                            top: 0,
+                                                                            left: 0,
+                                                                            width: '100%',
+                                                                            height: '100%',
+                                                                            zIndex: 10,
+                                                                            background: 'linear-gradient(120deg, #1a237e 60%, #43a047 100%)',
+                                                                            color: '#fff',
+                                                                            boxShadow: '0 8px 48px 8px #1a237e55',
+                                                                            transform: 'scale(1.04) translateY(-8px)',
+                                                                            display: 'flex',
+                                                                            flexDirection: 'column',
+                                                                            justifyContent: 'center',
+                                                                            alignItems: 'center',
+                                                                            animation: 'faqExpand 0.5s cubic-bezier(.7,.2,.2,1)',
+                                                                            transition: 'all 0.5s cubic-bezier(.7,.2,.2,1)',
+                                                                        }
+                                                                    : {
+                                                                            position: 'relative',
+                                                                            minHeight: 56,
+                                                                            maxHeight: 56,
+                                                                            overflow: 'hidden',
+                                                                            background: 'rgba(255,255,255,0.08)',
+                                                                            borderRadius: 16,
+                                                                            boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                                                                            transition: 'all 0.5s cubic-bezier(.7,.2,.2,1)',
+                                                                        }
+                                                            }
+                                                        >
+                                                                <button
+                                                                    className="faq-q"
+                                                                    style={
+                                                                        isOpen
+                                                                            ? {
+                                                                                    fontSize: '2rem',
+                                                                                    fontWeight: 800,
+                                                                                    color: '#fff',
+                                                                                    background: 'none',
+                                                                                    border: 'none',
+                                                                                    boxShadow: 'none',
+                                                                                    marginBottom: '2rem',
+                                                                                    cursor: 'default',
+                                                                                    pointerEvents: 'none',
+                                                                                    transition: 'all 0.5s cubic-bezier(.7,.2,.2,1)',
+                                                                                }
+                                                                            : {}
+                                                                    }
+                                                                    onClick={() => setExpandedIdx(isOpen ? null : idx)}
+                                                                >
+                                                                        <span>{item.q}</span>
+                                                                        <span className={`chev${isOpen ? ' up' : ''}`} aria-hidden>⌄</span>
+                                                                </button>
+                                                                <div
+                                                                    className="faq-a"
+                                                                    aria-hidden={!isOpen}
+                                                                    style={
+                                                                        isOpen
+                                                                            ? {
+                                                                                    fontSize: '1.3rem',
+                                                                                    color: '#fff',
+                                                                                    opacity: 1,
+                                                                                    height: 'auto',
+                                                                                    padding: '1.5rem 2rem 2rem',
+                                                                                    background: 'none',
+                                                                                    boxShadow: 'none',
+                                                                                    textAlign: 'center',
+                                                                                    display: 'flex',
+                                                                                    flexDirection: 'column',
+                                                                                    alignItems: 'center',
+                                                                                    justifyContent: 'center',
+                                                                                    transition: 'all 0.5s cubic-bezier(.7,.2,.2,1)',
+                                                                                }
+                                                                            : {
+                                                                                    opacity: 0,
+                                                                                    height: 0,
+                                                                                    padding: '0 2rem',
+                                                                                    pointerEvents: 'none',
+                                                                                    transition: 'all 0.5s cubic-bezier(.7,.2,.2,1)',
+                                                                                }
+                                                                    }
+                                                                >
+                                                                        {item.a}
+                                                                        {isOpen && (
+                                                                                <button className="faq-close-btn" onClick={() => setExpandedIdx(null)} style={{transition:'all 0.3s'}}>Close</button>
+                                                                        )}
+                                                                </div>
+                                                        </div>
+                                                );
+                                        };
                     const ownerImg = '/assets/owner.jpg';
                     const ownerFallback = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><circle cx="60" cy="60" r="60" fill="#e0e7ff"/></svg>');
                     return (
                         <>
-                          <div className="left-container-landingpage-5">
-                              <div className="faqs-wrap">
-                                  <h2 className="faqs-title">Frequently Asked Questions</h2>
-                                  <div className="faqs-list">
-                                      {faqs.map((f, i) => <FAQItem key={i} item={f} idx={i} />)}
-                                  </div>
-                              </div>
-                          </div>
+                                                    <div className="left-container-landingpage-5">
+                                                            <div className="faqs-wrap">
+                                                                    <h2 className="faqs-title">Frequently Asked Questions</h2>
+                                                                    <div className="faqs-list">
+                                                                            {faqs.map((f, i) => <FAQItem key={i} item={f} idx={i} />)}
+                                                                    </div>
+                                                            </div>
+                                                            <style>{`
+                                                                .faqs-wrap {
+                                                                    width: 580px;
+                                                                    min-height: 420px;
+                                                                    max-height: 480px;
+                                                                    overflow: hidden;
+                                                                    position: relative;
+                                                                    transition: box-shadow 0.3s cubic-bezier(.7,.2,.2,1);
+                                                                    // background:red;
+                                                                    margin-top:2rem;
+                                                                }
+                                                                .faqs-list {
+                                                                    display: flex;
+                                                                    flex-direction: column;
+                                                                    gap: 1rem;
+                                                                    height: 340px;
+                                                                    overflow-y: auto;
+                                                                    transition: filter 0.3s cubic-bezier(.7,.2,.2,1);
+                                                                    scrollbar-width: thin;
+                                                                    
+                                                                    
+                                                                }
+                                                                .faqs-list::-webkit-scrollbar {
+                                                                    width: 5px;
+                                                                    height: 5px;
+                                                                    
+                                                                }
+                                                                .faqs-list::-webkit-scrollbar-thumb {
+                                                                    background: #ffffffff;
+                                                                    border-radius: 8px;
+                                                                    min-height: 24px;
+                                                                    
+                                                                }
+                                                                .faqs-list::-webkit-scrollbar-track {
+                                                                    background: transparent;
+                                                                }
+                                                                .faqs-list {
+                                                                    scrollbar-width: thin;
+                                                                    scrollbar-color: #ffffffff transparent;
+                                                                    
+                                                                }
+                                                                .faq-item {
+                                                                    background: rgba(255,255,255,0.08);
+                                                                    border-radius: 16px;
+                                                                    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+                                                                    transition: transform 0.5s cubic-bezier(.7,.2,.2,1), box-shadow 0.5s cubic-bezier(.7,.2,.2,1), z-index 0.2s, min-height 0.5s cubic-bezier(.7,.2,.2,1), max-height 0.5s cubic-bezier(.7,.2,.2,1);
+                                                                    position: relative;
+                                                                    z-index: 1;
+                                                                    min-height: 56px;
+                                                                    overflow: hidden;
+                                                                }
+                                                                .faq-item.open {
+                                                                    background: rgba(255,255,255,0.13);
+                                                                    box-shadow: 0 4px 24px rgba(0,0,0,0.16);
+                                                                }
+                                                                .faq-item.expanded {
+                                                                    position: absolute;
+                                                                    top: 0; left: 0; right: 0; bottom: 0;
+                                                                    width: 100%; height: 100%;
+                                                                    z-index: 10;
+                                                                    background: white;;
+                                                                    color: #fff;
+                                                                    box-shadow: 0 8px 48px 8px #1a237e55;
+                                                                    transform: scale(1.04) translateY(-8px);
+                                                                    display: flex;
+                                                                    flex-direction: column;
+                                                                    justify-content: center;
+                                                                    align-items: center;
+                                                                    animation: faqExpand 0.5s cubic-bezier(.7,.2,.2,1);
+                                                                }
+                                                                @keyframes faqExpand {
+                                                                    from { transform: scale(0.95) translateY(40px); opacity: 0.5; }
+                                                                    to { transform: scale(1.04) translateY(-8px); opacity: 1; }
+                                                                }
+                                                                .faq-item.expanded .faq-q {
+                                                                    font-size: 2rem;
+                                                                    font-weight: 800;
+                                                                    color: #fff;
+                                                                    background: none;
+                                                                    border: none;
+                                                                    box-shadow: none;
+                                                                    margin-bottom: 2rem;
+                                                                    cursor: default;
+                                                                    pointer-events: none;
+                                                                }
+                                                                .faq-item.expanded .faq-a {
+                                                                    font-size: 1.3rem;
+                                                                    color: #fff;
+                                                                    opacity: 1;
+                                                                    height: auto;
+                                                                    padding: 1.5rem 2rem 2rem;
+                                                                    background: none;
+                                                                    box-shadow: none;
+                                                                    text-align: center;
+                                                                    display: flex;
+                                                                    flex-direction: column;
+                                                                    align-items: center;
+                                                                    justify-content: center;
+                                                                }
+                                                                .faq-close-btn {
+                                                                    margin-top: 2rem;
+                                                                    padding: 0.7rem 2.2rem;
+                                                                    font-size: 1.1rem;
+                                                                    font-weight: 700;
+                                                                    border-radius: 2rem;
+                                                                    border: none;
+                                                                    background: #fff;
+                                                                    color: #1a237e;
+                                                                    box-shadow: 0 2px 12px #1a237e33;
+                                                                    cursor: pointer;
+                                                                    transition: background 0.2s, color 0.2s;
+                                                                }
+                                                                .faq-close-btn:hover {
+                                                                    background: #43a047;
+                                                                    color: #fff;
+                                                                }
+                                                            `}</style>
+                                                    </div>
                           <div className="right-container-landingpage-5">
                               <div className="owner-note-card">
                                   <img
