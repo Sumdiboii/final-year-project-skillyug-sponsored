@@ -1,3 +1,37 @@
+@media (max-width: 600px) {
+   
+    .pricing-container-1-bottom-1,
+    .pricing-container-1-bottom-2,
+    .pricing-container-1-bottom-3 {
+        gap: 0.5rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+    .student-cell {
+        min-height: 120px;
+        height: 120px;
+        max-height: 80px;
+        font-size: 1.1rem;
+    }
+    .student-cell-top {
+        font-size: 2rem;
+    }
+    .student-cell-bottom {
+        font-size: 1.05rem;
+    }
+
+     .guardian-cell {
+        min-height: 120px;
+        height: 120px;
+        max-height: 80px;
+        font-size: 1.1rem;
+    }
+    .guardian-cell-top {
+        font-size: 2rem;
+    }
+    .guardian-cell-bottom {
+        font-size: 1.05rem;
+    }
+}
 .pricing-page {
 	background-color: rgb(15, 5, 70);
 	min-height: 100vh;
@@ -53,14 +87,22 @@
 }
 
 @media (max-width: 900px) and (orientation: portrait) {
+
+    .pricing-title{
+        font-size:1.5rem;
+        margin-top:30%;
+        
+        scale:0.7;
+    }
     .pricing-containers {
+        margin-top:2rem;
         flex-direction: column;
-        gap: 2rem;
+        gap: 3rem;
         align-items: stretch;
         justify-content: flex-start;
         min-height: unset;
         margin-right:30px;
-        
+        padding:20px;;
         width:90vw;
     }
     .pricing-container-1,
@@ -68,9 +110,15 @@
     .pricing-container-3 {
         max-height: unset;
         height: auto;
-        min-height:450px;
+        min-height:500px;
         width: 100%;
-        margin-bottom: 1.5rem;
+        gap:15px !important;
+       
+       
+    }
+        .pricing-container-1-bottom, .pricing-container-2-bottom, .pricing-container-3-bottom{
+                gap:1rem !important;
+        
     }
 }
 /* Pricing Page Styles */

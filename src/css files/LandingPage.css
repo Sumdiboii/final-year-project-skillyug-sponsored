@@ -1,7 +1,76 @@
-/* Hide right-container-landingpage-1 on small screens */
-@media (max-width: 600px) {
+@media (max-width: 800px) {
+    .prepmark-subtitle {
+        width:100vw;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+        font-size: 1.1rem;
+        margin-bottom:3rem;
+        box-sizing: border-box;
+    }
+    .prepmark-btn {
+        min-width: 140px;
+        width: 90%;
+        font-size: 1.1rem;
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        border-radius: 50%;
+    }
+
     .right-container-landingpage-1 {
         display: none !important;
+    }
+
+    .left-container-landingpage-1 {
+        height:60vh !important;
+    }
+
+   
+    
+    .landingpage-2 {
+        display:none;
+    }
+
+    .lp25-right {
+        display:none;
+}
+
+
+}
+
+@media (max-width: 400px) {
+
+    
+    .left-container-landingpage-1 {
+        height:70vh !important;
+    }
+    .prepmark-subtitle {
+        width:100vw;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+        font-size: 1.1rem;
+        
+        margin-bottom:2rem;
+        box-sizing: border-box;
+    }
+    .prepmark-btn {
+        min-width: 140px;
+        width: 90%;
+        font-size: 1.1rem;
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        
+        border-radius: 50%;
+    }
+
+     .landingpage-2{
+        flex-direction:column;
+        height:fit-content;
     }
 }
 /* Skillyug logo flipcard */
@@ -133,8 +202,8 @@
 @keyframes lp25-scroll { from { transform: translateY(0); } to { transform: translateY(-50%); } }
 
 @media (max-width: 900px){
-    .landingpage-2-5{ flex-direction: column; padding: 2rem 1rem; }
-    .lp25-gallery-mask{ height: 420px; max-width: 320px; }
+    .landingpage-2-5{ flex-direction: column; padding: 2rem 1rem}
+    .lp25-gallery-mask{ height: 320px; max-width: 220px; }
 }
 .landing-page {
 	background-color: rgb(15, 5, 70);
@@ -637,11 +706,11 @@
 .stat-value { font-size: 2.1rem; font-weight: 900; letter-spacing: .2px; }
 .stat-label { font-size: 0.95rem; opacity: 0.9; }
 
-@media (max-width: 900px) {
+/* @media (max-width: 900px) {
     .landingpage-3 { flex-direction: column; height: auto; gap: 2rem; padding: 2rem 1rem; }
     .left-container-landingpage-3, .right-container-landingpage-3 { width: 100vw; height: auto; }
     .lp3-chart-wrap, .lp3-stats-grid { max-width: 90vw; }
-}
+} */
 
 .landingpage-4{
     display: flex;
@@ -690,10 +759,10 @@
 .review-stars span { margin-right: 2px; }
 .review-text { margin: 0; opacity: .95; font-size: .98rem; }
 
-@media (max-width: 900px) {
+/* @media (max-width: 900px) {
     .review-card { min-width: 240px; max-width: 280px; }
     .reviews-track { animation-duration: 28s; }
-}
+} */
 
 .landingpage-5{
     display: flex;
@@ -748,9 +817,9 @@
 .owner-name { font-weight: 800; }
 .owner-role { opacity: .85; font-size: .95rem; }
 
-@media (max-width: 900px) {
+/* @media (max-width: 900px) {
     .landingpage-5 { flex-direction: column; padding: 2rem 1rem; }
     .left-container-landingpage-5, .right-container-landingpage-5 { width: 100vw; align-items: center; }
     .faqs-wrap { max-width: 90vw; }
     .owner-note-card { max-width: 90vw; }
-}
+} */

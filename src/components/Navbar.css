@@ -2,7 +2,7 @@
 	position: fixed;
 	top: 0;
 	left: 0;
-	width: 100%;
+	width: 100vw;
 	height: 90px;
 	background-color: rgb(15, 5, 70);
 	display: flex;
@@ -87,4 +87,9 @@
 	.navbar-menu li { padding: 0.5rem 0; }
 	.navbar-menu li a { font-size: 1rem; }
 	.navbar-toggle { display: flex; }
+
+	.navbar-logo{
+		scale:0.9;
+		
+	}
 }
