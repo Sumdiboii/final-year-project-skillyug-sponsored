@@ -92,7 +92,7 @@ const Login = () => {
 
         </form>
 
-         <button type="button" className="back-btn" onClick={() => navigate("/")}>
+         <button type="button" className="back1-btn" onClick={() => navigate("/")}>
           
           Back 
         </button>

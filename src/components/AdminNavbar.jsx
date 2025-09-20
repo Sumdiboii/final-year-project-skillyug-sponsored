@@ -1,23 +1,23 @@
 import React, { useState } from "react";
-import "./MainNavbar.css";
+import "./AdminNavbar.css";
 import { Link } from "react-router-dom";
 
-const MainNavbar = () => {
+const AdminNavbar = () => {
 	const [open, setOpen] = useState(false);
 
 	const toggle = () => setOpen((s) => !s);
 	const close = () => setOpen(false);
 
 	return (
-		<nav className="main-navbar">
-			<div className="mainnavbar-logo">
+		<nav className="admin-navbar">
+			<div className="admin-navbar-logo">
 				<Link to="/home" onClick={close}>
 					<img src="assets/skillyug-rebrand-logo.png" alt="Logo" style={{height: '50px', marginTop: '10px'}} />
 				</Link>
 			</div>
 
 			<button
-				className={`main-navbar-toggle ${open ? 'open' : ''}`}
+				className={`admin-navbar-toggle ${open ? 'open' : ''}`}
 				aria-label="Toggle navigation"
 				aria-expanded={open}
 				onClick={toggle}
@@ -27,16 +27,16 @@ const MainNavbar = () => {
 				<span className="bar" />
 			</button>
 
-			<ul className={`main-navbar-menu ${open ? "open" : ""}`}>
-				<li><Link to="/settings" onClick={close}>Settings</Link></li>
-				<li><Link to="/statistics" onClick={close}>Statistics</Link></li>
-				<li><Link to="/practice" onClick={close}>Practice</Link></li>
-				<li><Link to="/learning" onClick={close}>Learning</Link></li>
-				<li><Link to="/profile" onClick={close}>Profile</Link></li>
+			<ul className={`admin-navbar-menu ${open ? "open" : ""}`}>
+				<li><Link to="/settings" onClick={close}>Create Tests</Link></li>
+				<li><Link to="/statistics" onClick={close}>Manage Users</Link></li>
+				<li><Link to="/practice" onClick={close}>Discussions</Link></li>
+				<li><Link to="/learning" onClick={close}>Analytics</Link></li>
+				<li><Link to="/profile" onClick={close}>Add Tests</Link></li>
 				<li><Link to="/" className="nav-link" onClick={close}>Log Out</Link></li>
 			</ul>
 		</nav>
 	);
 };
 
-export default MainNavbar;
+export default AdminNavbar;

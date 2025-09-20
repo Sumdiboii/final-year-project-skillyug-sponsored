@@ -17,6 +17,13 @@ import Settings from "./jsx files/Settings";
 import Practice from "./jsx files/Practice";
 import Learning from "./jsx files/Learning";
 import AdminLogin from "./jsx files/AdminLogin";
+import AdminHome from "./jsx files/AdminHome";
+import AboutUs from "./components/Footer Pages/AboutUs";
+import ContactUs from "./components/Footer Pages/ContactUs";
+import PrivacyPolicy from "./components/Footer Pages/PrivacyPolicy";
+import Terms from "./components/Footer Pages/Terms";
+import Refund from "./components/Footer Pages/Refund";
+import FAQ from "./components/Footer Pages/FAQ";
 
 function AppRoutes() {
   const location = useLocation();
@@ -43,6 +50,13 @@ function AppRoutes() {
         <Route path="/practice" element={<Practice />} />
         <Route path="/learning" element={<Learning />} />
         <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin-home" element={<AdminHome />} />
+        <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/terms-conditions" element={<Terms />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/refund-policy" element={<Refund />} />
       </Routes>
     </>
   );

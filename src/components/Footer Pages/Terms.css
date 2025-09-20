@@ -1,0 +1,209 @@
+.terms-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+  padding: 2rem 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.terms-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  color: white;
+}
+
+.terms-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+}
+
+.terms-header h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.terms-header p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.terms-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.terms-section {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.terms-section:hover {
+  transform: translateY(-2px);
+}
+
+.terms-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+.terms-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.terms-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.terms-card p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+  font-size: 1rem;
+}
+
+.terms-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.terms-card li {
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  opacity: 0.9;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.terms-card li:last-child {
+  border-bottom: none;
+}
+
+.terms-card strong {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Special styling for prohibited activities */
+.terms-section:nth-child(3) .terms-card li:contains("❌") {
+  color: #ff7675;
+}
+
+/* Special styling for payment section */
+.terms-section:nth-child(4) {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Special styling for contact section */
+.terms-section:last-of-type .terms-card {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.back-home {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+}
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Hover effects for different sections */
+.terms-section:nth-child(1):hover {
+  box-shadow: 0 10px 30px rgba(116, 185, 255, 0.2);
+}
+
+.terms-section:nth-child(2):hover {
+  box-shadow: 0 10px 30px rgba(0, 184, 148, 0.2);
+}
+
+.terms-section:nth-child(3):hover {
+  box-shadow: 0 10px 30px rgba(255, 118, 117, 0.2);
+}
+
+.terms-section:nth-child(4):hover {
+  box-shadow: 0 10px 30px rgba(253, 203, 110, 0.2);
+}
+
+@media (max-width: 768px) {
+  .terms-container {
+    padding: 0 1rem;
+  }
+  
+  .terms-header h1 {
+    font-size: 2rem;
+  }
+  
+  .terms-section {
+    padding: 1.5rem;
+  }
+  
+  .terms-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .terms-card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .terms-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .terms-section h2 {
+    font-size: 1.3rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+  
+  .terms-card li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+}

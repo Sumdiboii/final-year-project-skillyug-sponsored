@@ -423,7 +423,7 @@
 
 
 
-.back-btn {
+.back2-btn {
   width: 100%;
   display: flex;
   align-items: center;
@@ -438,9 +438,9 @@
   cursor: pointer;
   transition: box-shadow .2s ease, transform .06s ease;
 }
-.back-btn:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-.back-btn:active { transform: translateY(1px); }
-.back-icon { height: 18px; width: 18px; }
+.back2-btn:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.back2-btn:active { transform: translateY(1px); }
+.back2-icon { height: 18px; width: 18px; }
 
 
 @media (max-width: 420px) {

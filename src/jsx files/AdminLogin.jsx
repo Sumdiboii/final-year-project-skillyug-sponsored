@@ -146,8 +146,8 @@ const AdminLogin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add login logic here - for now, directly navigate to Home
-    navigate("/home");
+    // Add admin login logic here - for now, directly navigate to AdminHome
+    navigate("/admin-home");
   };
 
 //   const handleGoogle = () => {
@@ -238,7 +238,7 @@ const AdminLogin = () => {
 
         </form>
 
-         <button type="button" className="back-btn" onClick={() => navigate("/")}>
+         <button type="button" className="back2-btn" onClick={() => navigate("/")}>
           
           Back 
         </button>

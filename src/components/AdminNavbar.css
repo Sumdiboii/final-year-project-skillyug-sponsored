@@ -1,4 +1,4 @@
-.main-navbar {
+.admin-navbar {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -15,7 +15,7 @@
 
 
 
-.main-navbar-menu {
+.admin-navbar-menu {
 	list-style: none;
 	display: flex;
 	gap: 3rem;
@@ -23,12 +23,12 @@
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
     
-.main-navbar-menu li {
+.admin-navbar-menu li {
 	margin: 0 ;
 	padding: 0;
 }
 
-.main-navbar-menu li a {
+.admin-navbar-menu li a {
 	color: #fff;
 	text-decoration: none;
 	font-size: 1rem;
@@ -36,12 +36,12 @@
 	transition: color 0.2s;
 }
 
-.main-navbar-menu li a:hover {
+.admin-navbar-menu li a:hover {
 	color: #e02d01;
 }
 
 /* Hamburger (hidden on desktop) */
-.main-navbar-toggle {
+.admin-navbar-toggle {
 	display: none;
 	background: transparent;
 	border: none;
@@ -50,7 +50,7 @@
 	align-items: center;
 	justify-content: center;
 }
-.main-navbar-toggle .bar {
+.admin-navbar-toggle .bar {
 	display: block;
 	width: 22px;
 	height: 2px;
@@ -58,17 +58,17 @@
 	margin: 4px 0;
 	transition: transform 0.25s ease, opacity 0.2s ease;
 }
-.main-navbar-toggle.open .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-.main-navbar-toggle.open .bar:nth-child(2) { opacity: 0; }
-.main-navbar-toggle.open .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.admin-navbar-toggle.open .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.admin-navbar-toggle.open .bar:nth-child(2) { opacity: 0; }
+.admin-navbar-toggle.open .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 /* Responsive: collapse menu into hamburger */
 @media (max-width: 768px) {
-	.main-navbar {
+	.admin-navbar {
 		padding: 0 16px;
 		height: 70px;
 	}
-	.main-navbar-menu {
+	.admin-navbar-menu {
 		display: none;
 		position: absolute;
 		top: 70px;
@@ -81,14 +81,14 @@
 		box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 		border-radius: 8px;
 	}
-	.main-navbar-menu.open {
+	.admin-navbar-menu.open {
 		display: flex;
 	}
-	.main-navbar-menu li { padding: 0.5rem 0; }
-	.main-navbar-menu li a { font-size: 1rem; }
-	.main-navbar-toggle { display: flex; }
+	.admin-navbar-menu li { padding: 0.5rem 0; }
+	.admin-navbar-menu li a { font-size: 1rem; }
+	.admin-navbar-toggle { display: flex; }
 
-	.main-navbar-logo{
+	.admin-navbar-logo{
 		scale:0.9;
 		
 	}

@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import AstronautSVG from "../components/Astronaut";
 import Ship from "../components/Astronaut";
 import HexagonProfileSlider from "../components/VerticalSlider";
+import QuizFireworks from "../components/QuizFireworks";
 
 
 const LandingPage = () => {
@@ -275,7 +276,221 @@ const LandingPage = () => {
                                      </div>
                                  </div>
                         </div>
+<div className="mock-quiz-section">
+    {(() => {
+        const [activeTab, setActiveTab] = React.useState('easy');
+        const [currentQuestion, setCurrentQuestion] = React.useState(0);
+        const [selectedAnswer, setSelectedAnswer] = React.useState(null);
+        const [showResult, setShowResult] = React.useState(false);
+        const [questions, setQuestions] = React.useState([]);
+        const [showFireworks, setShowFireworks] = React.useState(false);
 
+        const questionBank = {
+            easy: [
+                {
+                    question: "If a train travels 60 km in 1 hour, how far will it travel in 3 hours?",
+                    options: ["120 km", "180 km", "150 km", "200 km"],
+                    correct: 1,
+                    explanation: "Distance = Speed × Time. At 60 km/hour for 3 hours: 60 × 3 = 180 km."
+                },
+                {
+                    question: "What comes next in the sequence: 2, 4, 6, 8, ?",
+                    options: ["9", "10", "11", "12"],
+                    correct: 1,
+                    explanation: "This is an arithmetic sequence with a common difference of 2. So 8 + 2 = 10."
+                },
+                {
+                    question: "If all cats are animals and Fluffy is a cat, what can we conclude?",
+                    options: ["Fluffy is not an animal", "Fluffy is an animal", "Fluffy might be an animal", "Cannot determine"],
+                    correct: 1,
+                    explanation: "This is basic logical reasoning. Since all cats are animals and Fluffy is a cat, Fluffy must be an animal."
+                }
+            ],
+            medium: [
+                {
+                    question: "A rectangle has a length of 12 cm and width of 8 cm. What is its area?",
+                    options: ["96 cm²", "40 cm²", "20 cm²", "48 cm²"],
+                    correct: 0,
+                    explanation: "Area of rectangle = Length × Width = 12 × 8 = 96 cm²."
+                },
+                {
+                    question: "If A = 1, B = 2, C = 3, what is the sum of the letters in 'CAB'?",
+                    options: ["5", "6", "7", "8"],
+                    correct: 1,
+                    explanation: "C = 3, A = 1, B = 2. Sum = 3 + 1 + 2 = 6."
+                },
+                {
+                    question: "In a class of 30 students, 18 play football and 20 play cricket. How many play both?",
+                    options: ["6", "8", "10", "12"],
+                    correct: 1,
+                    explanation: "Using the formula: Both = (Football + Cricket) - Total = (18 + 20) - 30 = 8 students play both."
+                }
+            ],
+            hard: [
+                {
+                    question: "If 3x + 7 = 22, what is the value of x?",
+                    options: ["3", "4", "5", "6"],
+                    correct: 2,
+                    explanation: "3x + 7 = 22. Subtract 7: 3x = 15. Divide by 3: x = 5."
+                },
+                {
+                    question: "A clock shows 3:15. What is the angle between hour and minute hands?",
+                    options: ["0°", "7.5°", "15°", "22.5°"],
+                    correct: 1,
+                    explanation: "At 3:15, minute hand is at 90° (pointing at 3). Hour hand moves 0.5° per minute, so it's at 90° + (15 × 0.5°) = 97.5°. Difference = 7.5°."
+                },
+                {
+                    question: "If P → Q is true and Q is false, what can we say about P?",
+                    options: ["P is true", "P is false", "P can be true or false", "Cannot determine"],
+                    correct: 1,
+                    explanation: "In logic, if P → Q (if P then Q) is true and Q is false, then P must be false. This is because a true statement cannot lead to a false conclusion."
+                }
+            ]
+        };
+
+        React.useEffect(() => {
+            const shuffled = [...questionBank[activeTab]].sort(() => Math.random() - 0.5);
+            setQuestions(shuffled);
+            setCurrentQuestion(0);
+            setSelectedAnswer(null);
+            setShowResult(false);
+            setShowFireworks(false); // Reset fireworks when changing difficulty
+        }, [activeTab]);
+
+        const handleAnswerSelect = (answerIndex) => {
+            setSelectedAnswer(answerIndex);
+        };
+
+        const handleSubmit = () => {
+            if (selectedAnswer !== null) {
+                setShowResult(true);
+                
+                // Check if answer is correct and trigger fireworks
+                const currentQ = questions[currentQuestion];
+                if (selectedAnswer === currentQ?.correct) {
+                    setShowFireworks(true);
+                    // Hide fireworks after 7 seconds for longer celebration
+                    setTimeout(() => {
+                        setShowFireworks(false);
+                    }, 7000);
+                }
+            }
+        };
+
+        const nextQuestion = () => {
+            setShowFireworks(false); // Reset fireworks when moving to next question
+            
+            if (currentQuestion < questions.length - 1) {
+                setCurrentQuestion(currentQuestion + 1);
+                setSelectedAnswer(null);
+                setShowResult(false);
+            } else {
+                // Reset to first question
+                setCurrentQuestion(0);
+                setSelectedAnswer(null);
+                setShowResult(false);
+            }
+        };
+
+        const currentQ = questions[currentQuestion];
+        const isCorrect = selectedAnswer === currentQ?.correct;
+
+        return (
+            <div className="quiz-container">
+                <h2 className="quiz-title">Try Our Demo Quiz</h2>
+                <p className="quiz-subtitle">Test your aptitude and logical reasoning skills</p>
+                
+                <div className="quiz-tabs">
+                    {['easy', 'medium', 'hard'].map(level => (
+                        <button
+                            key={level}
+                            className={`quiz-tab ${activeTab === level ? 'active' : ''}`}
+                            onClick={() => setActiveTab(level)}
+                        >
+                            {level.charAt(0).toUpperCase() + level.slice(1)}
+                        </button>
+                    ))}
+                </div>
+
+                {currentQ && (
+                    <div className="quiz-content">
+                        <div className="question-header">
+                            <span className="question-counter">
+                                Question {currentQuestion + 1} of {questions.length}
+                            </span>
+                            <span className="difficulty-badge">{activeTab.toUpperCase()}</span>
+                        </div>
+
+                        <div className="question-card">
+                            <h3 className="question-text">{currentQ.question}</h3>
+                            
+                            <div className="options-grid">
+                                {currentQ.options.map((option, index) => (
+                                    <button
+                                        key={index}
+                                        className={`option-btn ${
+                                            selectedAnswer === index ? 'selected' : ''
+                                        } ${
+                                            showResult ? 
+                                                (index === currentQ.correct ? 'correct' : 
+                                                 selectedAnswer === index ? 'incorrect' : '') 
+                                                : ''
+                                        }`}
+                                        onClick={() => !showResult && handleAnswerSelect(index)}
+                                        disabled={showResult}
+                                    >
+                                        <span className="option-letter">
+                                            {String.fromCharCode(65 + index)}
+                                        </span>
+                                        <span className="option-text">{option}</span>
+                                    </button>
+                                ))}
+                            </div>
+
+                            {showResult && (
+                                <div className={`result-section ${isCorrect ? 'correct' : 'incorrect'}`}>
+                                    <div className="result-header">
+                                        <span className="result-icon">
+                                            {isCorrect ? '✅' : '❌'}
+                                        </span>
+                                        <span className="result-text">
+                                            {isCorrect ? 'Correct!' : 'Incorrect'}
+                                        </span>
+                                    </div>
+                                    <div className="explanation">
+                                        <strong>Explanation:</strong> {currentQ.explanation}
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="quiz-actions">
+                                {!showResult ? (
+                                    <button
+                                        className="submit-btn"
+                                        onClick={handleSubmit}
+                                        disabled={selectedAnswer === null}
+                                    >
+                                        Submit Answer
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="next-btn"
+                                        onClick={nextQuestion}
+                                    >
+                                        {currentQuestion < questions.length - 1 ? 'Next Question' : 'Try Again'}
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+                
+                {/* Fireworks celebration for correct answers */}
+                {showFireworks && <QuizFireworks />}
+            </div>
+        );
+    })()}
+</div>
             <div className="landingpage-4">
                 {/* Reviews slider: two rows, opposite directions */}
                 {(() => {

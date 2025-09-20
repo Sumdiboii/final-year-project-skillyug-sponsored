@@ -137,7 +137,7 @@
 
 
 
-.back-btn {
+.back1-btn {
   width: 100%;
   display: flex;
   align-items: center;
@@ -146,15 +146,15 @@
   height: 44px;
   border-radius: 10px;
   border: 1px solid #dbe2ef;
-  background: #fff;
+  background: rgb(255, 255, 255);
   color:rgb(15, 5, 70);
   font-weight: 600;
   cursor: pointer;
   transition: box-shadow .2s ease, transform .06s ease;
 }
-.back-btn:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-.back-btn:active { transform: translateY(1px); }
-.back-icon { height: 18px; width: 18px; }
+.back1-btn:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.back1-btn:active { transform: translateY(1px); }
+.back1-icon { height: 18px; width: 18px; }
 
 
 @media (max-width: 420px) {

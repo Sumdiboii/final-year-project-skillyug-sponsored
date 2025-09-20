@@ -1,0 +1,177 @@
+.privacy-policy-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+  padding: 2rem 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.privacy-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  color: white;
+}
+
+.privacy-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+}
+
+.privacy-header h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.privacy-header p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.privacy-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.policy-section {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.policy-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+.policy-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.policy-card:last-child {
+  margin-bottom: 0;
+}
+
+.policy-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.policy-card p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+  font-size: 1rem;
+}
+
+.policy-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.policy-card li {
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  opacity: 0.9;
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.policy-card li:last-child {
+  border-bottom: none;
+}
+
+.policy-card li strong {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Special styling for rights section */
+.policy-section:nth-child(6) .policy-card li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+/* Special styling for contact section */
+.policy-section:last-of-type .policy-card {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.back-home {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+}
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+  .privacy-container {
+    padding: 0 1rem;
+  }
+  
+  .privacy-header h1 {
+    font-size: 2rem;
+  }
+  
+  .policy-section {
+    padding: 1.5rem;
+  }
+  
+  .policy-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .policy-card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .privacy-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .policy-section h2 {
+    font-size: 1.3rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+}
