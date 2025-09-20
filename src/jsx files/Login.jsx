@@ -1,15 +1,18 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css files/Login.css";
 import ParticleBackground from "../components/StarBg";
+import Footer from "../components/Footer";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add login logic here
-    alert("Login submitted!");
+    // Add login logic here - for now, directly navigate to Home
+    navigate("/home");
   };
 
   const handleGoogle = () => {
@@ -17,37 +20,31 @@ const Login = () => {
     alert("Continue with Google clicked");
   };
 
+  const handleAdminLogin = () => {
+    // Navigate to admin login page
+    navigate("/admin-login");
+  };
+
   return (
     <div className="login-page">
       {/* Particles in the background */}
       <ParticleBackground />
-      <button
-        className="login-back-btn"
-        style={{
-          position: 'absolute',
-          top: 32,
-          left: 32,
-          background: '#fff',
-          color: '#0a174e',
-          border: 'none',
-          borderRadius: '1.5rem',
-          padding: '0.6rem 1.6rem',
-          fontWeight: 600,
-          fontSize: '1rem',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
-          cursor: 'pointer',
-          zIndex: 1000
-        }}
-        onClick={() => window.history.back()}
-      >
-        ← Back
-      </button>
+      
       <div className="login-card">
         <div className="login-header">
-          <img src="assets/PrepMark.png" alt="Skillyug" className="login-logo" />
-          <h2 className="login-title">Welcome back</h2>
+          <img src="assets/blue-skillyug-logo-1.jpg" alt="Skillyug" className="login-logo" />
+          <h2 className="login-title" >Welcome back</h2>
           <p className="login-subtitle">Sign in to continue to your dashboard</p>
         </div>
+
+         <button type="button" className="admin-btn" onClick={handleAdminLogin}>
+          <img
+            className="admin-icon"
+            src="assets/skillyug-logo-removebg-preview.png"
+            alt="Admin Logo"
+          />
+          Administrator Login
+        </button>
 
         <button type="button" className="google-btn" onClick={handleGoogle}>
           <img
@@ -92,10 +89,17 @@ const Login = () => {
           </div>
 
           <button type="submit" className="login-btn">Sign In</button>
+
         </form>
 
-        <p className="login-hint">Don’t have an account? <a href="#">Sign up</a></p>
+         <button type="button" className="back-btn" onClick={() => navigate("/")}>
+          
+          Back 
+        </button>
+
+        <p className="login-hint">Don’t have an account? <a href="/pricing">Sign up</a></p>
       </div>
+      
     </div>
   );
 };
