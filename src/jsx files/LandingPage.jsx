@@ -369,10 +369,10 @@ const LandingPage = () => {
                 const currentQ = questions[currentQuestion];
                 if (selectedAnswer === currentQ?.correct) {
                     setShowFireworks(true);
-                    // Hide fireworks after 7 seconds for longer celebration
+                    // Hide fireworks after 4 seconds for better performance
                     setTimeout(() => {
                         setShowFireworks(false);
-                    }, 7000);
+                    }, 4000);
                 }
             }
         };

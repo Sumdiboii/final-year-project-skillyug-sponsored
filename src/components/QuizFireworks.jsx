@@ -10,15 +10,15 @@ const QuizFireworks = () => {
   ];
 
   const createCelebrationBurst = () => {
-    // Create 5 fireworks simultaneously for celebration - more coverage
-    const positions = ['15%', '35%', '50%', '65%', '85%'];
+    // Create 3 fireworks for lighter performance
+    const positions = ['25%', '50%', '75%'];
     
     positions.forEach((position, index) => {
       setTimeout(() => {
         const id = Date.now() + Math.random() + index;
         const color = colors[Math.floor(Math.random() * colors.length)];
-        const burstHeight = 20 + Math.random() * 50; // 20-70% from top - much taller range
-        const particles = 18 + Math.random() * 12; // 18-30 particles - more particles
+        const burstHeight = 25 + Math.random() * 40; // 25-65% from top
+        const particles = 12 + Math.random() * 6; // 12-18 particles - reduced
         
         const newFirework = {
           id,
@@ -38,50 +38,13 @@ const QuizFireworks = () => {
               fw.id === id ? { ...fw, stage: 'burst' } : fw
             )
           );
-        }, 800);
+        }, 600);
 
-        // Remove firework - longer duration
+        // Remove firework
         setTimeout(() => {
           setFireworks(prev => prev.filter(fw => fw.id !== id));
-        }, 4500);
-      }, index * 100); // Faster staggering
-    });
-  };
-
-  const createExtraFireworks = () => {
-    // Additional random fireworks for fuller effect
-    const extraPositions = ['10%', '30%', '70%', '90%'];
-    
-    extraPositions.forEach((position, index) => {
-      setTimeout(() => {
-        const id = Date.now() + Math.random() + index + 1000;
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        const burstHeight = 15 + Math.random() * 60; // 15-75% from top
-        const particles = 12 + Math.random() * 10; // 12-22 particles
-        
-        const newFirework = {
-          id,
-          position,
-          color,
-          burstHeight,
-          particles,
-          stage: 'launch'
-        };
-
-        setFireworks(prev => [...prev, newFirework]);
-
-        setTimeout(() => {
-          setFireworks(prev => 
-            prev.map(fw => 
-              fw.id === id ? { ...fw, stage: 'burst' } : fw
-            )
-          );
-        }, 700);
-
-        setTimeout(() => {
-          setFireworks(prev => prev.filter(fw => fw.id !== id));
-        }, 4000);
-      }, index * 200 + 500); // Delayed start
+        }, 3000);
+      }, index * 150);
     });
   };
 
@@ -89,28 +52,13 @@ const QuizFireworks = () => {
     // Start celebration immediately
     createCelebrationBurst();
     
-    // Create extra fireworks
-    createExtraFireworks();
-    
-    // Create second wave after 1.2 seconds
+    // Optional second wave for lighter performance
     const secondBurst = setTimeout(() => {
       createCelebrationBurst();
-    }, 1200);
-
-    // Create third wave after 2.5 seconds
-    const thirdBurst = setTimeout(() => {
-      createExtraFireworks();
-    }, 2500);
-
-    // Final burst after 3.5 seconds
-    const finalBurst = setTimeout(() => {
-      createCelebrationBurst();
-    }, 3500);
+    }, 1800);
 
     return () => {
       clearTimeout(secondBurst);
-      clearTimeout(thirdBurst);
-      clearTimeout(finalBurst);
     };
   }, []);
 
@@ -169,32 +117,16 @@ const QuizFireworks = () => {
         </div>
       ))}
       
-      {/* Success message sparkles - more coverage */}
+      {/* Reduced sparkles for better performance */}
       <div className="success-sparkles">
-        {Array.from({ length: 25 }).map((_, i) => (
+        {Array.from({ length: 8 }).map((_, i) => (
           <div
             key={i}
             className="success-sparkle"
             style={{
-              left: `${5 + Math.random() * 90}%`,
-              top: `${10 + Math.random() * 80}%`,
-              animationDelay: `${Math.random() * 4}s`,
-              '--sparkle-color': colors[Math.floor(Math.random() * colors.length)]
-            }}
-          ></div>
-        ))}
-      </div>
-      
-      {/* Additional floating sparkles for full screen effect */}
-      <div className="floating-sparkles">
-        {Array.from({ length: 35 }).map((_, i) => (
-          <div
-            key={i}
-            className="floating-sparkle"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 6}s`,
+              left: `${15 + Math.random() * 70}%`,
+              top: `${20 + Math.random() * 60}%`,
+              animationDelay: `${Math.random() * 2}s`,
               '--sparkle-color': colors[Math.floor(Math.random() * colors.length)]
             }}
           ></div>
