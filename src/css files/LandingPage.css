@@ -28,14 +28,133 @@
     }
 
    
-    
-    .landingpage-2 {
-        display:none;
+     .landingpage-2{
+        flex-direction:column !important;
+        height:fit-content !important;
+        background-color: rgb(255, 255, 255) !important;
+        padding: 2rem 1rem !important;
+        gap: 3rem !important;
     }
 
-    .lp25-right {
-        display:none;
+    .left-container-landingpage-2{
+        width: 100vw !important;
+        height: fit-content !important;
+        padding: 2rem !important;
+        margin: 0 !important;
+        
+    }
+
+    .right-container-landingpage-2{
+        width: 100vw !important;
+        height: fit-content !important;
+        gap: 3rem !important;
+        margin: 0 !important;
+        padding: 1rem !important;
+       
+    }
+
+    .right-container-landingpage-2-top{
+        flex-direction: column !important;
+        height: fit-content !important;
+        width: 100% !important;
+        gap: 3rem !important;
+    }
+
+    .right-container-landingpage-2-bottom{
+        flex-direction: column !important;
+        height: fit-content !important;
+        width: 100% !important;
+        gap: 3rem !important;
+    }
+
+    .right-container-landingpage-2-top-1,
+    .right-container-landingpage-2-top-2,
+    .right-container-landingpage-2-bottom-1,
+    .right-container-landingpage-2-bottom-2{
+        height: 250px !important;
+        min-height: 250px !important;
+        width: 100% !important;
+        padding: 1rem !important;
+    }
+
+
+
+
+    .skillyug-flipcard {
+    width: 300px !important;
+    height: 300px !important;
+    position: relative;
+    
 }
+
+.skillyug-flipcard-inner{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;;
+}
+
+.skillyug-flipcard-back {
+    transform: rotateY(180deg);
+    background: #0a174e;
+    color: #fff;
+    padding: 2.5rem 2.5rem;
+    text-align: center;
+    z-index: 3;
+    margin:0 !important;
+    position: absolute;
+}
+
+.landingpage-2-5{
+    background-color: transparent !important;
+    width:100% !important;
+}
+
+.lp25-left{
+    width:80vw !important;
+    
+}
+
+.vid-title-text{
+    width:100vw !important;
+    font-size: 27px !important;
+    padding:0 !important;
+    
+}
+
+.lp25-video-wrap{
+    min-width:100% !important;
+    
+}
+
+.lp25-right{
+    display:none !important;
+}
+
+.landingpage-3{
+    background-color: transparent !important;
+    flex-direction: column !important;
+    gap:0 !important;
+}
+
+.lp3-title{
+    font-size: 24px !important;
+    
+    width:100vw !important;
+    text-align: center !important;}
+
+
+    .lp3-chart-wrap{
+        width:80vw !important;
+        height:200px !important;
+    }
+
+    .right-container-landingpage-3{
+        width:90vw !important;
+        margin:0 !important;
+        padding:0.5rem 0.5rem 2rem 0.5rem !important;
+    }
+
 
 .quiz-container{
 
@@ -52,12 +171,67 @@
         min-height: fit-content !important;
         height:fit-content !important;
         width: 100vw;
+        border:none !important;
         background: rgb(255, 255, 255);
         padding: 2rem 0;
 }
 
+.landingpage-5{
+    display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box;
+        min-height: fit-content !important;
+        height:fit-content !important;
+        width: 100vw;
+        background: rgb(255, 255, 255);
+        padding: 0 !important;
+}
+
+.left-container-landingpage-5{
+    
+        width: 100vw !important;
+        background-color: transparent !important;
 
 }
+
+.faqs-wrap { width: 100%; max-width:90vw !important; background: transparent !important; margin-top: 3rem !important; margin-bottom: 2rem !important; }
+.faqs-title{
+    font-size: 23px !important;
+}
+
+.right-container-landingpage-5{
+    width:100vw !important;
+}
+
+.owner-note-card { width: 100%; max-width: 90vw !important;  margin-right: 0rem !important; margin-bottom:3rem; box-sizing: border-box !important;}
+}
+
+/* @media (max-width: 1024px) and (min-width: 801px) {
+    .landingpage-2{
+        padding: 1.5rem !important;
+        gap: 1.5rem !important;
+    }
+
+    .right-container-landingpage-2{
+        gap: 1.5rem !important;
+        margin-right: 1rem !important;
+    }
+
+    .right-container-landingpage-2-top{
+        gap: 1.5rem !important;
+    }
+
+    .right-container-landingpage-2-bottom{
+        gap: 1.5rem !important;
+    }
+
+    .skillyug-flipcard {
+        width: 350px !important;
+        height: 320px !important;
+    }
+} */
 
 @media (max-width: 400px) {
 
@@ -87,19 +261,43 @@
         border-radius: 50%;
     }
 
-     .landingpage-2{
-        flex-direction:column;
-        height:fit-content;
+    .landingpage-2{
+        padding: 1rem 0.5rem !important;
+        gap: 1rem !important;
     }
+
+    .left-container-landingpage-2,
+    .right-container-landingpage-2{
+        padding: 0.5rem !important;
+    }
+
+    .right-container-landingpage-2{
+        gap: 1rem !important;
+    }
+
+    .right-container-landingpage-2-top-1,
+    .right-container-landingpage-2-top-2,
+    .right-container-landingpage-2-bottom-1,
+    .right-container-landingpage-2-bottom-2{
+        height: 180px !important;
+        min-height: 180px !important;
+        padding: 0.75rem !important;
+    }
+
+    .app-feature-desc{
+        font-size: 1.1rem !important;
+        padding-inline: 0.5rem !important;
+    }
+
 }
 /* Skillyug logo flipcard */
 .skillyug-flip-wrap {
-    perspective: 1200px;
+    /* perspective: 1200px; */
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 420px;
+    height:fit-content;
     margin-left:2rem;
 }
 .skillyug-flipcard {
@@ -519,6 +717,7 @@
     box-sizing: border-box;
     height: 100vh;
     width: 50vw;
+   
     background-color: transparent;
     
 }
@@ -720,10 +919,10 @@
 .lp3-chart .lp3-legend text { fill: #051b5a; font-weight: 600; }
 
 .lp3-stats-grid { width: 100%; max-width: 640px;min-height: 500px; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 2rem; }
-.stat-card { background: white; border: 1px solid #ffffff22; border-radius: 18px; padding: 1.25rem; color:  rgb(15, 5, 70);; text-align: center; box-shadow: 0 12px 32px rgba(0,0,0,0.25); backdrop-filter: blur(6px); transition: transform .12s ease, box-shadow .2s ease; }
-.stat-card:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,0,0,0.32); }
-.stat-value { font-size: 2.1rem; font-weight: 900; letter-spacing: .2px; }
-.stat-label { font-size: 0.95rem; opacity: 0.9; }
+.statt-card { background: white; border: 1px solid #ffffff22; border-radius: 18px; padding: 1.25rem; color:  rgb(15, 5, 70); text-align: center; box-shadow: 0 12px 32px rgba(0,0,0,0.25); backdrop-filter: blur(6px); transition: transform .12s ease, box-shadow .2s ease; }
+.statt-card:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,0,0,0.32); }
+.statt-value { font-size: 2.1rem; font-weight: 900; letter-spacing: .2px; }
+.statt-label { font-size: 0.95rem; opacity: 0.9; }
 
 /* @media (max-width: 900px) {
     .landingpage-3 { flex-direction: column; height: auto; gap: 2rem; padding: 2rem 1rem; }
@@ -789,6 +988,7 @@
     min-height: 100vh;
     background: rgb(255, 255, 255);
     padding: 2rem;
+    border:none;
     display: flex;
     align-items: center;
     justify-content: center;

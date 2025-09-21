@@ -80,13 +80,13 @@ const LandingPage = () => {
                                                     <p>
                                                         Skillyug Education Academy is a premier institution dedicated to empowering students with practical skills and knowledge for the modern world. Our programs focus on hands-on learning, mentorship, and real-world projects to ensure every learner is industry-ready.
                                                     </p>
-                                                    <ul>
+                                                    {/* <ul>
                                                         <li>Expert faculty and mentors</li>
                                                         <li>Industry-driven curriculum</li>
                                                         <li>Workshops, internships, and live projects</li>
                                                         <li>Personalized career guidance</li>
                                                         <li>Vibrant student community</li>
-                                                    </ul>
+                                                    </ul> */}
                                                 </div>
                                             </div>
                                         </div>
@@ -249,29 +249,29 @@ const LandingPage = () => {
                                  </div>
                                  <div className="right-container-landingpage-3">
                                      <div className="lp3-stats-grid">
-                                         <div className="stat-card">
-                                             <div className="stat-value">15</div>
-                                             <div className="stat-label">Lessons</div>
+                                         <div className="statt-card">
+                                             <div className="statt-value">15</div>
+                                             <div className="statt-label">Lessons</div>
                                          </div>
-                                         <div className="stat-card">
-                                             <div className="stat-value">50k</div>
-                                             <div className="stat-label">Users</div>
+                                         <div className="statt-card">
+                                             <div className="statt-value">50k</div>
+                                             <div className="statt-label">Users</div>
                                          </div>
-                                         <div className="stat-card">
-                                             <div className="stat-value">92%</div>
-                                             <div className="stat-label">Avg. Score Lift</div>
+                                         <div className="statt-card">
+                                             <div className="statt-value">92%</div>
+                                             <div className="statt-label">Avg. Score Lift</div>
                                          </div>
-                                         <div className="stat-card">
-                                             <div className="stat-value">4.8★</div>
-                                             <div className="stat-label">App Rating</div>
+                                         <div className="statt-card">
+                                             <div className="statt-value">4.8★</div>
+                                             <div className="statt-label">App Rating</div>
                                          </div>
-                                         <div className="stat-card">
-                                             <div className="stat-value">92%</div>
-                                             <div className="stat-label">Avg. Score Lift</div>
+                                         <div className="statt-card">
+                                             <div className="statt-value">92%</div>
+                                             <div className="statt-label">Avg. Score Lift</div>
                                          </div>
-                                         <div className="stat-card">
-                                             <div className="stat-value">4.8★</div>
-                                             <div className="stat-label">App Rating</div>
+                                         <div className="statt-card">
+                                             <div className="statt-value">4.8★</div>
+                                             <div className="statt-label">App Rating</div>
                                          </div>
                                      </div>
                                  </div>
