@@ -194,6 +194,96 @@ const LandingPage = () => {
                 </div>
             </div>
 
+                    {/* App Download Section with Astronaut */}
+                    <div className="download-section">
+                        <div className="download-container">
+                            {/* Main Stars Background */}
+                            <div className="stars-container">
+                                {Array.from({ length: 20 }).map((_, i) => {
+                                    // Better distribution using sectors
+                                    const sector = i % 4; // 4 sectors
+                                    const sectorX = (sector % 2) * 50; // Left or right half
+                                    const sectorY = Math.floor(sector / 2) * 50; // Top or bottom half
+                                    const randomX = sectorX + Math.random() * 45; // Random within sector
+                                    const randomY = sectorY + Math.random() * 45; // Random within sector
+                                    
+                                    return (
+                                        <div
+                                            key={i}
+                                            className="floating-star"
+                                            style={{
+                                                left: `${Math.min(randomX + 5, 95)}%`,
+                                                top: `${Math.min(randomY + 5, 95)}%`,
+                                                animationDelay: `${Math.random() * 8}s`,
+                                                animationDuration: `${4 + Math.random() * 4}s`
+                                            }}
+                                        >
+                                            ✦
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                           
+                            
+
+                            {/* Main Content */}
+                            <div className="download-content">
+                                
+
+                                {/* Text Content */}
+                                <div className="download-text-content">
+                                    <h1 className="download-title">
+                                        <span className="title-line">Download PrepMark</span>
+                                        <span className="title-line">Start Learning Today</span>
+                                    </h1>
+                                    <p className="download-subtitle">
+                                        Experience personalized learning on-the-go with our award-winning mobile app
+                                    </p>
+
+                                    {/* App Store Buttons */}
+                                    <div className="app-stores">
+                                        <a href="https://github.com/Sumdiboii" target="_blank" rel="noopener noreferrer" className="app-store-btn google-play">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="app-store-image" />
+                                        </a>
+                                        <a href="https://github.com/Sumdiboii" target="_blank" rel="noopener noreferrer" className="app-store-btn app-store">
+                                            <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" className="app-store-image" />
+                                        </a>
+                                    </div>
+
+                                    
+                                </div>
+                                <div className="rocket-cont"><Ship /></div>
+                            </div>
+
+                            {/* Additional Well-Distributed Stars */}
+                            <div className="additional-stars">
+                                {Array.from({ length: 30 }).map((_, i) => {
+                                    // 6x5 grid pattern for better coverage
+                                    const gridX = (i % 6) * 16.67; // 6 columns: 0%, 16.67%, 33.33%, 50%, 66.67%, 83.33%
+                                    const gridY = Math.floor(i / 6) * 20; // 5 rows: 0%, 20%, 40%, 60%, 80%
+                                    const randomX = gridX + (Math.random() - 0.5) * 12; // ±6% randomness
+                                    const randomY = gridY + (Math.random() - 0.5) * 15; // ±7.5% randomness
+                                    
+                                    return (
+                                        <div
+                                            key={i}
+                                            className="additional-star"
+                                            style={{
+                                                left: `${Math.max(2, Math.min(98, randomX))}%`,
+                                                top: `${Math.max(2, Math.min(98, randomY))}%`,
+                                                animationDelay: `${Math.random() * 15}s`,
+                                                animationDuration: `${3 + Math.random() * 5}s`
+                                            }}
+                                        >
+                                            ✧
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+
                          <div className="landingpage-3">
                                  <ParticleBackground />
                                  <div className="left-container-landingpage-3">

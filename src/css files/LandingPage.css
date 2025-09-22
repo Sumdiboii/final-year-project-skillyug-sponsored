@@ -108,6 +108,7 @@
 .landingpage-2-5{
     background-color: transparent !important;
     width:100% !important;
+    min-height:fit-content !important;
 }
 
 .lp25-left{
@@ -408,7 +409,7 @@
     to { transform: translateY(0); opacity: 1; }
 }
 /* Landing page 2.5: video + vertical gallery */
-.landingpage-2-5{ display:flex; flex-direction:row; align-items:center; justify-content:center; width:100vw; gap:2rem; padding:2rem 3rem; box-sizing:border-box; }
+.landingpage-2-5{ display:flex; flex-direction:row; align-items:center; justify-content:center; width:100vw; gap:2rem;  box-sizing:border-box; min-height: fit-content !important; }
 .lp25-left, .lp25-right { flex:1; display:flex; align-items:center; justify-content:center; flex-direction: column; gap:2.5rem; }
 .vid-title-text { color: #ffffff; font-size: 2rem; font-weight: 700; text-align: center; font-family: 'Poppins', Arial, sans-serif; }
 .lp25-video-wrap{ width:100%; min-width: 720px; border-radius: 18px; overflow:hidden; border:1px solid rgba(255,255,255,.18); box-shadow: 0 12px 32px rgba(0,0,0,.25); background: rgba(255,255,255,.06); backdrop-filter: blur(6px); }
@@ -1368,3 +1369,502 @@
     .faqs-wrap { max-width: 90vw; }
     .owner-note-card { max-width: 90vw; }
 } */
+
+/* ==================== MODERN DOWNLOAD SECTION ==================== */
+.download-section {
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.download-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Floating Stars Background */
+.stars-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.floating-star {
+    position: absolute;
+    font-size: 1rem;
+    opacity: 0.4;
+    color: rgba(255, 255, 255, 0.6);
+    animation: starTwinkle infinite ease-in-out;
+}
+
+@keyframes starTwinkle {
+    0%, 100% { opacity: 0.2; transform: scale(0.5); }
+    50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+
+
+
+
+/* Main Content */
+.download-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 80vw;
+    height:100vh;
+    z-index: 10;
+    position: relative;
+    margin:0;
+    background-color: transparent;
+    
+}
+
+.rocket-cont {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    color: white;
+    text-align: center;
+    background-color:transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Text Content */
+.download-text-content {
+    flex: 1.5;
+    color: white;
+     height:70%;
+    width:100%;
+    text-align: center;
+    background-color: transparent;
+    
+    
+}
+
+.download-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    
+}
+
+.title-line {
+    display: block;
+    animation: titleSlideIn 1s ease-out forwards;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.title-line:nth-child(1) { animation-delay: 0.2s; }
+.title-line:nth-child(2) { animation-delay: 0.4s; color: #cc4915; }
+
+@keyframes titleSlideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.download-subtitle {
+    width:100%;
+    font-size: 1.4rem;
+    margin-bottom: 3rem;
+    opacity: 1;
+    line-height: 1.6;
+    animation: subtitleFadeIn 1s ease-out 0.8s forwards;
+    opacity: 0;
+    text-align: center;
+}
+
+@keyframes subtitleFadeIn {
+    to { opacity: 0.9; }
+}
+
+/* App Store Buttons */
+.app-stores {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.app-store-btn {
+    display: block;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: buttonSlideUp 1s ease-out forwards;
+    opacity: 0;
+    transform: translateY(30px);
+    overflow: hidden;
+}
+
+.app-store-image {
+    height: 60px;
+    width: auto;
+    display: block;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.google-play { animation-delay: 1s; }
+.app-store { animation-delay: 1.2s; }
+
+@keyframes buttonSlideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.app-store-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+}
+
+.app-store-btn:hover .app-store-image {
+    filter: brightness(1.1) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+}
+
+/* App store button content styles removed - now using images */
+
+/* Feature Highlights */
+.download-features {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    animation: featuresSlideIn 1s ease-out 1.4s forwards;
+    opacity: 0;
+}
+
+@keyframes featuresSlideIn {
+    to { opacity: 1; }
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.feature-icon {
+    font-size: 1.2rem;
+}
+
+/* Additional Well-Distributed Stars */
+.additional-stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.additional-star {
+    position: absolute;
+    font-size: 0.7rem;
+    opacity: 0.5;
+    color: rgba(255, 255, 255, 0.8);
+    animation: twinkle 4s ease-in-out infinite;
+    pointer-events: none;
+    user-select: none;
+}
+
+.additional-star:nth-child(odd) {
+    animation-duration: 5s;
+    opacity: 0.4;
+}
+
+.additional-star:nth-child(3n) {
+    animation-duration: 6s;
+    opacity: 0.6;
+    font-size: 0.8rem;
+}
+
+/* Enhanced star distribution for better coverage */
+.stars-container .floating-star:nth-child(1) { top: 10%; left: 5%; }
+.stars-container .floating-star:nth-child(2) { top: 15%; right: 8%; }
+.stars-container .floating-star:nth-child(3) { top: 25%; left: 12%; }
+.stars-container .floating-star:nth-child(4) { top: 35%; right: 15%; }
+.stars-container .floating-star:nth-child(5) { top: 45%; left: 8%; }
+.stars-container .floating-star:nth-child(6) { top: 55%; right: 12%; }
+.stars-container .floating-star:nth-child(7) { top: 65%; left: 15%; }
+.stars-container .floating-star:nth-child(8) { top: 75%; right: 5%; }
+.stars-container .floating-star:nth-child(9) { top: 85%; left: 10%; }
+.stars-container .floating-star:nth-child(10) { top: 20%; left: 50%; }
+.stars-container .floating-star:nth-child(11) { top: 70%; right: 45%; }
+.stars-container .floating-star:nth-child(12) { top: 40%; left: 55%; }
+
+/* Responsive Design */
+@media (max-width: 1440px) {
+    .download-content {
+        width: 95%;
+        padding: 0 1rem;
+    }
+    
+    .astronaut-body {
+        font-size: 5rem;
+    }
+    
+    .download-title {
+        font-size: 3.2rem;
+    }
+    
+    .big-planet {
+        font-size: 6rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .download-content {
+        flex-direction: column;
+        gap: 2rem;
+        text-align: center;
+        padding: 0 2rem;
+    }
+    
+    .astronaut-container {
+        height: 35vh;
+        order: 1;
+    }
+    
+    .download-text-content {
+        order: 2;
+        max-width: 700px;
+    }
+    
+    .download-title {
+        font-size: 2.8rem;
+    }
+    
+    .astronaut-body {
+        font-size: 4.5rem;
+    }
+    
+    .rocket {
+        font-size: 2.5rem;
+    }
+    
+    .big-planet {
+        font-size: 5rem;
+    }
+    
+    .big-planet-container {
+        left: 2%;
+        top: 20%;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .download-content {
+        padding: 0 1.5rem;
+    }
+    
+    .download-title {
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .download-subtitle {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .astronaut-container {
+        height: 25vh;
+    }
+    
+    .astronaut-body {
+        font-size: 3.5rem;
+    }
+    
+    .rocket {
+        font-size: 2rem;
+        top: -0.5rem;
+        right: -1.5rem;
+    }
+    
+    .app-stores {
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .app-store-btn {
+        min-width: auto;
+    }
+    
+    .app-store-image {
+        height: 50px;
+    }
+    
+    .download-features {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .feature-item {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .planet {
+        font-size: 1.5rem;
+        opacity: 0.6;
+    }
+    
+    .big-planet {
+        font-size: 4rem;
+    }
+    
+    .big-planet-container {
+        left: 1%;
+        top: 15%;
+    }
+    
+    .floating-planet {
+        opacity: 0.6;
+    }
+    
+    .planet-small-1 { font-size: 2rem; }
+    .planet-small-2 { font-size: 1.5rem; }
+    .planet-small-3 { font-size: 2.5rem; }
+    .planet-small-4 { font-size: 1.3rem; }
+    .planet-small-5 { font-size: 1.8rem; }
+    .planet-small-6 { font-size: 1.2rem; }
+}
+
+@media (max-width: 480px) {
+    .download-section {
+        padding: 0.5rem;
+    }
+    
+    .download-content {
+        padding: 0 1rem;
+    }
+    
+    .download-title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .download-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+    
+    .astronaut-container {
+        height: 20vh;
+    }
+    
+    .astronaut-body {
+        font-size: 2.5rem;
+    }
+    
+    .rocket {
+        font-size: 1.5rem;
+        top: -0.3rem;
+        right: -1rem;
+    }
+    
+    .app-stores {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    
+    .app-store-btn {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .app-store-image {
+        height: 45px;
+    }
+    
+    .download-features {
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: center;
+    }
+    
+    .feature-item {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.6rem;
+        width: fit-content;
+    }
+    
+    /* Mobile planet styles */
+    .big-planet {
+        font-size: 3rem;
+    }
+    
+    .big-planet-container {
+        left: 0%;
+        top: 10%;
+        transform: translateY(0);
+    }
+    
+    .planet {
+        font-size: 1.2rem;
+        opacity: 0.3;
+    }
+    
+    .floating-planet {
+        opacity: 0.4;
+    }
+    
+    .planet-small-1 { font-size: 1.5rem; }
+    .planet-small-2 { font-size: 1.2rem; }
+    .planet-small-3 { font-size: 1.8rem; }
+    .planet-small-4 { font-size: 1rem; }
+    .planet-small-5 { font-size: 1.3rem; }
+    .planet-small-6 { font-size: 0.9rem; }
+    
+    /* Hide some smaller planets on very small screens for performance */
+    .planet-small-4,
+    .planet-small-6 {
+        display: none;
+    }
+}
