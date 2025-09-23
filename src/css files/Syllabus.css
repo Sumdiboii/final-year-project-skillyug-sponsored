@@ -15,7 +15,7 @@
 .main-syllabus-cont {
   width: 100vw;
   min-height: 100vh;
-  background: linear-gradient(135deg, rgb(15, 5, 70) 0%, rgb(30, 15, 90) 100%);
+  background: rgb(15, 5, 70);
   margin-top: 89px;
   display: flex;
   align-items: center;
@@ -464,21 +464,36 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+
+  .main-syllabus-cont{
+    padding: 1rem !important;
+    
+
+  }
   .objective-title {
-    font-size: 2.5rem;
+    font-size: 2rem !important;
+    
+  }
+  .objective-subtitle {
+    font-size: 1rem !important;
   }
   
   .objectives-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 2rem;
+    padding:1rem;
   }
   
   .syllabus-title {
-    font-size: 2.2rem;
+    font-size: 2rem !important;
+  }
+  
+  .syllabus-description {
+    font-size: 1rem !important;
   }
   
   .resources-title {
-    font-size: 2.2rem;
+    font-size: 2rem !important;
   }
   
   .tab-navigation {
@@ -487,20 +502,34 @@
   }
   
   .tab-btn {
-    width: 80%;
-    max-width: 300px;
+    width: 900%;
+    max-width: 400px;
+  }
+
+  .sat-subjects {
+    gap: 2rem;
+    padding:1rem;
   }
   
   .syllabus-grid {
     grid-template-columns: 1fr;
+    padding:1rem !important;
+  }
+
+  .resources-description{
+    font-size: 1rem !important;
+    width:90%;
   }
   
   .resources-grid {
     grid-template-columns: 1fr;
+   
+
   }
   
   .topics-grid {
     grid-template-columns: 1fr;
+    padding:1rem;
   }
   
   .subject-header {
@@ -515,6 +544,13 @@
     gap: 0.5rem;
   }
   
+  .resources-cta  {
+    padding:1rem 2rem 2rem 2rem !important;
+  }
+
+  .resources-content{
+    padding:1rem;
+  }
   .cta-buttons {
     flex-direction: column;
     align-items: center;

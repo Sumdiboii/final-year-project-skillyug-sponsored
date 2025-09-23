@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css files/Syllabus.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -66,6 +67,22 @@ const satSyllabus = [
 
 const Syllabus = () => {
   const [activeTab, setActiveTab] = useState("MAT");
+  const navigate = useNavigate();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const handleDownloadApp = () => {
+    window.scrollTo(0, 0); // Scroll to top before navigation
+    navigate("/");
+  };
+
+  const handleStartTrial = () => {
+    window.scrollTo(0, 0); // Scroll to top before navigation
+    navigate("/pricing");
+  };
 
   return (
     <div className="syllabus-page">
@@ -367,8 +384,8 @@ const Syllabus = () => {
               <h3>Ready to Start Your NMMS Journey?</h3>
               <p>Join thousands of successful students who trusted PrepMark for their exam preparation</p>
               <div className="cta-buttons">
-                <button className="cta-btn primary">Download App</button>
-                <button className="cta-btn secondary">Start Free Trial</button>
+                <button className="cta-btn primary" onClick={handleDownloadApp}>Download App</button>
+                <button className="cta-btn secondary" onClick={handleStartTrial}>Start Free Trial</button>
               </div>
             </div>
           </div>
