@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../css files/Practice.css';
+import MainNavbar from "../components/MainNavbar";
+import Footer from "../components/Footer";
+import ParticleBackground from '../components/StarBg';
 
 const Practice = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('quick');
+  const [syllabusTab, setSyllabusTab] = useState('mat'); // For MAT/SAT tabs in Section 2
+  const [satSubTab, setSatSubTab] = useState('math'); // For SAT sub-categories
 
   const quickPracticeOptions = [
     {
@@ -107,16 +114,393 @@ const Practice = () => {
     { name: 'Geography', level: 80, color: '#607D8B', icon: '🌍' }
   ];
 
-  const getDifficultyDots = (difficulty) => {
-    const levels = { easy: 1, medium: 2, hard: 3 };
-    const level = levels[difficulty] || 1;
-    
-    return Array.from({ length: 3 }, (_, i) => (
-      <div 
-        key={i} 
-        className={`difficulty-dot ${i < level ? `filled ${difficulty}` : ''}`}
-      ></div>
-    ));
+  // MAT Quiz Data - Based on Syllabus.jsx
+  const matQuizzes = [
+    {
+      id: 1,
+      title: 'Analogy',
+      description: 'Master word, number, and figure analogies with comprehensive practice',
+      questions: 15,
+      duration: '20 min',
+      difficulty: 'Medium',
+      topics: ['Word Analogies', 'Number Analogies', 'Figure Analogies', 'Mixed Patterns'],
+      icon: '🔗'
+    },
+    {
+      id: 2,
+      title: 'Classification',
+      description: 'Identify the odd one out and classify elements effectively',
+      questions: 20,
+      duration: '25 min',
+      difficulty: 'Easy',
+      topics: ['Word Classification', 'Number Classification', 'Figure Classification', 'Mixed Groups'],
+      icon: '🎯'
+    },
+    {
+      id: 3,
+      title: 'Number & Letter Series',
+      description: 'Complete sequence patterns in numbers and alphabets',
+      questions: 25,
+      duration: '30 min',
+      difficulty: 'Medium',
+      topics: ['Number Series', 'Letter Series', 'Mixed Series', 'Complex Patterns'],
+      icon: '🔢'
+    },
+    {
+      id: 4,
+      title: 'Coding-Decoding',
+      description: 'Decode patterns and encrypted messages using various techniques',
+      questions: 18,
+      duration: '25 min',
+      difficulty: 'Medium',
+      topics: ['Letter Coding', 'Number Coding', 'Symbol Coding', 'Mixed Coding'],
+      icon: '🔐'
+    },
+    {
+      id: 5,
+      title: 'Pattern Perception',
+      description: 'Identify and complete visual and logical patterns',
+      questions: 20,
+      duration: '30 min',
+      difficulty: 'Hard',
+      topics: ['Visual Patterns', 'Number Patterns', 'Shape Patterns', 'Complex Sequences'],
+      icon: '👁️'
+    },
+    {
+      id: 6,
+      title: 'Hidden Figures',
+      description: 'Find embedded shapes and figures within complex designs',
+      questions: 15,
+      duration: '20 min',
+      difficulty: 'Hard',
+      topics: ['Embedded Figures', 'Shape Recognition', 'Visual Analysis', 'Spatial Reasoning'],
+      icon: '🕵️'
+    },
+    {
+      id: 7,
+      title: 'Blood Relations',
+      description: 'Solve family relationship problems and genealogical puzzles',
+      questions: 20,
+      duration: '25 min',
+      difficulty: 'Medium',
+      topics: ['Family Trees', 'Relationship Chains', 'Generation Problems', 'Complex Relations'],
+      icon: '👨‍👩‍👧‍👦'
+    },
+    {
+      id: 8,
+      title: 'Direction Sense',
+      description: 'Master navigation and directional reasoning problems',
+      questions: 18,
+      duration: '20 min',
+      difficulty: 'Easy',
+      topics: ['Compass Directions', 'Distance Calculations', 'Path Finding', 'Movement Tracking'],
+      icon: '🧭'
+    },
+    {
+      id: 9,
+      title: 'Logical & Mathematical Puzzles',
+      description: 'Critical thinking and advanced problem-solving techniques',
+      questions: 22,
+      duration: '35 min',
+      difficulty: 'Hard',
+      topics: ['Logic Puzzles', 'Math Puzzles', 'Reasoning Problems', 'Critical Analysis'],
+      icon: '🧩'
+    },
+    {
+      id: 10,
+      title: 'Spatial Visualization',
+      description: 'Mirror images, folding/unfolding patterns and 3D reasoning',
+      questions: 16,
+      duration: '25 min',
+      difficulty: 'Hard',
+      topics: ['Mirror Images', 'Paper Folding', 'Cube Problems', '3D Visualization'],
+      icon: '🔄'
+    }
+  ];
+
+  // SAT Quiz Data - Based on Syllabus.jsx (Mathematics)
+  const satMathQuizzes = [
+    {
+      id: 1,
+      title: 'Integers, Fractions & Decimals',
+      description: 'Master basic number systems and rational numbers',
+      questions: 20,
+      duration: '25 min',
+      difficulty: 'Easy',
+      topics: ['Integers', 'Fractions', 'Decimals', 'Rational Numbers'],
+      icon: '🔢'
+    },
+    {
+      id: 2,
+      title: 'Exponents & Powers',
+      description: 'Understanding exponential expressions and power rules',
+      questions: 15,
+      duration: '20 min',
+      difficulty: 'Medium',
+      topics: ['Laws of Exponents', 'Powers', 'Scientific Notation', 'Applications'],
+      icon: '⚡'
+    },
+    {
+      id: 3,
+      title: 'Algebra Fundamentals',
+      description: 'Algebraic expressions, equations, and identities',
+      questions: 25,
+      duration: '30 min',
+      difficulty: 'Medium',
+      topics: ['Expressions', 'Simple Equations', 'Identities', 'Factorization'],
+      icon: '📊'
+    },
+    {
+      id: 4,
+      title: 'Geometry Basics',
+      description: 'Triangles, quadrilaterals, circles, and constructions',
+      questions: 20,
+      duration: '30 min',
+      difficulty: 'Medium',
+      topics: ['Triangles', 'Quadrilaterals', 'Circles', 'Constructions'],
+      icon: '📐'
+    },
+    {
+      id: 5,
+      title: 'Mensuration',
+      description: 'Calculate perimeter, area, surface area, and volume',
+      questions: 18,
+      duration: '25 min',
+      difficulty: 'Medium',
+      topics: ['Perimeter', 'Area', 'Surface Area', 'Volume'],
+      icon: '📏'
+    },
+    {
+      id: 6,
+      title: 'Profit & Loss',
+      description: 'Commercial mathematics and business calculations',
+      questions: 15,
+      duration: '20 min',
+      difficulty: 'Easy',
+      topics: ['Profit & Loss', 'Percentage', 'Ratio & Proportion', 'Unitary Method'],
+      icon: '💰'
+    },
+    {
+      id: 7,
+      title: 'Simple & Compound Interest',
+      description: 'Interest calculations and financial mathematics',
+      questions: 12,
+      duration: '18 min',
+      difficulty: 'Medium',
+      topics: ['Simple Interest', 'Compound Interest', 'Applications', 'Time & Work'],
+      icon: '🏦'
+    },
+    {
+      id: 8,
+      title: 'Data Handling',
+      description: 'Graphs, charts, and basic probability concepts',
+      questions: 16,
+      duration: '22 min',
+      difficulty: 'Easy',
+      topics: ['Bar Graphs', 'Pie Charts', 'Probability', 'Data Interpretation'],
+      icon: '📈'
+    }
+  ];
+
+  // SAT Science Quiz Data
+  const satScienceQuizzes = [
+    {
+      id: 1,
+      title: 'Nutrition in Plants & Animals',
+      description: 'Understanding how plants and animals obtain and use nutrients',
+      questions: 20,
+      duration: '25 min',
+      difficulty: 'Easy',
+      topics: ['Photosynthesis', 'Animal Nutrition', 'Digestive System', 'Nutrients'],
+      icon: '🌱'
+    },
+    {
+      id: 2,
+      title: 'Heat, Light & Sound',
+      description: 'Physical properties and behavior of heat, light, and sound',
+      questions: 18,
+      duration: '22 min',
+      difficulty: 'Medium',
+      topics: ['Heat Transfer', 'Light Properties', 'Sound Waves', 'Energy'],
+      icon: '🔥'
+    },
+    {
+      id: 3,
+      title: 'Acids, Bases & Salts',
+      description: 'Chemical properties and reactions of acids, bases, and salts',
+      questions: 15,
+      duration: '20 min',
+      difficulty: 'Medium',
+      topics: ['Acid Properties', 'Base Properties', 'Salt Formation', 'pH Scale'],
+      icon: '🧪'
+    },
+    {
+      id: 4,
+      title: 'Physical & Chemical Changes',
+      description: 'Distinguish between physical and chemical transformations',
+      questions: 16,
+      duration: '20 min',
+      difficulty: 'Easy',
+      topics: ['Physical Changes', 'Chemical Changes', 'Reactions', 'Properties'],
+      icon: '⚗️'
+    },
+    {
+      id: 5,
+      title: 'Motion, Force & Pressure',
+      description: 'Understanding motion, forces, and pressure in physics',
+      questions: 20,
+      duration: '25 min',
+      difficulty: 'Medium',
+      topics: ['Types of Motion', 'Force', 'Pressure', 'Friction'],
+      icon: '🏃‍♂️'
+    },
+    {
+      id: 6,
+      title: 'Reproduction in Living Organisms',
+      description: 'Reproductive processes in plants and animals',
+      questions: 18,
+      duration: '22 min',
+      difficulty: 'Medium',
+      topics: ['Plant Reproduction', 'Animal Reproduction', 'Life Cycles', 'Growth'],
+      icon: '🌸'
+    },
+    {
+      id: 7,
+      title: 'Microorganisms',
+      description: 'Study of microbes and their impact on life',
+      questions: 12,
+      duration: '15 min',
+      difficulty: 'Easy',
+      topics: ['Bacteria', 'Viruses', 'Fungi', 'Beneficial Microbes'],
+      icon: '🦠'
+    },
+    {
+      id: 8,
+      title: 'Cell Structure & Human Body',
+      description: 'Cell biology and human body systems',
+      questions: 22,
+      duration: '28 min',
+      difficulty: 'Medium',
+      topics: ['Cell Parts', 'Tissues', 'Organs', 'Body Systems'],
+      icon: '🧬'
+    },
+    {
+      id: 9,
+      title: 'Environment & Conservation',
+      description: 'Environmental science and conservation principles',
+      questions: 16,
+      duration: '20 min',
+      difficulty: 'Easy',
+      topics: ['Pollution', 'Conservation', 'Ecosystems', 'Natural Resources'],
+      icon: '🌍'
+    },
+    {
+      id: 10,
+      title: 'Solar System & Universe',
+      description: 'Astronomy and space science fundamentals',
+      questions: 14,
+      duration: '18 min',
+      difficulty: 'Medium',
+      topics: ['Planets', 'Stars', 'Solar System', 'Universe'],
+      icon: '🌌'
+    }
+  ];
+
+  // SAT Social Science Quiz Data
+  const satSocialQuizzes = [
+    {
+      id: 1,
+      title: 'Medieval to Modern India',
+      description: 'Indian history from medieval period to independence',
+      questions: 25,
+      duration: '30 min',
+      difficulty: 'Medium',
+      topics: ['Medieval India', 'Mughal Empire', 'British Rule', 'Freedom Struggle'],
+      icon: '🏛️'
+    },
+    {
+      id: 2,
+      title: 'National Movement',
+      description: 'India\'s struggle for independence and freedom fighters',
+      questions: 20,
+      duration: '25 min',
+      difficulty: 'Medium',
+      topics: ['Freedom Fighters', 'Movements', 'Revolutionary Activities', 'Independence'],
+      icon: '🇮🇳'
+    },
+    {
+      id: 3,
+      title: 'Geography - Resources & Agriculture',
+      description: 'Natural resources, agriculture, and industries',
+      questions: 22,
+      duration: '28 min',
+      difficulty: 'Easy',
+      topics: ['Natural Resources', 'Agriculture', 'Industries', 'Economic Geography'],
+      icon: '🌾'
+    },
+    {
+      id: 4,
+      title: 'Land, Soil & Water Resources',
+      description: 'Environmental geography and resource management',
+      questions: 18,
+      duration: '22 min',
+      difficulty: 'Easy',
+      topics: ['Land Resources', 'Soil Types', 'Water Resources', 'Conservation'],
+      icon: '🏔️'
+    },
+    {
+      id: 5,
+      title: 'Constitution & Democracy',
+      description: 'Indian constitution, democratic principles, and governance',
+      questions: 20,
+      duration: '25 min',
+      difficulty: 'Medium',
+      topics: ['Constitution', 'Democracy', 'Rights', 'Fundamental Duties'],
+      icon: '⚖️'
+    },
+    {
+      id: 6,
+      title: 'Government & Judiciary',
+      description: 'Structure of government and judicial system',
+      questions: 18,
+      duration: '22 min',
+      difficulty: 'Medium',
+      topics: ['Government Structure', 'Judiciary', 'Laws', 'Justice System'],
+      icon: '🏛️'
+    },
+    {
+      id: 7,
+      title: 'Economics - Basic Concepts',
+      description: 'Fundamental economic principles and concepts',
+      questions: 16,
+      duration: '20 min',
+      difficulty: 'Easy',
+      topics: ['Economic Systems', 'Markets', 'Money', 'Banking'],
+      icon: '💼'
+    },
+    {
+      id: 8,
+      title: 'Rural & Urban Livelihoods',
+      description: 'Economic activities in rural and urban areas',
+      questions: 15,
+      duration: '18 min',
+      difficulty: 'Easy',
+      topics: ['Rural Economy', 'Urban Economy', 'Employment', 'Livelihoods'],
+      icon: '🏘️'
+    }
+  ];
+
+  const startQuiz = (quiz, examType, subCategory = null) => {
+    // Navigate to PracticePage with quiz data
+    navigate('/practice-quiz', {
+      state: {
+        quizData: {
+          ...quiz,
+          examType: examType,
+          subCategory: subCategory
+        }
+      }
+    });
   };
 
   const startQuickPractice = (practice) => {
@@ -136,161 +520,316 @@ const Practice = () => {
   };
 
   return (
-    <div className="practice-page">
-      <div className="practice-container">
-        {/* Header */}
-        <div className="practice-header">
-          <h1>🎯 Practice Center</h1>
-          <p>Sharpen your skills with quizzes, tests, and assessments</p>
-        </div>
-
-        {/* Navigation Tabs */}
-        <div className="practice-tabs">
-          <button 
-            className={`tab-button ${activeTab === 'quick' ? 'active' : ''}`}
-            onClick={() => setActiveTab('quick')}
-          >
-            ⚡ Quick Practice
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'tests' ? 'active' : ''}`}
-            onClick={() => setActiveTab('tests')}
-          >
-            📝 Mock Tests
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'skills' ? 'active' : ''}`}
-            onClick={() => setActiveTab('skills')}
-          >
-            📊 Skills Assessment
-          </button>
-        </div>
-
-        <div className="practice-content">
-          {/* Quick Practice Tab */}
-          {activeTab === 'quick' && (
-            <div className="quick-practice-section">
-              <h2>⚡ Quick Practice Sessions</h2>
-              <div className="quick-practice-grid">
-                {quickPracticeOptions.map((practice, index) => (
-                  <div key={index} className="quick-practice-card">
-                    <div className="practice-icon">{practice.icon}</div>
-                    <div className="practice-title">{practice.title}</div>
-                    <div className="practice-description">{practice.description}</div>
-                    <div className="practice-stats">
-                      <div className="stat-item">
-                        <div className="stat-value">{practice.questions}</div>
-                        <div className="stat-label">Questions</div>
-                      </div>
-                      <div className="stat-item">
-                        <div className="stat-value">{practice.time}</div>
-                        <div className="stat-label">Duration</div>
-                      </div>
-                      <div className="stat-item">
-                        <div className="stat-value">{practice.difficulty}</div>
-                        <div className="stat-label">Level</div>
-                      </div>
-                    </div>
-                    <button 
-                      className="start-practice-btn"
-                      onClick={() => startQuickPractice(practice)}
-                    >
-                      Start Practice
-                    </button>
-                  </div>
-                ))}
+    <>
+      <MainNavbar />
+      <div className="practice-page">
+        
+        {/* Section 1: Practice Dashboard */}
+        <section className="practice-dashboard-section">
+          <ParticleBackground />
+          <div className="dashboard-header">
+            <h1>🎯 Practice Dashboard</h1>
+            <p>Track your progress, recent activity, and jump into practice!</p>
+          </div>
+          <div className="dashboard-content">
+            {/* Example stats and quick access (replace with real data as needed) */}
+            <div className="dashboard-stats">
+              <div className="stat-card">
+                <div className="stat-label">Current Streak</div>
+                <div className="stat-value">7 days 🔥</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-label">Total Quizzes</div>
+                <div className="stat-value">42</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-label">Best Score</div>
+                <div className="stat-value">98%</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-label">Last Practiced</div>
+                <div className="stat-value">2 hours ago</div>
               </div>
             </div>
-          )}
+            <div className="dashboard-actions">
+              <button className="dashboard-btn primary">Start Quick Practice</button>
+              <button className="dashboard-btn secondary">View All Results</button>
+            </div>
+          </div>
+        </section>
 
-          {/* Mock Tests Tab */}
-          {activeTab === 'tests' && (
-            <div className="tests-grid">
-              {mockTests.map((test, index) => (
-                <div key={index} className="test-card">
-                  <div className="test-header">
-                    <div className="test-type-icon">{test.icon}</div>
-                    <div className="test-info">
-                      <h3>{test.title}</h3>
-                      <p>{test.description}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="test-details">
-                    <div className="detail-item">
-                      <div className="detail-value">{test.questions}</div>
-                      <div className="detail-label">Questions</div>
-                    </div>
-                    <div className="detail-item">
-                      <div className="detail-value">{test.time}</div>
-                      <div className="detail-label">Minutes</div>
-                    </div>
-                    <div className="detail-item">
-                      <div className="detail-value">{test.subjects.length}</div>
-                      <div className="detail-label">Subjects</div>
-                    </div>
-                  </div>
+        {/* Section 2: MAT/SAT Quiz Container */}
+        <section className="quiz-syllabus-section">
+          <div className="syllabus-header">
+            <h2>📚 Syllabus-Based Quizzes</h2>
+            <p>Choose your exam type and practice with structured quiz sets</p>
+          </div>
 
-                  <div className="difficulty-indicator">
-                    <span className="difficulty-label">Difficulty:</span>
-                    <div className="difficulty-dots">
-                      {getDifficultyDots(test.difficulty)}
-                    </div>
-                  </div>
+          {/* MAT/SAT Tabs */}
+          <div className="syllabus-tabs">
+            <button 
+              className={`syllabus-tab ${syllabusTab === 'mat' ? 'active' : ''}`}
+              onClick={() => setSyllabusTab('mat')}
+            >
+              <span className="tab-icon">🧠</span>
+              <span className="tab-text">MAT (Mental Ability Test)</span>
+            </button>
+            <button 
+              className={`syllabus-tab ${syllabusTab === 'sat' ? 'active' : ''}`}
+              onClick={() => setSyllabusTab('sat')}
+            >
+              <span className="tab-icon">🎓</span>
+              <span className="tab-text">SAT (Scholastic Assessment)</span>
+            </button>
+          </div>
 
-                  <div className="test-actions">
-                    <button 
-                      className="action-btn primary-btn"
-                      onClick={() => startTest(test)}
-                    >
-                      Start Test
-                    </button>
-                    <button 
-                      className="action-btn secondary-btn"
-                      onClick={() => previewTest(test)}
-                    >
-                      Preview
-                    </button>
-                  </div>
+          {/* Quiz Content */}
+          <div className="quiz-content">
+            {syllabusTab === 'mat' && (
+              <div className="mat-quizzes">
+                <div className="quiz-grid">
+                  {matQuizzes.map((quiz) => (
+                    <div key={quiz.id} className="quiz-card">
+                      <div className="quiz-header">
+                        <div className="quiz-icon">{quiz.icon}</div>
+                        <div className="quiz-info">
+                          <h3 className="quiz-title">{quiz.title}</h3>
+                          <p className="quiz-description">{quiz.description}</p>
+                        </div>
+                      </div>
+
+                      <div className="quiz-stats">
+                        <div className="quiz-stat">
+                          <span className="stat-label">Questions</span>
+                          <span className="stat-value">{quiz.questions}</span>
+                        </div>
+                        <div className="quiz-stat">
+                          <span className="stat-label">Duration</span>
+                          <span className="stat-value">{quiz.duration}</span>
+                        </div>
+                        <div className="quiz-stat">
+                          <span className="stat-label">Level</span>
+                          <span className={`stat-value difficulty-${quiz.difficulty.toLowerCase()}`}>
+                            {quiz.difficulty}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="quiz-topics">
+                        <h4>Topics Covered:</h4>
+                        <div className="topics-list">
+                          {quiz.topics.map((topic, index) => (
+                            <span key={index} className="topic-tag">{topic}</span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="quiz-actions">
+                        <button 
+                          className="quiz-btn start-btn"
+                          onClick={() => startQuiz(quiz, 'MAT')}
+                        >
+                          Start Quiz
+                        </button>
+                        <button className="quiz-btn preview-btn">Preview</button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
-
-          {/* Skills Assessment Tab */}
-          {activeTab === 'skills' && (
-            <div className="skills-assessment">
-              <h2>📊 Skills Assessment</h2>
-              <p style={{ color: '#666', marginBottom: '2rem' }}>
-                Test yourself in specific subject areas to identify strengths and areas for improvement
-              </p>
-              <div className="skills-grid">
-                {skillsData.map((skill, index) => (
-                  <div 
-                    key={index} 
-                    className="skill-item"
-                    onClick={() => startSkillAssessment(skill)}
-                  >
-                    <div className="skill-icon">{skill.icon}</div>
-                    <div className="skill-name">{skill.name}</div>
-                    <div className="skill-level">
-                      <div 
-                        className="skill-progress"
-                        style={{ 
-                          width: `${skill.level}%`,
-                          background: skill.color
-                        }}
-                      ></div>
-                    </div>
-                    <div className="skill-percentage">{skill.level}% Mastery</div>
-                  </div>
-                ))}
               </div>
-            </div>
-          )}
-        </div>
+            )}
+
+            {syllabusTab === 'sat' && (
+              <div className="sat-quizzes">
+                {/* SAT Sub-tabs */}
+                <div className="sat-sub-tabs">
+                  <button 
+                    className={`sat-sub-tab ${satSubTab === 'math' ? 'active' : ''}`}
+                    onClick={() => setSatSubTab('math')}
+                  >
+                    📊 Mathematics
+                  </button>
+                  <button 
+                    className={`sat-sub-tab ${satSubTab === 'science' ? 'active' : ''}`}
+                    onClick={() => setSatSubTab('science')}
+                  >
+                    🔬 Science
+                  </button>
+                  <button 
+                    className={`sat-sub-tab ${satSubTab === 'social' ? 'active' : ''}`}
+                    onClick={() => setSatSubTab('social')}
+                  >
+                    🌍 Social Science
+                  </button>
+                </div>
+
+                {/* SAT Math Quizzes */}
+                {satSubTab === 'math' && (
+                  <div className="quiz-grid">
+                    {satMathQuizzes.map((quiz) => (
+                      <div key={quiz.id} className="quiz-card">
+                        <div className="quiz-header">
+                          <div className="quiz-icon">{quiz.icon}</div>
+                          <div className="quiz-info">
+                            <h3 className="quiz-title">{quiz.title}</h3>
+                            <p className="quiz-description">{quiz.description}</p>
+                          </div>
+                        </div>
+
+                        <div className="quiz-stats">
+                          <div className="quiz-stat">
+                            <span className="stat-label">Questions</span>
+                            <span className="stat-value">{quiz.questions}</span>
+                          </div>
+                          <div className="quiz-stat">
+                            <span className="stat-label">Duration</span>
+                            <span className="stat-value">{quiz.duration}</span>
+                          </div>
+                          <div className="quiz-stat">
+                            <span className="stat-label">Level</span>
+                            <span className={`stat-value difficulty-${quiz.difficulty.toLowerCase()}`}>
+                              {quiz.difficulty}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="quiz-topics">
+                          <h4>Topics Covered:</h4>
+                          <div className="topics-list">
+                            {quiz.topics.map((topic, index) => (
+                              <span key={index} className="topic-tag">{topic}</span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="quiz-actions">
+                          <button 
+                            className="quiz-btn start-btn"
+                            onClick={() => startQuiz(quiz, 'SAT', 'Math')}
+                          >
+                            Start Quiz
+                          </button>
+                          <button className="quiz-btn preview-btn">Preview</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* SAT Science Quizzes */}
+                {satSubTab === 'science' && (
+                  <div className="quiz-grid">
+                    {satScienceQuizzes.map((quiz) => (
+                      <div key={quiz.id} className="quiz-card">
+                        <div className="quiz-header">
+                          <div className="quiz-icon">{quiz.icon}</div>
+                          <div className="quiz-info">
+                            <h3 className="quiz-title">{quiz.title}</h3>
+                            <p className="quiz-description">{quiz.description}</p>
+                          </div>
+                        </div>
+
+                        <div className="quiz-stats">
+                          <div className="quiz-stat">
+                            <span className="stat-label">Questions</span>
+                            <span className="stat-value">{quiz.questions}</span>
+                          </div>
+                          <div className="quiz-stat">
+                            <span className="stat-label">Duration</span>
+                            <span className="stat-value">{quiz.duration}</span>
+                          </div>
+                          <div className="quiz-stat">
+                            <span className="stat-label">Level</span>
+                            <span className={`stat-value difficulty-${quiz.difficulty.toLowerCase()}`}>
+                              {quiz.difficulty}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="quiz-topics">
+                          <h4>Topics Covered:</h4>
+                          <div className="topics-list">
+                            {quiz.topics.map((topic, index) => (
+                              <span key={index} className="topic-tag">{topic}</span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="quiz-actions">
+                          <button 
+                            className="quiz-btn start-btn"
+                            onClick={() => startQuiz(quiz, 'SAT', 'Science')}
+                          >
+                            Start Quiz
+                          </button>
+                          <button className="quiz-btn preview-btn">Preview</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* SAT Social Science Quizzes */}
+                {satSubTab === 'social' && (
+                  <div className="quiz-grid">
+                    {satSocialQuizzes.map((quiz) => (
+                      <div key={quiz.id} className="quiz-card">
+                        <div className="quiz-header">
+                          <div className="quiz-icon">{quiz.icon}</div>
+                          <div className="quiz-info">
+                            <h3 className="quiz-title">{quiz.title}</h3>
+                            <p className="quiz-description">{quiz.description}</p>
+                          </div>
+                        </div>
+
+                        <div className="quiz-stats">
+                          <div className="quiz-stat">
+                            <span className="stat-label">Questions</span>
+                            <span className="stat-value">{quiz.questions}</span>
+                          </div>
+                          <div className="quiz-stat">
+                            <span className="stat-label">Duration</span>
+                            <span className="stat-value">{quiz.duration}</span>
+                          </div>
+                          <div className="quiz-stat">
+                            <span className="stat-label">Level</span>
+                            <span className={`stat-value difficulty-${quiz.difficulty.toLowerCase()}`}>
+                              {quiz.difficulty}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="quiz-topics">
+                          <h4>Topics Covered:</h4>
+                          <div className="topics-list">
+                            {quiz.topics.map((topic, index) => (
+                              <span key={index} className="topic-tag">{topic}</span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="quiz-actions">
+                          <button 
+                            className="quiz-btn start-btn"
+                            onClick={() => startQuiz(quiz, 'SAT', 'Social')}
+                          >
+                            Start Quiz
+                          </button>
+                          <button className="quiz-btn preview-btn">Preview</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Section 3 will be added next */}
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 
