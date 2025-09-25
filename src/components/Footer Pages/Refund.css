@@ -1,290 +1,733 @@
+/* Refund Policy Page Styles */
 .refund-page {
+  width: 100vw;
   min-height: 100vh;
-  background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-  padding: 2rem 0;
-  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, rgb(15, 5, 70) 0%, #1a0a5e 30%, #2d1b69 70%, #4a2c7a 100%);
+  position: relative;
+  font-family: 'Poppins', Arial, sans-serif;
+  overflow-x: hidden;
 }
 
 .refund-container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
-  color: white;
-}
-
-.refund-header {
-  text-align: center;
-  margin-bottom: 3rem;
-  padding: 2rem 0;
-}
-
-.refund-header h1 {
-  font-size: 3rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.refund-header p {
-  font-size: 1.1rem;
-  opacity: 0.8;
-  font-style: italic;
-}
-
-.refund-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-}
-
-.refund-section {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
   padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease;
-}
-
-.refund-section:hover {
-  transform: translateY(-2px);
-}
-
-.refund-section h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-  padding-bottom: 0.5rem;
-}
-
-.refund-card {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.refund-card h3 {
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-  color: #ffffff;
-  font-weight: bold;
-}
-
-.refund-card p {
-  line-height: 1.6;
-  margin-bottom: 1rem;
-  opacity: 0.9;
-  font-size: 1rem;
-}
-
-.refund-card ul {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0;
-}
-
-.refund-card li {
-  padding: 0.5rem 0;
-  font-size: 1rem;
-  opacity: 0.9;
-  line-height: 1.5;
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.refund-card li:last-child {
-  border-bottom: none;
-}
-
-.highlight-box {
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-}
-
-.highlight-box h3 {
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
-}
-
-.process-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-.step {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.step-number {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  flex-shrink: 0;
-}
-
-.step-content h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
-}
-
-.step-content p {
-  margin: 0;
-  opacity: 0.9;
-}
-
-.timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.timeline-item {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  padding: 1.5rem;
-  border-left: 4px solid rgba(255, 255, 255, 0.3);
   position: relative;
+  z-index: 2;
 }
 
-.timeline-item h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
+/* Glass Card Base Style */
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 2.5rem;
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.6s ease-out;
+  margin-bottom: 2rem;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Hero Section */
+.refund-hero {
+  margin-bottom: 3rem;
+}
+
+.hero-content {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.hero-icon {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  display: inline-block;
+  animation: warningPulse 3s infinite;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #ef4444, #f97316, #eab308);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.6;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.stat-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.timeline-item p {
-  margin: 0 0 0.5rem 0;
-  opacity: 0.9;
+.stat-icon {
+  font-size: 1.5rem;
 }
 
-.timeline-item .time {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 0.3rem 0.8rem;
-  border-radius: 15px;
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.stat-label {
   font-size: 0.9rem;
-  font-weight: bold;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.2rem;
 }
 
-.contact-info {
+.stat-value {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+/* Policy Overview */
+.policy-overview {
+  margin-bottom: 3rem;
+}
+
+.overview-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.overview-header h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.overview-header p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.policy-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
-  margin-top: 1rem;
 }
 
-.contact-item {
+.policy-item {
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  padding: 1.5rem;
+  padding: 2rem;
+  border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
+  transition: all 0.3s ease;
 }
 
-.contact-item h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
+.policy-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-5px);
+}
+
+.policy-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.policy-item h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.8rem;
+}
+
+.policy-item p {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+}
+
+/* Refund Content */
+.refund-content {
+  margin-bottom: 3rem;
+}
+
+.refund-section {
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+}
+
+.refund-section.expanded {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.section-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.contact-item p {
-  margin: 0 0 0.3rem 0;
-  font-weight: bold;
-}
-
-.contact-item small {
-  opacity: 0.7;
-  font-size: 0.9rem;
-}
-
-.back-home {
-  text-align: center;
-  margin-top: 3rem;
-  padding-top: 2rem;
-}
-
-.back-btn {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  padding: 0.8rem 2rem;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.section-header:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.section-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.section-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.section-titles {
+  flex: 1;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+}
+
+.section-subtitle {
   font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.expand-icon {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  transition: transform 0.3s ease;
+}
+
+.refund-section.expanded .expand-icon {
+  transform: rotate(90deg);
+}
+
+/* Section Content */
+.section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  padding: 0 2rem;
+}
+
+.section-content.show {
+  max-height: 3000px;
+  padding: 2rem;
+}
+
+.content-overview {
+  margin-bottom: 1.5rem;
+}
+
+.content-overview p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Policy Details */
+.policy-details {
+  margin-bottom: 1.5rem;
+}
+
+.policy-highlight {
+  background: rgba(239, 68, 68, 0.1);
+  padding: 1.5rem;
+  border-radius: 15px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  margin-bottom: 1.5rem;
+}
+
+.policy-highlight h4 {
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin: 0 0 0.8rem 0;
+  font-weight: 600;
+}
+
+.policy-highlight p {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.policy-points h4 {
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.policy-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.policy-list li {
+  padding: 0.8rem 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  line-height: 1.6;
+  position: relative;
+  padding-left: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.policy-list li:last-child {
+  border-bottom: none;
+}
+
+.policy-list li::before {
+  content: "🚫";
+  position: absolute;
+  left: 0;
+}
+
+/* Reasons Grid */
+.reasons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.reason-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.reason-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.reason-info h5 {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.reason-info p {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Exceptions Grid */
+.exceptions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.exception-item {
+  background: rgba(239, 68, 68, 0.1);
+  padding: 1.2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.exception-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.exception-info h5 {
+  font-size: 1rem;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.exception-info p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Alternatives Grid */
+.alternatives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.alternative-item {
+  background: rgba(34, 197, 94, 0.1);
+  padding: 1.5rem;
+  border-radius: 15px;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.alternative-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.alternative-icon {
+  font-size: 1.5rem;
+}
+
+.alternative-header h5 {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin: 0;
+  font-weight: 600;
+}
+
+.alternative-item p {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 0.8rem 0;
+  line-height: 1.5;
+}
+
+.availability {
+  font-size: 0.8rem;
+  color: #22c55e;
+  font-weight: 600;
+  background: rgba(34, 197, 94, 0.2);
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  display: inline-block;
+}
+
+/* Checklist Grid */
+.checklist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.checklist-item {
+  background: rgba(99, 102, 241, 0.1);
+  padding: 1.5rem;
+  border-radius: 15px;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.checklist-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.checklist-info h5 {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.checklist-info p {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Contact Options */
+.contact-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.contact-option {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.contact-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-3px);
+}
+
+.contact-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.contact-info h4 {
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.contact-info p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 0.5rem 0;
+}
+
+.contact-info .availability {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.contact-note {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+}
+
+/* Final Warning */
+.final-warning {
+  margin-bottom: 3rem;
+}
+
+.warning-content {
+  text-align: center;
+  padding: 2rem;
+}
+
+.warning-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  animation: warningPulse 2s infinite;
+}
+
+.warning-content h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ef4444;
+  margin-bottom: 1.5rem;
+}
+
+.warning-content p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.warning-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.home-btn,
+.contact-btn {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  font-family: inherit;
 }
 
-.back-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+.contact-btn {
+  background: linear-gradient(135deg, #ef4444, #f97316);
+}
+
+.home-btn:hover,
+.contact-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+}
+
+.contact-btn:hover {
+  box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes warningPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.3));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.6));
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .refund-container {
+    padding: 1.5rem;
+  }
+  
+  .hero-content {
+    padding: 3rem 1.5rem;
+  }
+  
+  .hero-title {
+    font-size: 2.8rem;
+  }
+  
+  .policy-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  
+  .reasons-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
   .refund-container {
-    padding: 0 1rem;
+    padding: 1rem;
   }
   
-  .refund-header h1 {
-    font-size: 2rem;
+  .glass-card {
+    padding: 2rem;
   }
   
-  .refund-section {
-    padding: 1.5rem;
+  .hero-content {
+    padding: 2.5rem 1rem;
   }
   
-  .process-steps {
+  .hero-title {
+    font-size: 2.2rem;
+  }
+  
+  .hero-stats {
+    flex-direction: column;
+    align-items: center;
     gap: 1rem;
   }
   
-  .step {
+  .section-info {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+    text-align: center;
+    gap: 1rem;
   }
   
-  .contact-info {
+  .section-icon {
+    align-self: center;
+  }
+  
+  .policy-grid,
+  .reasons-grid,
+  .exceptions-grid,
+  .alternatives-grid,
+  .checklist-grid,
+  .contact-options {
     grid-template-columns: 1fr;
+  }
+  
+  .warning-actions {
+    flex-direction: column;
+    align-items: center;
   }
 }
 
 @media (max-width: 480px) {
-  .refund-header h1 {
+  .hero-title {
     font-size: 1.8rem;
   }
   
-  .refund-section h2 {
-    font-size: 1.5rem;
+  .hero-icon {
+    font-size: 3rem;
+  }
+  
+  .section-icon {
+    font-size: 2rem;
+  }
+  
+  .glass-card {
+    padding: 1.5rem;
+  }
+  
+  .section-header {
+    padding: 1rem;
+  }
+  
+  .section-content.show {
+    padding: 1.5rem;
+  }
+  
+  .reason-item,
+  .exception-item,
+  .alternative-item,
+  .checklist-item {
+    padding: 1rem;
+  }
+  
+  .contact-option {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.3rem;
+    text-align: center;
   }
 }
