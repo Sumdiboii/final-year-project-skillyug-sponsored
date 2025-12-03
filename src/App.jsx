@@ -25,6 +25,7 @@ import PrivacyPolicy from "./components/Footer Pages/PrivacyPolicy";
 import Terms from "./components/Footer Pages/Terms";
 import Refund from "./components/Footer Pages/Refund";
 import FAQ from "./components/Footer Pages/FAQ";
+import Exam from './jsx files/Exam';
 
 function AppRoutes() {
   const location = useLocation();
@@ -59,6 +60,7 @@ function AppRoutes() {
         <Route path="/terms-conditions" element={<Terms />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/refund-policy" element={<Refund />} />
+        <Route path="/exams" element={<Exam />} />
       </Routes>
     </>
   );

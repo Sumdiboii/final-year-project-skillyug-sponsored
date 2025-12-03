@@ -118,7 +118,7 @@
 
 .syllabus-description {
   font-size: 1.1rem;
-  color:  rgb(15, 5, 70);
+  color:  rgb(15, 5, 70) !important;
   max-width: 600px;
   margin: 0 auto;
 }

@@ -61,7 +61,7 @@ const Footer = () => {
         <div className="footer-section links">
           <h2>Links</h2>
           <ul>
-            <li><Link to="/faq">FAQ</Link></li>
+            
             <li><Link to="/terms-conditions">Terms and Conditions</Link></li>
             <li><Link to="/privacy-policy">Privacy Policy</Link></li>
             <li><Link to="/refund-policy">Refund and Cancellation Policy</Link></li>

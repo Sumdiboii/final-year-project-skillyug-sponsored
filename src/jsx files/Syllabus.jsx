@@ -197,7 +197,7 @@ const Syllabus = () => {
                     <div className="topics-grid">
                       {subject.topics.map((topic, topicIndex) => (
                         <div key={topicIndex} className="topic-item">
-                          <span className="topic-bullet">•</span>
+                          <span className="topic-bullet"></span>
                           <span className="topic-text">{topic}</span>
                         </div>
                       ))}
@@ -378,17 +378,7 @@ const Syllabus = () => {
             </div>
           </div>
 
-          {/* Call to Action */}
-          <div className="resources-cta">
-            <div className="cta-content">
-              <h3>Ready to Start Your NMMS Journey?</h3>
-              <p>Join thousands of successful students who trusted PrepMark for their exam preparation</p>
-              <div className="cta-buttons">
-                <button className="cta-btn primary" onClick={handleDownloadApp}>Download App</button>
-                <button className="cta-btn secondary" onClick={handleStartTrial}>Start Free Trial</button>
-              </div>
-            </div>
-          </div>
+          
         </div>
       </div>
 
