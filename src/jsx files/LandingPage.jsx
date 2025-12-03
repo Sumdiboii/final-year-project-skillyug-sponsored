@@ -198,7 +198,7 @@ const LandingPage = () => {
                     <div className="download-section">
                         <div className="download-container">
                             {/* Main Stars Background */}
-                            <div className="stars-container">
+                            <div className="stars-container-lp">
                                 {Array.from({ length: 20 }).map((_, i) => {
                                     // Better distribution using sectors
                                     const sector = i % 4; // 4 sectors

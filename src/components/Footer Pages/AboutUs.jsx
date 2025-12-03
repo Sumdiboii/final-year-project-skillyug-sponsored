@@ -21,7 +21,7 @@ const AboutUs = () => {
     <>
       <Navbar />
       <div className="about-us-page">
-        <ParticleBackground />
+        
 
         <main className="about-wrap">
           <header className="about-hero">

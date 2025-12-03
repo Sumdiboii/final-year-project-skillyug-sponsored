@@ -7,6 +7,12 @@ import LandingPage from "./jsx files/LandingPage";
 import Pricing from "./jsx files/Pricing";
 import Syllabus from "./jsx files/Syllabus";
 import Login from "./jsx files/Login";
+import CreateAccount from "./jsx files/CreateAccount";
+import ChooseRole from "./jsx files/ChooseRole";
+import StudentInfo from "./jsx files/StudentInfo";
+import AdminInfo from "./jsx files/AdminInfo";
+import GuardianVerification from "./jsx files/GuardianVerification";
+import VerifyOTP from "./jsx files/VerifyOTP";
 import Home from "./jsx files/Home";
 
 import './App.css';
@@ -45,6 +51,12 @@ function AppRoutes() {
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/syllabus" element={<Syllabus />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/create-account" element={<CreateAccount />} />
+        <Route path="/choose-role" element={<ChooseRole />} />
+        <Route path="/student-info" element={<StudentInfo />} />
+        <Route path="/admin-info" element={<AdminInfo />} />
+        <Route path="/guardian-verification" element={<GuardianVerification />} />
+        <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile/>} />
         <Route path="/statistics" element={<Statistics />} />
