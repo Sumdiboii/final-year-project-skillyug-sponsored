@@ -1,5 +1,5 @@
 /* About Us Page Styles */
-.about-us-page {
+.abus-about-us-page {
   width: 100vw;
   min-height: 100vh;
   background: rgb(15, 5, 70);
@@ -12,12 +12,12 @@
 }
 
 /* Make sure the particle background sits behind content */
-.about-us-page .particles {
+.abus-about-us-page .abus-particles {
   z-index: 1;
 }
 
 /* Page Content Wrapper */
-.about-wrap {
+.abus-about-wrap {
   width: 100%;
   max-width: 1100px;
   margin: 6rem auto 4rem;
@@ -28,19 +28,19 @@
   color: #fff;
 }
 
-.about-hero {
+.abus-about-hero {
   text-align: center;
   background-color: transparent;
   padding: 2rem 1rem 1rem;
 }
 
-.about-logo {
+.abus-about-logo {
   display: inline-block;
   height: 84px;
   margin-bottom: 1rem;
 }
 
-.about-title {
+.abus-about-title {
   font-size: 2.6rem;
   margin: 0.25rem 0 1rem;
   font-weight: 800;
@@ -50,15 +50,12 @@
   -webkit-text-fill-color: transparent;
   
   letter-spacing: 0;
-  animation: titleGlow 3s ease-in-out infinite alternate;
+  
 }
 
-@keyframes titleGlow {
-  from { filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.2)); }
-  to { filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.4)); }
-}
 
-.about-sub {
+
+.abus-about-sub {
   color: rgba(255,255,255,0.85);
   max-width: 820px;
   margin: 0 auto;
@@ -66,7 +63,7 @@
   line-height: 1.6;
 }
 
-.about-cards {
+.abus-about-cards {
   background-color: transparent;
   display: grid;
   min-width:100%;
@@ -76,7 +73,7 @@
   
 }
 
-.about-card {
+.abus-about-card {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.12);
   padding: 2rem 1.8rem;
@@ -94,7 +91,7 @@
   overflow: hidden;
 }
 
-.about-card::before {
+.abus-about-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -105,18 +102,18 @@
   transition: left 0.6s;
 }
 
-.about-card:hover {
+.abus-about-card:hover {
   background: rgba(255,255,255,0.12);
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
   border-color: rgba(255,255,255,0.2);
 }
 
-.about-card:hover::before {
+.abus-about-card:hover::before {
   left: 100%;
 }
 
-.about-card h3 {
+.abus-about-card h3 {
   margin: 0 0 0.8rem;
   
   font-size: 1.25rem;
@@ -128,21 +125,21 @@
   text-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
 }
 
-.about-card p {
+.abus-about-card p {
   margin: 0;
   color: rgba(255,255,255,0.86);
   font-size: 0.98rem;
   line-height: 1.5;
 }
 
-.about-actions {
+.abus-about-actions {
   display: flex;
   gap: 1rem;
   justify-content: center;
   margin-top: 2rem;
 }
 
-.btn {
+.abus-btn {
   padding: 1rem 2rem;
   border-radius: 50px;
   border: 2px solid rgba(255,255,255,0.2);
@@ -158,7 +155,7 @@
   margin-top:1rem;
 }
 
-.btn::before {
+.abus-btn::before {
   content: '';
   position: absolute;
   top: 0;
@@ -169,35 +166,35 @@
   transition: left 0.5s;
 }
 
-.btn:hover {
+.abus-btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   border-color: rgba(255,255,255,0.4);
 }
 
-.btn:hover::before {
+.abus-btn:hover::before {
   left: 100%;
 }
 
-.btn.primary {
+.abus-btn.abus-primary {
   background: rgb(13, 131, 23);
   border: none;
   box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
 }
 
-.btn.primary:hover {
+.abus-btn.abus-primary:hover {
   background: #cc4915;
   box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
 }
 
 /* Responsive Design */
 @media (max-width: 900px) {
-  .about-wrap { 
+  .abus-about-wrap { 
     padding: 1.25rem; 
     margin-top: 4.5rem; 
   }
   
-  .about-cards { 
+  .abus-about-cards { 
     display:flex;
     
     flex-direction: column;
@@ -205,16 +202,16 @@
     align-items: center;
     grid-template-columns: 1fr; 
   }
-  .about-card {
+  .abus-about-card {
     min-width:80vw;
   max-width: 80vw;
   }
   
-  .about-title { 
+  .abus-about-title { 
     font-size: 1.8rem; 
   }
   
-  .about-sub { 
+  .abus-about-sub { 
     font-size: 0.98rem; 
   }
 }
@@ -225,3 +222,4 @@
     animation: none !important; 
   }
 }
+

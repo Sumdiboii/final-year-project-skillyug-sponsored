@@ -85,51 +85,51 @@ const Syllabus = () => {
   };
 
   return (
-    <div className="syllabus-page">
+    <div className="syl-syllabus-page">
       <Navbar />
       <ParticleBackground />
 
       {/* Educational Objective Section */}
-      <div className="main-syllabus-cont">
-        <div className="objective-content">
-          <div className="objective-header">
-            <h1 className="objective-title">Educational Objectives</h1>
-            <div className="objective-subtitle">Empowering Students Through Quality Education</div>
+      <div className="syl-main-syllabus-cont">
+        <div className="syl-objective-content">
+          <div className="syl-objective-header">
+            <h1 className="syl-objective-title">Educational Objectives</h1>
+            <div className="syl-objective-subtitle">Empowering Students Through Quality Education</div>
           </div>
           
-          <div className="objectives-grid">
-            <div className="objective-card">
-              <div className="objective-icon">🎯</div>
+          <div className="syl-objectives-grid">
+            <div className="syl-objective-card">
+              <div className="syl-objective-icon">🎯</div>
               <h3>Academic Excellence</h3>
               <p>Prepare students for competitive examinations like NMMS with comprehensive study materials and practice tests</p>
             </div>
             
-            <div className="objective-card">
-              <div className="objective-icon">🧠</div>
+            <div className="syl-objective-card">
+              <div className="syl-objective-icon">🧠</div>
               <h3>Critical Thinking</h3>
               <p>Develop analytical and logical reasoning skills through structured mental ability training and problem-solving techniques</p>
             </div>
             
-            <div className="objective-card">
-              <div className="objective-icon">📚</div>
+            <div className="syl-objective-card">
+              <div className="syl-objective-icon">📚</div>
               <h3>Holistic Learning</h3>
               <p>Provide balanced education covering Mathematics, Science, and Social Studies aligned with NCERT curriculum</p>
             </div>
             
-            <div className="objective-card">
-              <div className="objective-icon">💰</div>
+            <div className="syl-objective-card">
+              <div className="syl-objective-icon">💰</div>
               <h3>Affordable Learning</h3>
               <p>Make quality education accessible to all students through cost-effective learning solutions and scholarship opportunities</p>
             </div>
             
-            <div className="objective-card">
-              <div className="objective-icon">💻</div>
+            <div className="syl-objective-card">
+              <div className="syl-objective-icon">💻</div>
               <h3>E-Learning Promotion</h3>
               <p>Leverage digital technology to deliver interactive online courses, virtual classrooms, and mobile learning experiences</p>
             </div>
             
-            <div className="objective-card">
-              <div className="objective-icon">🌟</div>
+            <div className="syl-objective-card">
+              <div className="syl-objective-icon">🌟</div>
               <h3>Future Ready</h3>
               <p>Equip students with essential skills and knowledge to excel in higher education and professional careers</p>
             </div>
@@ -138,25 +138,25 @@ const Syllabus = () => {
       </div>
 
       {/* NMMS Syllabus Section */}
-      <div className="sub1-syllabus-cont">
-        <div className="syllabus-content">
-          <div className="syllabus-header">
-            <h2 className="syllabus-title">📘 NMMS Exam Syllabus</h2>
-            <p className="syllabus-description">
+      <div className="syl-sub1-syllabus-cont">
+        <div className="syl-syllabus-content">
+          <div className="syl-syllabus-header">
+            <h2 className="syl-syllabus-title">📘 NMMS Exam Syllabus</h2>
+            <p className="syl-syllabus-description">
               Comprehensive syllabus for National Means-cum-Merit Scholarship examination
             </p>
           </div>
 
           {/* Tab Navigation */}
-          <div className="tab-navigation">
+          <div className="syl-tab-navigation">
             <button 
-              className={`tab-btn ${activeTab === "MAT" ? "active" : ""}`}
+              className={`syl-tab-btn ${activeTab === "MAT" ? "active" : ""}`}
               onClick={() => setActiveTab("MAT")}
             >
               🧠 Mental Ability Test (MAT)
             </button>
             <button 
-              className={`tab-btn ${activeTab === "SAT" ? "active" : ""}`}
+              className={`syl-tab-btn ${activeTab === "SAT" ? "active" : ""}`}
               onClick={() => setActiveTab("SAT")}
             >
               📚 Scholastic Aptitude Test (SAT)
@@ -165,16 +165,16 @@ const Syllabus = () => {
 
           {/* MAT Content */}
           {activeTab === "MAT" && (
-            <div className="tab-content">
-              <div className="tab-description">
+            <div className="syl-tab-content">
+              <div className="syl-tab-description">
                 <p>Covers reasoning and problem-solving skills</p>
               </div>
-              <div className="syllabus-grid">
+              <div className="syl-syllabus-grid">
                 {matSyllabus.map((item, index) => (
-                  <div key={index} className="syllabus-card">
-                    <div className="card-icon">{item.icon}</div>
-                    <h4 className="card-title">{item.title}</h4>
-                    <p className="card-description">{item.desc}</p>
+                  <div key={index} className="syl-syllabus-card">
+                    <div className="syl-card-icon">{item.icon}</div>
+                    <h4 className="syl-card-title">{item.title}</h4>
+                    <p className="syl-card-description">{item.desc}</p>
                   </div>
                 ))}
               </div>
@@ -183,22 +183,22 @@ const Syllabus = () => {
 
           {/* SAT Content */}
           {activeTab === "SAT" && (
-            <div className="tab-content">
-              <div className="tab-description">
+            <div className="syl-tab-content">
+              <div className="syl-tab-description">
                 <p>Based on Class 7 & 8 NCERT/State syllabus</p>
               </div>
-              <div className="sat-subjects">
+              <div className="syl-sat-subjects">
                 {satSyllabus.map((subject, index) => (
-                  <div key={index} className="subject-section">
-                    <div className="subject-header">
-                      <span className="subject-icon">{subject.icon}</span>
-                      <h3 className="subject-title">{subject.category}</h3>
+                  <div key={index} className="syl-subject-section">
+                    <div className="syl-subject-header">
+                      <span className="syl-subject-icon">{subject.icon}</span>
+                      <h3 className="syl-subject-title">{subject.category}</h3>
                     </div>
-                    <div className="topics-grid">
+                    <div className="syl-topics-grid">
                       {subject.topics.map((topic, topicIndex) => (
-                        <div key={topicIndex} className="topic-item">
-                          <span className="topic-bullet"></span>
-                          <span className="topic-text">{topic}</span>
+                        <div key={topicIndex} className="syl-topic-item">
+                          <span className="syl-topic-bullet"></span>
+                          <span className="syl-topic-text">{topic}</span>
                         </div>
                       ))}
                     </div>
@@ -211,168 +211,168 @@ const Syllabus = () => {
       </div>
     
       {/* Study Resources & Preparation Tips Section */}
-      <div className="sub2-syllabus-cont">
-        <div className="resources-content">
-          <div className="resources-header">
-            <h2 className="resources-title">📚 Study Resources & Preparation Tips</h2>
-            <p className="resources-description">
+      <div className="syl-sub2-syllabus-cont">
+        <div className="syl-resources-content">
+          <div className="syl-resources-header">
+            <h2 className="syl-resources-title">📚 Study Resources & Preparation Tips</h2>
+            <p className="syl-resources-description">
               Essential resources and expert strategies to excel in NMMS examination
             </p>
           </div>
 
-          <div className="resources-grid">
+          <div className="syl-resources-grid">
             {/* Study Materials */}
-            <div className="resource-category">
-              <div className="category-header">
-                <div className="category-icon">📖</div>
-                <h3 className="category-title">Study Materials</h3>
+            <div className="syl-resource-category">
+              <div className="syl-category-header">
+                <div className="syl-category-icon">📖</div>
+                <h3 className="syl-category-title">Study Materials</h3>
               </div>
-              <div className="resource-items">
-                <div className="resource-item">
-                  <span className="resource-bullet">📝</span>
-                  <span className="resource-text">Comprehensive practice test papers</span>
+              <div className="syl-resource-items">
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">📝</span>
+                  <span className="syl-resource-text">Comprehensive practice test papers</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">📊</span>
-                  <span className="resource-text">Topic-wise question banks</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">📊</span>
+                  <span className="syl-resource-text">Topic-wise question banks</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">📋</span>
-                  <span className="resource-text">Previous year solved papers</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">📋</span>
+                  <span className="syl-resource-text">Previous year solved papers</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">🎯</span>
-                  <span className="resource-text">Mock test series with analysis</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">🎯</span>
+                  <span className="syl-resource-text">Mock test series with analysis</span>
                 </div>
               </div>
             </div>
 
             {/* Preparation Strategy */}
-            <div className="resource-category">
-              <div className="category-header">
-                <div className="category-icon">🧠</div>
-                <h3 className="category-title">Preparation Strategy</h3>
+            <div className="syl-resource-category">
+              <div className="syl-category-header">
+                <div className="syl-category-icon">🧠</div>
+                <h3 className="syl-category-title">Preparation Strategy</h3>
               </div>
-              <div className="resource-items">
-                <div className="resource-item">
-                  <span className="resource-bullet">⏰</span>
-                  <span className="resource-text">Create a structured study timetable</span>
+              <div className="syl-resource-items">
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">⏰</span>
+                  <span className="syl-resource-text">Create a structured study timetable</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">🔄</span>
-                  <span className="resource-text">Regular revision and practice</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">🔄</span>
+                  <span className="syl-resource-text">Regular revision and practice</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">📈</span>
-                  <span className="resource-text">Track progress with weekly tests</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">📈</span>
+                  <span className="syl-resource-text">Track progress with weekly tests</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">💡</span>
-                  <span className="resource-text">Focus on weak areas improvement</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">💡</span>
+                  <span className="syl-resource-text">Focus on weak areas improvement</span>
                 </div>
               </div>
             </div>
 
             {/* Digital Resources */}
-            <div className="resource-category">
-              <div className="category-header">
-                <div className="category-icon">💻</div>
-                <h3 className="category-title">Digital Resources</h3>
+            <div className="syl-resource-category">
+              <div className="syl-category-header">
+                <div className="syl-category-icon">💻</div>
+                <h3 className="syl-category-title">Digital Resources</h3>
               </div>
-              <div className="resource-items">
-                <div className="resource-item">
-                  <span className="resource-bullet">�</span>
-                  <span className="resource-text">Mobile app for on-the-go learning</span>
+              <div className="syl-resource-items">
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">�</span>
+                  <span className="syl-resource-text">Mobile app for on-the-go learning</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">🎥</span>
-                  <span className="resource-text">Video lectures by expert teachers</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">🎥</span>
+                  <span className="syl-resource-text">Video lectures by expert teachers</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">💬</span>
-                  <span className="resource-text">Online doubt clearing sessions</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">💬</span>
+                  <span className="syl-resource-text">Online doubt clearing sessions</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">📊</span>
-                  <span className="resource-text">Performance analytics dashboard</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">📊</span>
+                  <span className="syl-resource-text">Performance analytics dashboard</span>
                 </div>
               </div>
             </div>
 
             {/* Exam Tips */}
-            <div className="resource-category">
-              <div className="category-header">
-                <div className="category-icon">🏆</div>
-                <h3 className="category-title">Exam Tips</h3>
+            <div className="syl-resource-category">
+              <div className="syl-category-header">
+                <div className="syl-category-icon">🏆</div>
+                <h3 className="syl-category-title">Exam Tips</h3>
               </div>
-              <div className="resource-items">
-                <div className="resource-item">
-                  <span className="resource-bullet">⚡</span>
-                  <span className="resource-text">Time management techniques</span>
+              <div className="syl-resource-items">
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">⚡</span>
+                  <span className="syl-resource-text">Time management techniques</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">✅</span>
-                  <span className="resource-text">Smart guessing strategies</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">✅</span>
+                  <span className="syl-resource-text">Smart guessing strategies</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">🎯</span>
-                  <span className="resource-text">Question prioritization methods</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">🎯</span>
+                  <span className="syl-resource-text">Question prioritization methods</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">😌</span>
-                  <span className="resource-text">Stress management and confidence building</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">😌</span>
+                  <span className="syl-resource-text">Stress management and confidence building</span>
                 </div>
               </div>
             </div>
 
             {/* Expert Guidance */}
-            <div className="resource-category">
-              <div className="category-header">
-                <div className="category-icon">👨‍🏫</div>
-                <h3 className="category-title">Expert Guidance</h3>
+            <div className="syl-resource-category">
+              <div className="syl-category-header">
+                <div className="syl-category-icon">👨‍🏫</div>
+                <h3 className="syl-category-title">Expert Guidance</h3>
               </div>
-              <div className="resource-items">
-                <div className="resource-item">
-                  <span className="resource-bullet">🎓</span>
-                  <span className="resource-text">One-on-one mentorship sessions</span>
+              <div className="syl-resource-items">
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">🎓</span>
+                  <span className="syl-resource-text">One-on-one mentorship sessions</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">👥</span>
-                  <span className="resource-text">Group study sessions</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">👥</span>
+                  <span className="syl-resource-text">Group study sessions</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">📞</span>
-                  <span className="resource-text">24/7 student support helpline</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">📞</span>
+                  <span className="syl-resource-text">24/7 student support helpline</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">🎤</span>
-                  <span className="resource-text">Weekly expert webinars</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">🎤</span>
+                  <span className="syl-resource-text">Weekly expert webinars</span>
                 </div>
               </div>
             </div>
 
             {/* Success Stories */}
-            <div className="resource-category">
-              <div className="category-header">
-                <div className="category-icon">🌟</div>
-                <h3 className="category-title">Success Stories</h3>
+            <div className="syl-resource-category">
+              <div className="syl-category-header">
+                <div className="syl-category-icon">🌟</div>
+                <h3 className="syl-category-title">Success Stories</h3>
               </div>
-              <div className="resource-items">
-                <div className="resource-item">
-                  <span className="resource-bullet">🏅</span>
-                  <span className="resource-text">1000+ scholarship winners</span>
+              <div className="syl-resource-items">
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">🏅</span>
+                  <span className="syl-resource-text">1000+ scholarship winners</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">📈</span>
-                  <span className="resource-text">95% success rate in NMMS</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">📈</span>
+                  <span className="syl-resource-text">95% success rate in NMMS</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">💬</span>
-                  <span className="resource-text">Student testimonials and reviews</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">💬</span>
+                  <span className="syl-resource-text">Student testimonials and reviews</span>
                 </div>
-                <div className="resource-item">
-                  <span className="resource-bullet">🎉</span>
-                  <span className="resource-text">Alumni network support</span>
+                <div className="syl-resource-item">
+                  <span className="syl-resource-bullet">🎉</span>
+                  <span className="syl-resource-text">Alumni network support</span>
                 </div>
               </div>
             </div>
@@ -386,3 +386,4 @@ const Syllabus = () => {
     </div>
   );
 };export default Syllabus;
+

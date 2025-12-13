@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../Footer Pages/Terms.css';
+import './Terms.css';
 import ParticleBackground from '../StarBg';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
@@ -68,27 +68,27 @@ const Terms = () => {
   return (
     <>
       <Navbar />
-      <div className="terms-wrap">
+      <div className="trms-terms-wrap">
        
         
-        <div className="terms-container">
-          <div className="terms-hero">
-            <h1 className="terms-title">Terms & Conditions</h1>
-            <p className="terms-sub">Your rights and responsibilities on our platform</p>
-            <p className="terms-date">Last Updated: January 2024</p>
+        <div className="trms-terms-container">
+          <div className="trms-terms-hero">
+            <h1 className="trms-terms-title">Terms & Conditions</h1>
+            <p className="trms-terms-sub">Your rights and responsibilities on our platform</p>
+            <p className="trms-terms-date">Last Updated: January 2024</p>
           </div>
 
-          <div className="terms-intro">
+          <div className="trms-terms-intro">
             <p>
               By using Skillyug Education's PrepMark platform, you agree to these Terms and Conditions. 
               Please read them carefully to understand your rights and obligations when accessing our educational services.
             </p>
           </div>
 
-          <div className="terms-cards">
+          <div className="trms-terms-cards">
             {termsSections.map((section, index) => (
-              <div key={index} className="terms-card">
-                <div className="card-icon">{section.icon}</div>
+              <div key={index} className="trms-terms-card">
+                <div className="trms-card-icon">{section.icon}</div>
                 <h2>{section.title}</h2>
                 <p>{section.description}</p>
               </div>
@@ -104,3 +104,5 @@ const Terms = () => {
 };
 
 export default Terms;
+
+

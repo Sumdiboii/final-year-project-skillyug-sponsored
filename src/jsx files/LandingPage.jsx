@@ -30,52 +30,52 @@ const LandingPage = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
     return (
-		<div className="landing-page">
+		<div className="lp-landing-page">
             <Navbar />
             
-			<div className="landingpage-1">
+			<div className="lp-landingpage-1">
                 <ParticleBackground />
-                <div className="left-container-landingpage-1">
-                    <div className="left-container-landingpage-1-top">
-                        <img src="/assets/PrepMark.png" alt="PrepMark Logo" className="prepmark-logo" />
+                <div className="lp-left-container-landingpage-1">
+                    <div className="lp-left-container-landingpage-1-top">
+                        <img src="/assets/PrepMark.png" alt="PrepMark Logo" className="lp-prepmark-logo" />
                     </div>
-                    <div className="left-container-landingpage-1-bottom">
-                        <div className="left-container-landingpage-1-bottom-top">
-                            <span className="prepmark-subtitle">Empowering children with India's #1 aptitude and brain training platform</span>
+                    <div className="lp-left-container-landingpage-1-bottom">
+                        <div className="lp-left-container-landingpage-1-bottom-top">
+                            <span className="lp-prepmark-subtitle">Empowering children with India's #1 aptitude and brain training platform</span>
                         </div>
-                        <div className="left-container-landingpage-1-bottom-bottom">
-                            <div className="left-container-landingpage-1-bottom-bottom-1">
-                                <button className="prepmark-btn get-started" onClick={() => navigate("/pricing")}>Pricing Plans</button>
+                        <div className="lp-left-container-landingpage-1-bottom-bottom">
+                            <div className="lp-left-container-landingpage-1-bottom-bottom-1">
+                                <button className="lp-prepmark-btn get-started" onClick={() => navigate("/pricing")}>Pricing Plans</button>
                             </div>
-                            <div className="left-container-landingpage-1-bottom-bottom-2">
-                                <button className="prepmark-btn about-us">About Us</button>
+                            <div className="lp-left-container-landingpage-1-bottom-bottom-2">
+                                <button className="lp-prepmark-btn about-us">About Us</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="right-container-landingpage-1">
-                    <div className={`red-scroll-box${scrolledDown ? ' out' : ''}`}>
+                <div className="lp-right-container-landingpage-1">
+                    <div className={`lp-red-scroll-box${scrolledDown ? ' out' : ''}`}>
                         <Ship />
                     </div>
                 </div>
             </div>
 
-                        <div className="landingpage-2">
-                                <div className="left-container-landingpage-2 skillyug-flip-wrap"
+                        <div className="lp-landingpage-2">
+                                <div className="lp-left-container-landingpage-2 lp-skillyug-flip-wrap"
                                     onMouseEnter={() => setSkillyugFlipped(true)}
                                     onMouseLeave={() => setSkillyugFlipped(false)}
                                 >
-                                    <div className={`skillyug-flipcard${skillyugFlipped ? ' flipped' : ''}`}>
-                                        <div className="skillyug-flipcard-inner">
-                                            <div className="skillyug-flipcard-front">
+                                    <div className={`lp-skillyug-flipcard${skillyugFlipped ? ' flipped' : ''}`}>
+                                        <div className="lp-skillyug-flipcard-inner">
+                                            <div className="lp-skillyug-flipcard-front">
                                                 <img
                                                     src="/assets/skillyug-logo-removebg-preview.png"
                                                     alt="Skillyug Logo"
-                                                    className="skillyug-logo"
+                                                    className="lp-skillyug-logo"
                                                 />
                                             </div>
-                                            <div className="skillyug-flipcard-back">
-                                                <div className="skillyug-flipcard-content">
+                                            <div className="lp-skillyug-flipcard-back">
+                                                <div className="lp-skillyug-flipcard-content">
                                                     <h1>Skillyug Education Academy</h1>
                                                     <p>
                                                         Skillyug Education Academy is a premier institution dedicated to empowering students with practical skills and knowledge for the modern world. Our programs focus on hands-on learning, mentorship, and real-world projects to ensure every learner is industry-ready.
@@ -92,75 +92,75 @@ const LandingPage = () => {
                                         </div>
                                     </div>
                                 </div>
-                <div className="right-container-landingpage-2">
-                                    <div className="right-container-landingpage-2-top">
-                                        <div className="flipcard">
-                                            <div className="flipcard-inner">
-                                                <div className="flipcard-front">
-                                                    <div className="right-container-landingpage-2-top-1">
-                                                        <div className="right-container-landingpage-2-top-1-top">
-                                                            <img src="/assets/leaf.png" alt="Brain" className="brain-img" />
+                <div className="lp-right-container-landingpage-2">
+                                    <div className="lp-right-container-landingpage-2-top">
+                                        <div className="lp-flipcard">
+                                            <div className="lp-flipcard-inner">
+                                                <div className="lp-flipcard-front">
+                                                    <div className="lp-right-container-landingpage-2-top-1">
+                                                        <div className="lp-right-container-landingpage-2-top-1-top">
+                                                            <img src="/assets/leaf.png" alt="Brain" className="lp-brain-img" />
                                                         </div>
-                                                        <div className="right-container-landingpage-2-top-1-bottom">
-                                                            <span className="app-feature-desc">Interactive games for fun learning.</span>
+                                                        <div className="lp-right-container-landingpage-2-top-1-bottom">
+                                                            <span className="lp-app-feature-desc">Interactive games for fun learning.</span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="flipcard-back">
-                                                    <span className="app-feature-back">Flip for fun fact: Games help boost memory and logic!</span>
+                                                <div className="lp-flipcard-back">
+                                                    <span className="lp-app-feature-back">Flip for fun fact: Games help boost memory and logic!</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flipcard">
-                                            <div className="flipcard-inner">
-                                                <div className="flipcard-front">
-                                                    <div className="right-container-landingpage-2-top-2">
-                                                        <div className="right-container-landingpage-2-top-2-top">
-                                                            <img src="/assets/leaf.png" alt="Brain" className="brain-img" />
+                                        <div className="lp-flipcard">
+                                            <div className="lp-flipcard-inner">
+                                                <div className="lp-flipcard-front">
+                                                    <div className="lp-right-container-landingpage-2-top-2">
+                                                        <div className="lp-right-container-landingpage-2-top-2-top">
+                                                            <img src="/assets/leaf.png" alt="Brain" className="lp-brain-img" />
                                                         </div>
-                                                        <div className="right-container-landingpage-2-top-2-bottom">
-                                                            <span className="app-feature-desc">Personalized analytics to track progress.</span>
+                                                        <div className="lp-right-container-landingpage-2-top-2-bottom">
+                                                            <span className="lp-app-feature-desc">Personalized analytics to track progress.</span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="flipcard-back">
-                                                    <span className="app-feature-back">Flip for fun fact: Analytics show your improvement over time!</span>
+                                                <div className="lp-flipcard-back">
+                                                    <span className="lp-app-feature-back">Flip for fun fact: Analytics show your improvement over time!</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="right-container-landingpage-2-bottom">
-                                        <div className="flipcard">
-                                            <div className="flipcard-inner">
-                                                <div className="flipcard-front">
-                                                    <div className="right-container-landingpage-2-bottom-1">
-                                                        <div className="right-container-landingpage-2-bottom-1-top">
-                                                            <img src="/assets/leaf.png" alt="Brain" className="brain-img" />
+                                    <div className="lp-right-container-landingpage-2-bottom">
+                                        <div className="lp-flipcard">
+                                            <div className="lp-flipcard-inner">
+                                                <div className="lp-flipcard-front">
+                                                    <div className="lp-right-container-landingpage-2-bottom-1">
+                                                        <div className="lp-right-container-landingpage-2-bottom-1-top">
+                                                            <img src="/assets/leaf.png" alt="Brain" className="lp-brain-img" />
                                                         </div>
-                                                        <div className="right-container-landingpage-2-bottom-1-bottom">
-                                                            <span className="app-feature-desc">Adaptive content for every skill level.</span>
+                                                        <div className="lp-right-container-landingpage-2-bottom-1-bottom">
+                                                            <span className="lp-app-feature-desc">Adaptive content for every skill level.</span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="flipcard-back">
-                                                    <span className="app-feature-back">Flip for fun fact: Content adapts to your learning speed!</span>
+                                                <div className="lp-flipcard-back">
+                                                    <span className="lp-app-feature-back">Flip for fun fact: Content adapts to your learning speed!</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flipcard">
-                                            <div className="flipcard-inner">
-                                                <div className="flipcard-front">
-                                                    <div className="right-container-landingpage-2-bottom-2">
-                                                        <div className="right-container-landingpage-2-bottom-2-top">
-                                                            <img src="/assets/leaf.png" alt="Brain" className="brain-img" />
+                                        <div className="lp-flipcard">
+                                            <div className="lp-flipcard-inner">
+                                                <div className="lp-flipcard-front">
+                                                    <div className="lp-right-container-landingpage-2-bottom-2">
+                                                        <div className="lp-right-container-landingpage-2-bottom-2-top">
+                                                            <img src="/assets/leaf.png" alt="Brain" className="lp-brain-img" />
                                                         </div>
-                                                        <div className="right-container-landingpage-2-bottom-2-bottom">
-                                                            <span className="app-feature-desc">Safe, child-friendly environment.</span>
+                                                        <div className="lp-right-container-landingpage-2-bottom-2-bottom">
+                                                            <span className="lp-app-feature-desc">Safe, child-friendly environment.</span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="flipcard-back">
-                                                    <span className="app-feature-back">Flip for fun fact: Our platform is ad-free and secure!</span>
+                                                <div className="lp-flipcard-back">
+                                                    <span className="lp-app-feature-back">Flip for fun fact: Our platform is ad-free and secure!</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -169,15 +169,15 @@ const LandingPage = () => {
             </div>
 
             {/* New section: App video (left) + vertical gallery (right) */}
-            <div className="landingpage-2-5">
-                 <div className="lp25-right">
+            <div className="lp-landingpage-2-5">
+                 <div className="lp-lp25-right">
                     <HexagonProfileSlider />
                  </div>
-                <div className="lp25-left">
-                    <div className="vid-title-text">Experience our app in action</div>
-                    <div className="lp25-video-wrap">
+                <div className="lp-lp25-left">
+                    <div className="lp-vid-title-text">Experience our app in action</div>
+                    <div className="lp-lp25-video-wrap">
                         <video
-                                                                                    className="lp25-video"
+                                                                                    className="lp-lp25-video"
                                                                                     src="/assets/276047_small.mp4"
                                                                                     autoPlay
                                                                                     loop
@@ -189,16 +189,16 @@ const LandingPage = () => {
                                                                                 ></video>
                     </div>
                 </div>
-                <div className="lp25-right">
+                <div className="lp-lp25-right">
                     <HexagonProfileSlider />
                 </div>
             </div>
 
                     {/* App Download Section with Astronaut */}
-                    <div className="download-section">
-                        <div className="download-container">
+                    <div className="lp-download-section">
+                        <div className="lp-download-container">
                             {/* Main Stars Background */}
-                            <div className="stars-container-lp">
+                            <div className="lp-stars-container-lp">
                                 {Array.from({ length: 20 }).map((_, i) => {
                                     // Better distribution using sectors
                                     const sector = i % 4; // 4 sectors
@@ -210,7 +210,7 @@ const LandingPage = () => {
                                     return (
                                         <div
                                             key={i}
-                                            className="floating-star"
+                                            className="lp-floating-star"
                                             style={{
                                                 left: `${Math.min(randomX + 5, 95)}%`,
                                                 top: `${Math.min(randomY + 5, 95)}%`,
@@ -228,36 +228,36 @@ const LandingPage = () => {
                             
 
                             {/* Main Content */}
-                            <div className="download-content">
+                            <div className="lp-download-content">
                                 
 
                                 {/* Text Content */}
-                                <div className="download-text-content">
-                                    <h1 className="download-title">
-                                        <span className="title-line">Download PrepMark</span>
-                                        <span className="title-line">Start Learning Today</span>
+                                <div className="lp-download-text-content">
+                                    <h1 className="lp-download-title">
+                                        <span className="lp-title-line">Download PrepMark</span>
+                                        <span className="lp-title-line">Start Learning Today</span>
                                     </h1>
-                                    <p className="download-subtitle">
+                                    <p className="lp-download-subtitle">
                                         Experience personalized learning on-the-go with our award-winning mobile app
                                     </p>
 
                                     {/* App Store Buttons */}
-                                    <div className="app-stores">
-                                        <a href="https://github.com/Sumdiboii" target="_blank" rel="noopener noreferrer" className="app-store-btn google-play">
-                                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="app-store-image" />
+                                    <div className="lp-app-stores">
+                                        <a href="https://github.com/Sumdiboii" target="_blank" rel="noopener noreferrer" className="lp-app-store-btn lp-google-play">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="lp-app-store-image" />
                                         </a>
-                                        <a href="https://github.com/Sumdiboii" target="_blank" rel="noopener noreferrer" className="app-store-btn app-store">
-                                            <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" className="app-store-image" />
+                                        <a href="https://github.com/Sumdiboii" target="_blank" rel="noopener noreferrer" className="lp-app-store-btn lp-app-store">
+                                            <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" className="lp-app-store-image" />
                                         </a>
                                     </div>
 
                                     
                                 </div>
-                                <div className="rocket-cont"><Ship /></div>
+                                <div className="lp-rocket-cont"><Ship /></div>
                             </div>
 
                             {/* Additional Well-Distributed Stars */}
-                            <div className="additional-stars">
+                            <div className="lp-additional-stars">
                                 {Array.from({ length: 30 }).map((_, i) => {
                                     // 6x5 grid pattern for better coverage
                                     const gridX = (i % 6) * 16.67; // 6 columns: 0%, 16.67%, 33.33%, 50%, 66.67%, 83.33%
@@ -268,7 +268,7 @@ const LandingPage = () => {
                                     return (
                                         <div
                                             key={i}
-                                            className="additional-star"
+                                            className="lp-additional-star"
                                             style={{
                                                 left: `${Math.max(2, Math.min(98, randomX))}%`,
                                                 top: `${Math.max(2, Math.min(98, randomY))}%`,
@@ -284,12 +284,12 @@ const LandingPage = () => {
                         </div>
                     </div>
 
-                         <div className="landingpage-3">
+                         <div className="lp-landingpage-3">
                                  <ParticleBackground />
-                                 <div className="left-container-landingpage-3">
-                                        <h2 className="lp3-title">Student Results Comparison</h2>
-                                        <div className="lp3-chart-wrap">
-                                            <svg className="lp3-chart" viewBox="0 0 420 260" role="img" aria-label="Traditional vs PrepMark scores">
+                                 <div className="lp-left-container-landingpage-3">
+                                        <h2 className="lp-lp3-title">Student Results Comparison</h2>
+                                        <div className="lp-lp3-chart-wrap">
+                                            <svg className="lp-lp3-chart" viewBox="0 0 420 260" role="img" aria-label="Traditional vs PrepMark scores">
                                                 <defs>
                                                     <linearGradient id="pmGrad" x1="0" x2="0" y1="0" y2="1">
                                                         <stop offset="0%" stopColor="#1a237e" />
@@ -328,7 +328,7 @@ const LandingPage = () => {
                                                     )
                                                 })}
                                                 {/* legend */}
-                                                <g className="lp3-legend" >
+                                                <g className="lp-lp3-legend" >
                                                     <rect x="240" y="34" width="12" height="12" fill="#b77a62ff;" rx="5" />
                                                     <text x="258" y="44" fill="#1a237e" fontSize="12">Traditional</text>
                                                     <rect x="240" y="54" width="12" height="12" fill="rgba(45, 214, 59, 1);" rx="5" />
@@ -337,36 +337,36 @@ const LandingPage = () => {
                                             </svg>
                                         </div>
                                  </div>
-                                 <div className="right-container-landingpage-3">
-                                     <div className="lp3-stats-grid">
-                                         <div className="statt-card">
-                                             <div className="statt-value">15</div>
-                                             <div className="statt-label">Lessons</div>
+                                 <div className="lp-right-container-landingpage-3">
+                                     <div className="lp-lp3-stats-grid">
+                                         <div className="lp-statt-card">
+                                             <div className="lp-statt-value">15</div>
+                                             <div className="lp-statt-label">Lessons</div>
                                          </div>
-                                         <div className="statt-card">
-                                             <div className="statt-value">50k</div>
-                                             <div className="statt-label">Users</div>
+                                         <div className="lp-statt-card">
+                                             <div className="lp-statt-value">50k</div>
+                                             <div className="lp-statt-label">Users</div>
                                          </div>
-                                         <div className="statt-card">
-                                             <div className="statt-value">92%</div>
-                                             <div className="statt-label">Avg. Score Lift</div>
+                                         <div className="lp-statt-card">
+                                             <div className="lp-statt-value">92%</div>
+                                             <div className="lp-statt-label">Avg. Score Lift</div>
                                          </div>
-                                         <div className="statt-card">
-                                             <div className="statt-value">4.8★</div>
-                                             <div className="statt-label">App Rating</div>
+                                         <div className="lp-statt-card">
+                                             <div className="lp-statt-value">4.8★</div>
+                                             <div className="lp-statt-label">App Rating</div>
                                          </div>
-                                         <div className="statt-card">
-                                             <div className="statt-value">92%</div>
-                                             <div className="statt-label">Avg. Score Lift</div>
+                                         <div className="lp-statt-card">
+                                             <div className="lp-statt-value">92%</div>
+                                             <div className="lp-statt-label">Avg. Score Lift</div>
                                          </div>
-                                         <div className="statt-card">
-                                             <div className="statt-value">4.8★</div>
-                                             <div className="statt-label">App Rating</div>
+                                         <div className="lp-statt-card">
+                                             <div className="lp-statt-value">4.8★</div>
+                                             <div className="lp-statt-label">App Rating</div>
                                          </div>
                                      </div>
                                  </div>
                         </div>
-<div className="mock-quiz-section">
+<div className="lp-mock-quiz-section">
     {(() => {
         const [activeTab, setActiveTab] = React.useState('easy');
         const [currentQuestion, setCurrentQuestion] = React.useState(0);
@@ -486,15 +486,15 @@ const LandingPage = () => {
         const isCorrect = selectedAnswer === currentQ?.correct;
 
         return (
-            <div className="quiz-container">
-                <h2 className="quiz-title">Try Our Demo Quiz</h2>
-                <p className="quiz-subtitle">Test your aptitude and logical reasoning skills</p>
+            <div className="lp-quiz-container">
+                <h2 className="lp-quiz-title">Try Our Demo Quiz</h2>
+                <p className="lp-quiz-subtitle">Test your aptitude and logical reasoning skills</p>
                 
-                <div className="quiz-tabs">
+                <div className="lp-quiz-tabs">
                     {['easy', 'medium', 'hard'].map(level => (
                         <button
                             key={level}
-                            className={`quiz-tab ${activeTab === level ? 'active' : ''}`}
+                            className={`lp-quiz-tab ${activeTab === level ? 'lp-active' : ''}`}
                             onClick={() => setActiveTab(level)}
                         >
                             {level.charAt(0).toUpperCase() + level.slice(1)}
@@ -503,60 +503,60 @@ const LandingPage = () => {
                 </div>
 
                 {currentQ && (
-                    <div className="quiz-content">
-                        <div className="question-header">
-                            <span className="question-counter">
+                    <div className="lp-quiz-content">
+                        <div className="lp-question-header">
+                            <span className="lp-question-counter">
                                 Question {currentQuestion + 1} of {questions.length}
                             </span>
-                            <span className="difficulty-badge">{activeTab.toUpperCase()}</span>
+                            <span className="lp-difficulty-badge">{activeTab.toUpperCase()}</span>
                         </div>
 
-                        <div className="question-card">
-                            <h3 className="question-text">{currentQ.question}</h3>
+                        <div className="lp-question-card">
+                            <h3 className="lp-question-text">{currentQ.question}</h3>
                             
-                            <div className="options-grid">
+                            <div className="lp-options-grid">
                                 {currentQ.options.map((option, index) => (
                                     <button
                                         key={index}
-                                        className={`option-btn ${
-                                            selectedAnswer === index ? 'selected' : ''
+                                        className={`lp-option-btn ${
+                                            selectedAnswer === index ? 'lp-selected' : ''
                                         } ${
                                             showResult ? 
-                                                (index === currentQ.correct ? 'correct' : 
-                                                 selectedAnswer === index ? 'incorrect' : '') 
+                                                (index === currentQ.correct ? 'lp-correct' : 
+                                                 selectedAnswer === index ? 'lp-incorrect' : '') 
                                                 : ''
                                         }`}
                                         onClick={() => !showResult && handleAnswerSelect(index)}
                                         disabled={showResult}
                                     >
-                                        <span className="option-letter">
+                                        <span className="lp-option-letter">
                                             {String.fromCharCode(65 + index)}
                                         </span>
-                                        <span className="option-text">{option}</span>
+                                        <span className="lp-option-text">{option}</span>
                                     </button>
                                 ))}
                             </div>
 
                             {showResult && (
-                                <div className={`result-section ${isCorrect ? 'correct' : 'incorrect'}`}>
-                                    <div className="result-header">
-                                        <span className="result-icon">
+                                <div className={`lp-result-section ${isCorrect ? 'lp-correct' : 'lp-incorrect'}`}>
+                                    <div className="lp-result-header">
+                                        <span className="lp-result-icon">
                                             {isCorrect ? '✅' : '❌'}
                                         </span>
-                                        <span className="result-text">
+                                        <span className="lp-result-text">
                                             {isCorrect ? 'Correct!' : 'Incorrect'}
                                         </span>
                                     </div>
-                                    <div className="explanation">
+                                    <div className="lp-explanation">
                                         <strong>Explanation:</strong> {currentQ.explanation}
                                     </div>
                                 </div>
                             )}
 
-                            <div className="quiz-actions">
+                            <div className="lp-quiz-actions">
                                 {!showResult ? (
                                     <button
-                                        className="submit-btn"
+                                        className="lp-submit-btn"
                                         onClick={handleSubmit}
                                         disabled={selectedAnswer === null}
                                     >
@@ -564,7 +564,7 @@ const LandingPage = () => {
                                     </button>
                                 ) : (
                                     <button
-                                        className="next-btn"
+                                        className="lp-next-btn"
                                         onClick={nextQuestion}
                                     >
                                         {currentQuestion < questions.length - 1 ? 'Next Question' : 'Try Again'}
@@ -579,9 +579,9 @@ const LandingPage = () => {
                 {showFireworks && <QuizFireworks />}
             </div>
         );
-    })()}
-</div>
-            <div className="landingpage-4">
+    })()}</div>
+
+            <div className="lp-landingpage-4">
                 {/* Reviews slider: two rows, opposite directions */}
                 {(() => {
                     const fallbackAvatar = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><circle cx="40" cy="40" r="40" fill="#e0e7ff"/></svg>');
@@ -600,44 +600,44 @@ const LandingPage = () => {
                         { name: 'Parent—Simran', img: 'https://i.pravatar.cc/80?img=66', text: 'Great balance of fun and learning; analytics are A+.' },
                     ];
                     const StarRow = () => (
-                        <div className="review-stars" aria-label="5 out of 5 stars" title="5 out of 5">
+                        <div className="lp-review-stars" aria-label="5 out of 5 stars" title="5 out of 5">
                             <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                         </div>
                     );
                     const Card = ({ r }) => (
-                        <div className="review-card">
-                            <div className="review-card-top">
+                        <div className="lp-review-card">
+                            <div className="lp-review-card-top">
                                 <img
-                                    className="review-avatar"
+                                    className="lp-review-avatar"
                                     src={r.img}
                                     alt={`${r.name} avatar`}
                                     loading="lazy"
                                     onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = fallbackAvatar; }}
                                 />
-                                <div className="review-meta">
-                                    <div className="review-name">{r.name}</div>
+                                <div className="lp-review-meta">
+                                    <div className="lp-review-name">{r.name}</div>
                                     <StarRow />
                                 </div>
                             </div>
-                            <p className="review-text">{r.text}</p>
+                            <p className="lp-review-text">{r.text}</p>
                         </div>
                     );
                     const Track = ({ items, reverse }) => (
-                        <div className={`reviews-track${reverse ? ' reverse' : ''}`}>
-                            <div className="track-segment">
+                        <div className={`lp-reviews-track${reverse ? ' lp-reverse' : ''}`}>
+                            <div className="lp-track-segment">
                                 {items.map((r, i) => <Card key={`a-${i}`} r={r} />)}
                             </div>
-                            <div className="track-segment" aria-hidden="true">
+                            <div className="lp-track-segment" aria-hidden="true">
                                 {items.map((r, i) => <Card key={`b-${i}`} r={r} />)}
                             </div>
                         </div>
                     );
                     return (
-                        <div className="reviews-section">
-                            <div className="reviews-row row-1">
+                        <div className="lp-reviews-section">
+                            <div className="lp-reviews-row lp-row-1">
                                 <Track items={reviewsTop} />
                             </div>
-                            <div className="reviews-row row-2">
+                            <div className="lp-reviews-row lp-row-2">
                                 <Track items={reviewsBottom} reverse />
                             </div>
                         </div>
@@ -645,7 +645,7 @@ const LandingPage = () => {
                 })()}
             </div>
 
-             <div className="landingpage-5">
+             <div className="lp-landingpage-5">
                   <ParticleBackground />
                   {(() => {
                     const faqs = [
@@ -668,7 +668,7 @@ const LandingPage = () => {
                                                 // For expanded, absolutely position over .faqs-wrap
                                                 return (
                                                         <div
-                                                            className={`faq-item${isOpen ? ' open expanded' : ''}`}
+                                                            className={`lp-faq-item${isOpen ? ' lp-open lp-expanded' : ''}`}
                                                             style={
                                                                 isOpen
                                                                     ? {
@@ -702,7 +702,7 @@ const LandingPage = () => {
                                                             }
                                                         >
                                                                 <button
-                                                                    className="faq-q"
+                                                                    className="lp-faq-q"
                                                                     style={
                                                                         isOpen
                                                                             ? {
@@ -722,10 +722,10 @@ const LandingPage = () => {
                                                                     onClick={() => setExpandedIdx(isOpen ? null : idx)}
                                                                 >
                                                                         <span>{item.q}</span>
-                                                                        <span className={`chev${isOpen ? ' up' : ''}`} aria-hidden>⌄</span>
+                                                                        <span className={`lp-chev${isOpen ? ' lp-up' : ''}`} aria-hidden>⌄</span>
                                                                 </button>
                                                                 <div
-                                                                    className="faq-a"
+                                                                    className="lp-faq-a"
                                                                     aria-hidden={!isOpen}
                                                                     style={
                                                                         isOpen
@@ -755,7 +755,7 @@ const LandingPage = () => {
                                                                 >
                                                                         {item.a}
                                                                         {isOpen && (
-                                                                                <button className="faq-close-btn" onClick={() => setExpandedIdx(null)} style={{transition:'all 0.3s'}}>Close</button>
+                                                                                <button className="lp-faq-close-btn" onClick={() => setExpandedIdx(null)} style={{transition:'all 0.3s'}}>Close</button>
                                                                         )}
                                                                 </div>
                                                         </div>
@@ -765,15 +765,14 @@ const LandingPage = () => {
                     const ownerFallback = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><circle cx="60" cy="60" r="60" fill="#e0e7ff"/></svg>');
                     return (
                         <>
-                                                    <div className="left-container-landingpage-5">
-                                                            <div className="faqs-wrap">
-                                                                    <h2 className="faqs-title">Frequently Asked Questions</h2>
-                                                                    <div className="faqs-list">
-                                                                            {faqs.map((f, i) => <FAQItem key={i} item={f} idx={i} />)}
+                                                    <div className="lp-left-container-landingpage-5">
+                                                            <div className="lp-faqs-wrap">
+                                                                    <h2 className="lp-faqs-title">Frequently Asked Questions</h2>
+                                                                    <div className="lp-faqs-list">                                                                            {faqs.map((f, i) => <FAQItem key={i} item={f} idx={i} />)}
                                                                     </div>
                                                             </div>
                                                             <style>{`
-                                                                .faqs-wrap {
+                                                                .lp-faqs-wrap {
                                                                     width: 580px;
                                                                     min-height: 420px;
                                                                     max-height: 480px;
@@ -783,7 +782,7 @@ const LandingPage = () => {
                                                                     // background:red;
                                                                     margin-top:2rem;
                                                                 }
-                                                                .faqs-list {
+                                                                .lp-faqs-list {
                                                                     display: flex;
                                                                     flex-direction: column;
                                                                     gap: 1rem;
@@ -794,26 +793,26 @@ const LandingPage = () => {
                                                                     
                                                                     
                                                                 }
-                                                                .faqs-list::-webkit-scrollbar {
+                                                                .lp-faqs-list::-webkit-scrollbar {
                                                                     width: 5px;
                                                                     height: 5px;
                                                                     
                                                                 }
-                                                                .faqs-list::-webkit-scrollbar-thumb {
+                                                                .lp-faqs-list::-webkit-scrollbar-thumb {
                                                                     background: #ffffffff;
                                                                     border-radius: 8px;
                                                                     min-height: 24px;
                                                                     
                                                                 }
-                                                                .faqs-list::-webkit-scrollbar-track {
+                                                                .lp-faqs-list::-webkit-scrollbar-track {
                                                                     background: transparent;
                                                                 }
-                                                                .faqs-list {
+                                                                .lp-faqs-list {
                                                                     scrollbar-width: thin;
                                                                     scrollbar-color: #ffffffff transparent;
                                                                     
                                                                 }
-                                                                .faq-item {
+                                                                .lp-faq-item {
                                                                     background: rgba(255,255,255,0.08);
                                                                     border-radius: 16px;
                                                                     box-shadow: 0 2px 12px rgba(0,0,0,0.08);
@@ -823,11 +822,11 @@ const LandingPage = () => {
                                                                     min-height: 56px;
                                                                     overflow: hidden;
                                                                 }
-                                                                .faq-item.open {
+                                                                .lp-faq-item.open {
                                                                     background: rgba(255,255,255,0.13);
                                                                     box-shadow: 0 4px 24px rgba(0,0,0,0.16);
                                                                 }
-                                                                .faq-item.expanded {
+                                                                .lp-faq-item.expanded {
                                                                     position: absolute;
                                                                     top: 0; left: 0; right: 0; bottom: 0;
                                                                     width: 100%; height: 100%;
@@ -846,7 +845,7 @@ const LandingPage = () => {
                                                                     from { transform: scale(0.95) translateY(40px); opacity: 0.5; }
                                                                     to { transform: scale(1.04) translateY(-8px); opacity: 1; }
                                                                 }
-                                                                .faq-item.expanded .faq-q {
+                                                                .lp-faq-item.expanded .faq-q {
                                                                     font-size: 2rem;
                                                                     font-weight: 800;
                                                                     color: #fff;
@@ -857,7 +856,7 @@ const LandingPage = () => {
                                                                     cursor: default;
                                                                     pointer-events: none;
                                                                 }
-                                                                .faq-item.expanded .faq-a {
+                                                                .lp-faq-item.expanded .faq-a {
                                                                     font-size: 1.3rem;
                                                                     color: #fff;
                                                                     opacity: 1;
@@ -871,7 +870,7 @@ const LandingPage = () => {
                                                                     align-items: center;
                                                                     justify-content: center;
                                                                 }
-                                                                .faq-close-btn {
+                                                                .lp-faq-close-btn {
                                                                     margin-top: 2rem;
                                                                     padding: 0.7rem 2.2rem;
                                                                     font-size: 1.1rem;
@@ -884,26 +883,26 @@ const LandingPage = () => {
                                                                     cursor: pointer;
                                                                     transition: background 0.2s, color 0.2s;
                                                                 }
-                                                                .faq-close-btn:hover {
+                                                                .lp-faq-close-btn:hover {
                                                                     background: #43a047;
                                                                     color: #fff;
                                                                 }
                                                             `}</style>
                                                     </div>
-                          <div className="right-container-landingpage-5">
-                              <div className="owner-note-card">
+                          <div className="lp-right-container-landingpage-5">
+                              <div className="lp-owner-note-card">
                                   <img
-                                    className="owner-avatar"
+                                    className="lp-owner-avatar"
                                     src={ownerImg}
                                     alt="Founder portrait"
                                     onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = ownerFallback; }}
                                     loading="lazy"
                                   />
-                                  <blockquote className="owner-quote">“Every child can build a sharper mind with the right practice—one small win each day.”</blockquote>
-                                  <p className="owner-speech">Hi, I\'m the founder of PrepMark. We built this platform to make brain training engaging and effective for students. Try a few lessons, watch the progress reports, and you\'ll see confidence grow week by week. Keep learning—your future self will thank you.</p>
-                                  <div className="owner-meta">
-                                      <div className="owner-name">Rahul Mehta</div>
-                                      <div className="owner-role">Founder, PrepMark</div>
+                                  <blockquote className="lp-owner-quote">"Every child can build a sharper mind with the right practice—one small win each day."</blockquote>
+                                  <p className="lp-owner-speech">Hi, I\'m the founder of PrepMark. We built this platform to make brain training engaging and effective for students. Try a few lessons, watch the progress reports, and you\'ll see confidence grow week by week. Keep learning—your future self will thank you.</p>
+                                  <div className="lp-owner-meta">
+                                      <div className="lp-owner-name">Rahul Mehta</div>
+                                      <div className="lp-owner-role">Founder, PrepMark</div>
                                   </div>
                               </div>
                           </div>

@@ -1,275 +1,268 @@
 import React, { useState } from 'react';
 import '../css files/Profile.css';
+import MainNavbar from '../components/MainNavbar';
+import Footer from '../components/Footer';
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    name: 'Alex Johnson',
-    email: 'alex.johnson@example.com',
-    phone: '+1 (555) 123-4567',
-    location: 'New York, NY',
-    school: 'Central High School',
-    grade: '10th Grade',
-    joinDate: 'September 2023'
+  
+  // Student profile data from registration
+  const [studentInfo, setStudentInfo] = useState({
+    fullName: 'Sumedh Kumar',
+    email: 'sumedh.kumar@example.com',
+    dateOfBirth: '2010-05-15',
+    age: 14,
+    grade: '7',
+    school: 'Delhi Public School',
+    address: '123 Main Street, New Delhi, India',
+    guardianName: 'Rajesh Kumar',
+    guardianPhone: '9876543210'
   });
 
-  const [preferences, setPreferences] = useState({
-    emailNotifications: true,
-    pushNotifications: false,
-    weeklyReports: true,
-    achievementAlerts: true,
-    studyReminders: true,
-    darkMode: false
-  });
+  const [tempInfo, setTempInfo] = useState({ ...studentInfo });
 
   const handleEdit = () => {
     setIsEditing(true);
+    setTempInfo({ ...studentInfo });
   };
 
   const handleSave = () => {
+    setStudentInfo({ ...tempInfo });
     setIsEditing(false);
-    // Here you would typically save to backend
+    // TODO: Save to backend
+    alert('Profile updated successfully!');
   };
 
   const handleCancel = () => {
     setIsEditing(false);
-    // Reset to original values if needed
+    setTempInfo({ ...studentInfo });
   };
 
   const handleInputChange = (field, value) => {
-    setUserInfo(prev => ({
+    setTempInfo(prev => ({
       ...prev,
       [field]: value
     }));
   };
 
-  const handlePreferenceChange = (pref) => {
-    setPreferences(prev => ({
-      ...prev,
-      [pref]: !prev[pref]
-    }));
+  // Auto-calculate age when date of birth changes
+  const calculateAge = (dob) => {
+    const today = new Date();
+    const birthDate = new Date(dob);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
   };
 
-  const stats = [
-    { icon: '📚', value: '45', label: 'Lessons Completed' },
-    { icon: '🎯', value: '12', label: 'Tests Passed' },
-    { icon: '🔥', value: '23', label: 'Day Streak' },
-    { icon: '⭐', value: '1,250', label: 'Points Earned' }
-  ];
-
-  const achievements = [
-    { icon: '🏆', title: 'First Test Pass', description: 'Passed your first practice test', unlocked: true },
-    { icon: '📖', title: 'Study Streak', description: 'Studied for 7 consecutive days', unlocked: true },
-    { icon: '🎯', title: 'Perfect Score', description: 'Got 100% on a practice test', unlocked: true },
-    { icon: '⚡', title: 'Speed Demon', description: 'Complete a test in under 15 minutes', unlocked: false },
-    { icon: '🌟', title: 'Rising Star', description: 'Reach 2000 total points', unlocked: false },
-    { icon: '🔥', title: 'Fire Streak', description: 'Maintain a 30-day study streak', unlocked: false }
-  ];
-
-  const recentActivity = [
-    { icon: '📝', action: 'Completed Math Practice Test', time: '2 hours ago' },
-    { icon: '📚', action: 'Studied Algebra - Linear Equations', time: '1 day ago' },
-    { icon: '🎯', action: 'Achieved 95% on Science Quiz', time: '2 days ago' },
-    { icon: '⭐', action: 'Earned "Study Streak" achievement', time: '3 days ago' },
-    { icon: '📖', action: 'Started Logic Reasoning course', time: '4 days ago' },
-    { icon: '🔥', action: 'Extended study streak to 23 days', time: '5 days ago' }
-  ];
+  const handleDOBChange = (value) => {
+    handleInputChange('dateOfBirth', value);
+    const newAge = calculateAge(value);
+    handleInputChange('age', newAge);
+  };
 
   return (
-    <div className="profile-page">
-      <div className="profile-container">
-        {/* Profile Header */}
-        <div className="profile-header">
-          <div className="profile-avatar-section">
-            <img 
-              src="/api/placeholder/120/120" 
-              alt="Profile Avatar" 
-              className="profile-avatar"
-            />
-            <button className="change-avatar-btn" title="Change Avatar">
-              📷
-            </button>
-          </div>
+    <>
+      <MainNavbar />
+      <div className="profile-page">
+        <div className="profile-container">
           
-          <div className="profile-info">
-            {!isEditing ? (
-              <>
-                <h1>{userInfo.name}</h1>
-                <p className="profile-email">{userInfo.email}</p>
-                <p className="profile-detail">📱 {userInfo.phone}</p>
-                <p className="profile-detail">📍 {userInfo.location}</p>
-                <p className="profile-detail">🏫 {userInfo.school}</p>
-                <p className="profile-detail">🎓 {userInfo.grade}</p>
-                <p className="profile-detail">📅 Joined {userInfo.joinDate}</p>
-              </>
-            ) : (
-              <>
-                <input
-                  className="profile-input"
-                  value={userInfo.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  placeholder="Full Name"
-                />
-                <input
-                  className="profile-input"
-                  value={userInfo.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  placeholder="Email"
-                />
-                <input
-                  className="profile-input"
-                  value={userInfo.phone}
-                  onChange={(e) => handleInputChange('phone', e.target.value)}
-                  placeholder="Phone"
-                />
-                <input
-                  className="profile-input"
-                  value={userInfo.location}
-                  onChange={(e) => handleInputChange('location', e.target.value)}
-                  placeholder="Location"
-                />
-                <input
-                  className="profile-input"
-                  value={userInfo.school}
-                  onChange={(e) => handleInputChange('school', e.target.value)}
-                  placeholder="School"
-                />
-                <input
-                  className="profile-input"
-                  value={userInfo.grade}
-                  onChange={(e) => handleInputChange('grade', e.target.value)}
-                  placeholder="Grade"
-                />
-              </>
-            )}
-          </div>
-          
-          <div className="profile-actions">
-            {!isEditing ? (
-              <button className="edit-btn" onClick={handleEdit}>
-                ✏️ Edit Profile
-              </button>
-            ) : (
-              <>
-                <button className="save-btn" onClick={handleSave}>
-                  💾 Save
-                </button>
-                <button className="cancel-btn" onClick={handleCancel}>
-                  ❌ Cancel
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-
-        <div className="profile-content">
-          {/* Stats Section */}
-          <div className="profile-stats">
-            {stats.map((stat, index) => (
-              <div key={index} className="stat-card">
-                <div className="stat-icon">{stat.icon}</div>
-                <div className="stat-value">{stat.value}</div>
-                <div className="stat-label">{stat.label}</div>
+          {/* Profile Header with Avatar and Name */}
+          <div className="profile-header-section">
+            <div className="profile-avatar-wrapper">
+              <div className="profile-avatar">
+                <span className="avatar-icon">👤</span>
               </div>
-            ))}
+              <h1 className="profile-name">{isEditing ? tempInfo.fullName : studentInfo.fullName}</h1>
+              <p className="profile-role">Student • Grade {isEditing ? tempInfo.grade : studentInfo.grade}</p>
+            </div>
+
+            <div className="profile-actions">
+              {!isEditing ? (
+                <button className="edit-profile-btn" onClick={handleEdit}>
+                  <span className="btn-icon">✏️</span>
+                  Edit Profile
+                </button>
+              ) : (
+                <div className="edit-actions">
+                  <button className="save-btn" onClick={handleSave}>
+                    <span className="btn-icon">💾</span>
+                    Save Changes
+                  </button>
+                  <button className="cancel-btn" onClick={handleCancel}>
+                    <span className="btn-icon">✖️</span>
+                    Cancel
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Achievements and Activity */}
-          <div className="profile-sections">
-            <div className="achievements-section">
-              <h2>🏆 Achievements</h2>
-              <div className="achievements-grid">
-                {achievements.map((achievement, index) => (
-                  <div 
-                    key={index} 
-                    className={`achievement-item ${achievement.unlocked ? 'unlocked' : 'locked'}`}
-                  >
-                    <div className="achievement-icon">{achievement.icon}</div>
-                    <div className="achievement-info">
-                      <h4>{achievement.title}</h4>
-                      <p>{achievement.description}</p>
-                    </div>
-                    {!achievement.unlocked && (
-                      <div className="locked-overlay">🔒</div>
+          {/* Profile Details Cards */}
+          <div className="profile-details-grid">
+            
+            {/* Personal Information */}
+            <div className="details-card">
+              <h2 className="card-title">📋 Personal Information</h2>
+              <div className="info-group">
+                <div className="info-item">
+                  <label className="info-label">Full Name</label>
+                  {!isEditing ? (
+                    <p className="info-value">{studentInfo.fullName}</p>
+                  ) : (
+                    <input
+                      type="text"
+                      className="info-input"
+                      value={tempInfo.fullName}
+                      onChange={(e) => handleInputChange('fullName', e.target.value)}
+                      placeholder="Enter full name"
+                    />
+                  )}
+                </div>
+
+                <div className="info-item">
+                  <label className="info-label">Email Address</label>
+                  {!isEditing ? (
+                    <p className="info-value">{studentInfo.email}</p>
+                  ) : (
+                    <input
+                      type="email"
+                      className="info-input"
+                      value={tempInfo.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      placeholder="Enter email"
+                    />
+                  )}
+                </div>
+
+                <div className="info-row">
+                  <div className="info-item">
+                    <label className="info-label">Date of Birth</label>
+                    {!isEditing ? (
+                      <p className="info-value">{new Date(studentInfo.dateOfBirth).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    ) : (
+                      <input
+                        type="date"
+                        className="info-input"
+                        value={tempInfo.dateOfBirth}
+                        onChange={(e) => handleDOBChange(e.target.value)}
+                      />
                     )}
                   </div>
-                ))}
-              </div>
-            </div>
 
-            <div className="activity-section">
-              <h2>📈 Recent Activity</h2>
-              <div className="activity-list">
-                {recentActivity.map((activity, index) => (
-                  <div key={index} className="activity-item">
-                    <div className="activity-icon">{activity.icon}</div>
-                    <div className="activity-info">
-                      <p>{activity.action}</p>
-                      <div className="activity-time">{activity.time}</div>
-                    </div>
+                  <div className="info-item">
+                    <label className="info-label">Age</label>
+                    <p className="info-value">{isEditing ? tempInfo.age : studentInfo.age} years</p>
                   </div>
-                ))}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Preferences Section */}
-          <div className="preferences-section">
-            <h2>⚙️ Preferences</h2>
-            <div className="preferences-grid">
-              <div className="preference-item">
-                <label>📧 Email Notifications</label>
-                <input
-                  type="checkbox"
-                  checked={preferences.emailNotifications}
-                  onChange={() => handlePreferenceChange('emailNotifications')}
-                />
-              </div>
-              <div className="preference-item">
-                <label>📱 Push Notifications</label>
-                <input
-                  type="checkbox"
-                  checked={preferences.pushNotifications}
-                  onChange={() => handlePreferenceChange('pushNotifications')}
-                />
-              </div>
-              <div className="preference-item">
-                <label>📊 Weekly Reports</label>
-                <input
-                  type="checkbox"
-                  checked={preferences.weeklyReports}
-                  onChange={() => handlePreferenceChange('weeklyReports')}
-                />
-              </div>
-              <div className="preference-item">
-                <label>🏆 Achievement Alerts</label>
-                <input
-                  type="checkbox"
-                  checked={preferences.achievementAlerts}
-                  onChange={() => handlePreferenceChange('achievementAlerts')}
-                />
-              </div>
-              <div className="preference-item">
-                <label>⏰ Study Reminders</label>
-                <input
-                  type="checkbox"
-                  checked={preferences.studyReminders}
-                  onChange={() => handlePreferenceChange('studyReminders')}
-                />
-              </div>
-              <div className="preference-item">
-                <label>🌙 Dark Mode</label>
-                <input
-                  type="checkbox"
-                  checked={preferences.darkMode}
-                  onChange={() => handlePreferenceChange('darkMode')}
-                />
+            {/* Academic Information */}
+            <div className="details-card">
+              <h2 className="card-title">🎓 Academic Information</h2>
+              <div className="info-group">
+                <div className="info-item">
+                  <label className="info-label">Grade</label>
+                  {!isEditing ? (
+                    <p className="info-value">Grade {studentInfo.grade}</p>
+                  ) : (
+                    <select
+                      className="info-input"
+                      value={tempInfo.grade}
+                      onChange={(e) => handleInputChange('grade', e.target.value)}
+                    >
+                      <option value="1">Grade 1</option>
+                      <option value="2">Grade 2</option>
+                      <option value="3">Grade 3</option>
+                      <option value="4">Grade 4</option>
+                      <option value="5">Grade 5</option>
+                      <option value="6">Grade 6</option>
+                      <option value="7">Grade 7</option>
+                      <option value="8">Grade 8</option>
+                    </select>
+                  )}
+                </div>
+
+                <div className="info-item">
+                  <label className="info-label">School Name</label>
+                  {!isEditing ? (
+                    <p className="info-value">{studentInfo.school}</p>
+                  ) : (
+                    <input
+                      type="text"
+                      className="info-input"
+                      value={tempInfo.school}
+                      onChange={(e) => handleInputChange('school', e.target.value)}
+                      placeholder="Enter school name"
+                    />
+                  )}
+                </div>
+
+                <div className="info-item">
+                  <label className="info-label">Address</label>
+                  {!isEditing ? (
+                    <p className="info-value">{studentInfo.address}</p>
+                  ) : (
+                    <textarea
+                      className="info-input info-textarea"
+                      value={tempInfo.address}
+                      onChange={(e) => handleInputChange('address', e.target.value)}
+                      placeholder="Enter address"
+                      rows="3"
+                    />
+                  )}
+                </div>
               </div>
             </div>
+
+            {/* Guardian Information */}
+            <div className="details-card full-width">
+              <h2 className="card-title">👨‍👩‍👦 Guardian Information</h2>
+              <div className="info-group">
+                <div className="info-row">
+                  <div className="info-item">
+                    <label className="info-label">Guardian Name</label>
+                    {!isEditing ? (
+                      <p className="info-value">{studentInfo.guardianName}</p>
+                    ) : (
+                      <input
+                        type="text"
+                        className="info-input"
+                        value={tempInfo.guardianName}
+                        onChange={(e) => handleInputChange('guardianName', e.target.value)}
+                        placeholder="Enter guardian name"
+                      />
+                    )}
+                  </div>
+
+                  <div className="info-item">
+                    <label className="info-label">Guardian Phone</label>
+                    {!isEditing ? (
+                      <p className="info-value">{studentInfo.guardianPhone}</p>
+                    ) : (
+                      <input
+                        type="tel"
+                        className="info-input"
+                        value={tempInfo.guardianPhone}
+                        onChange={(e) => handleInputChange('guardianPhone', e.target.value)}
+                        placeholder="Enter phone number"
+                        pattern="[0-9]{10}"
+                        maxLength="10"
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

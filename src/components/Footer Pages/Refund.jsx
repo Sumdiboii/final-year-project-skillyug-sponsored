@@ -69,17 +69,17 @@ const Refund = () => {
   return (
     <>
       <Navbar />
-      <div className="refund-wrap">
+      <div className="refnd-refund-wrap">
         
         
-        <div className="refund-container">
-          <div className="refund-hero">
-            <h1 className="refund-title">Refund & Cancellation Policy</h1>
-            <p className="refund-sub">All payments are final - Read before purchase</p>
-            <p className="refund-date">Last Updated: January 2024</p>
+        <div className="refnd-refund-container">
+          <div className="refnd-refund-hero">
+            <h1 className="refnd-refund-title">Refund & Cancellation Policy</h1>
+            <p className="refnd-refund-sub">All payments are final - Read before purchase</p>
+            <p className="refnd-refund-date">Last Updated: January 2024</p>
           </div>
 
-          <div className="refund-intro">
+          <div className="refnd-refund-intro">
             <p>
               At Skillyug Education, all payments made for our educational services are final and non-refundable. 
               This policy ensures fair pricing for all users and allows us to maintain high-quality educational content. 
@@ -87,10 +87,10 @@ const Refund = () => {
             </p>
           </div>
 
-          <div className="refund-cards">
+          <div className="refnd-refund-cards">
             {refundSections.map((section, index) => (
-              <div key={index} className="refund-card">
-                <div className="card-icon">{section.icon}</div>
+              <div key={index} className="refnd-refund-card">
+                <div className="refnd-card-icon">{section.icon}</div>
                 <h2>{section.title}</h2>
                 <p>{section.description}</p>
               </div>
@@ -106,3 +106,4 @@ const Refund = () => {
 };
 
 export default Refund;
+

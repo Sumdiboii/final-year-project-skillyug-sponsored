@@ -161,20 +161,20 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="admin-login-page">
+    <div className="adlgn-admin-login-page">
       {/* Particles in the background */}
       <ParticleBackground />
      
-      <div className="admin-login-card">
-        <div className="admin-login-header">
-          <img src="assets/blue-skillyug-logo-1.jpg" alt="Skillyug" className="admin-login-logo" />
-          <h2 className="admin-login-title" >Admin Login</h2>
-          <p className="admin-login-subtitle">Sign in to continue to your dashboard</p>
+      <div className="adlgn-admin-login-card">
+        <div className="adlgn-admin-login-header">
+          <img src="assets/blue-skillyug-logo-1.jpg" alt="Skillyug" className="adlgn-admin-login-logo" />
+          <h2 className="adlgn-admin-login-title" >Admin Login</h2>
+          <p className="adlgn-admin-login-subtitle">Sign in to continue to your dashboard</p>
         </div>
 
-         <button type="button" className="user-btn" onClick={handleUserLogin}>
+         <button type="button" className="adlgn-user-btn" onClick={handleUserLogin}>
           <img
-            className="user-icon"
+            className="adlgn-user-icon"
             src="assets/skillyug-logo-removebg-preview.png"
             alt="User Logo"
           />
@@ -190,55 +190,55 @@ const AdminLogin = () => {
           Continue with Google
         </button> */}
 
-        <div className="divider"><span>or</span></div>
+        <div className="adlgn-divider"><span>or</span></div>
 
-        <form className="admin-login-form" onSubmit={handleSubmit}>
-          <label className="admin-login-label" htmlFor="email">Email</label>
+        <form className="adlgn-admin-login-form" onSubmit={handleSubmit}>
+          <label className="adlgn-admin-login-label" htmlFor="email">Email</label>
           <input
             id="email"
             type="email"
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="admin-login-input"
+            className="adlgn-admin-login-input"
             required
           />
 
-          <label className="admin-login-label" htmlFor="password">Password</label>
+          <label className="adlgn-admin-login-label" htmlFor="password">Password</label>
           <input
             id="password"
             type="password"
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="admin-login-input"
+            className="adlgn-admin-login-input"
             required
           />
 
-          <label className="login-label" htmlFor="password">Authentication Key</label>
+          <label className="adlgn-admin-login-label" htmlFor="password">Authentication Key</label>
           <input
             id="password"
             type="password"
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="admin-login-input"
+            className="adlgn-admin-login-input"
             required
           />
 
-          <div className="admin-login-actions">
-            <label className="admin-remember">
+          <div className="adlgn-admin-login-actions">
+            <label className="adlgn-admin-remember">
               <input type="checkbox" />
               <span>Remember me</span>
             </label>
-            <a href="#" className="admin-forgot-link">Forgot password?</a>
+            <a href="#" className="adlgn-admin-forgot-link">Forgot password?</a>
           </div>
 
-          <button type="submit" className="admin-login-btn">Sign In</button>
+          <button type="submit" className="adlgn-admin-login-btn">Sign In</button>
 
         </form>
 
-         <button type="button" className="back2-btn" onClick={() => navigate("/")}>
+         <button type="button" className="adlgn-back2-btn" onClick={() => { navigate("/"); window.scrollTo(0, 0); }}>
           
           Back 
         </button>

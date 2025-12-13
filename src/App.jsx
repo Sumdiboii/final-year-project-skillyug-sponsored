@@ -30,7 +30,7 @@ import ContactUs from "./components/Footer Pages/ContactUs";
 import PrivacyPolicy from "./components/Footer Pages/PrivacyPolicy";
 import Terms from "./components/Footer Pages/Terms";
 import Refund from "./components/Footer Pages/Refund";
-import FAQ from "./components/Footer Pages/FAQ";
+
 import Exam from './jsx files/Exam';
 
 function AppRoutes() {
@@ -68,7 +68,7 @@ function AppRoutes() {
         <Route path="/admin-home" element={<AdminHome />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/faq" element={<FAQ />} />
+        
         <Route path="/terms-conditions" element={<Terms />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/refund-policy" element={<Refund />} />

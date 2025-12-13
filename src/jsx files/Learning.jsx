@@ -2,155 +2,493 @@ import React, { useState } from "react";
 import "../css files/Learning.css";
 import MainNavbar from "../components/MainNavbar";
 import Footer from "../components/Footer";
-import ParticleBackground from "../components/StarBg";
 
 const Learning = () => {
-  const [selectedSubject, setSelectedSubject] = useState("math");
-  const [currentLesson, setCurrentLesson] = useState(null);
+  const [selectedTest, setSelectedTest] = useState(null);
+  const [selectedTopic, setSelectedTopic] = useState(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [score, setScore] = useState(0);
+  const [answeredQuestions, setAnsweredQuestions] = useState([]);
+  const [testCompleted, setTestCompleted] = useState(false);
 
-  const subjects = {
-    math: {
-      name: "Mathematics",
-      icon: "🧮",
-      lessons: [
-        { id: 1, title: "Basic Arithmetic", completed: true, progress: 100, duration: "15 min" },
-        { id: 2, title: "Algebra Fundamentals", completed: true, progress: 100, duration: "20 min" },
-        { id: 3, title: "Geometry Basics", completed: false, progress: 60, duration: "25 min" },
-        { id: 4, title: "Fractions & Decimals", completed: false, progress: 0, duration: "18 min" },
-      ]
-    },
-    science: {
-      name: "Science",
-      icon: "🔬",
-      lessons: [
-        { id: 1, title: "States of Matter", completed: true, progress: 100, duration: "22 min" },
-        { id: 2, title: "Solar System", completed: false, progress: 40, duration: "30 min" },
-        { id: 3, title: "Human Body Systems", completed: false, progress: 0, duration: "28 min" },
-        { id: 4, title: "Chemical Reactions", completed: false, progress: 0, duration: "25 min" },
-      ]
-    },
-    logic: {
-      name: "Logic & Reasoning",
+  // MAT and SAT Topics with Questions
+  const testData = {
+    MAT: {
+      name: "Mental Ability Test",
       icon: "🧠",
-      lessons: [
-        { id: 1, title: "Pattern Recognition", completed: true, progress: 100, duration: "12 min" },
-        { id: 2, title: "Logical Sequences", completed: false, progress: 80, duration: "15 min" },
-        { id: 3, title: "Critical Thinking", completed: false, progress: 20, duration: "20 min" },
-        { id: 4, title: "Problem Solving", completed: false, progress: 0, duration: "18 min" },
+      description: "Test your mental reasoning and logical thinking",
+      topics: [
+        {
+          id: "pattern",
+          name: "Pattern Recognition",
+          icon: "🔢",
+          questions: [
+            {
+              id: 1,
+              question: "What comes next in the series: 2, 4, 8, 16, ?",
+              options: ["24", "32", "20", "28"],
+              correct: 1,
+              explanation: "The pattern is multiplying by 2 each time. 16 × 2 = 32"
+            },
+            {
+              id: 2,
+              question: "Complete the pattern: A, C, E, G, ?",
+              options: ["H", "I", "J", "K"],
+              correct: 1,
+              explanation: "The pattern skips one letter each time. After G comes H (skip) then I."
+            },
+            {
+              id: 3,
+              question: "What number should replace the question mark: 5, 10, 20, 40, ?",
+              options: ["60", "70", "80", "90"],
+              correct: 2,
+              explanation: "Each number is doubled. 40 × 2 = 80"
+            }
+          ]
+        },
+        {
+          id: "analogy",
+          name: "Verbal Analogy",
+          icon: "📝",
+          questions: [
+            {
+              id: 1,
+              question: "Doctor : Hospital :: Teacher : ?",
+              options: ["Student", "School", "Book", "Class"],
+              correct: 1,
+              explanation: "A doctor works in a hospital, and a teacher works in a school."
+            },
+            {
+              id: 2,
+              question: "Book : Pages :: Tree : ?",
+              options: ["Leaves", "Roots", "Trunk", "Branches"],
+              correct: 0,
+              explanation: "A book is made of pages, and a tree has leaves."
+            },
+            {
+              id: 3,
+              question: "Pen : Write :: Knife : ?",
+              options: ["Sharp", "Cut", "Metal", "Kitchen"],
+              correct: 1,
+              explanation: "A pen is used to write, and a knife is used to cut."
+            }
+          ]
+        },
+        {
+          id: "spatial",
+          name: "Spatial Reasoning",
+          icon: "🎯",
+          questions: [
+            {
+              id: 1,
+              question: "How many triangles are there in a square divided by its two diagonals?",
+              options: ["2", "4", "6", "8"],
+              correct: 3,
+              explanation: "The two diagonals create 8 triangles in total within the square."
+            },
+            {
+              id: 2,
+              question: "If you fold a paper twice and cut a corner, how many holes will you get when unfolded?",
+              options: ["1", "2", "3", "4"],
+              correct: 3,
+              explanation: "Each fold doubles the number of holes. 2 folds = 2² = 4 holes."
+            },
+            {
+              id: 3,
+              question: "A cube is painted red on all faces and cut into 27 smaller cubes. How many have no red faces?",
+              options: ["0", "1", "8", "9"],
+              correct: 1,
+              explanation: "Only the center cube (1) has no painted faces."
+            }
+          ]
+        }
+      ]
+    },
+    SAT: {
+      name: "Scholastic Aptitude Test",
+      icon: "📚",
+      description: "Assess your academic skills across various subjects",
+      topics: [
+        {
+          id: "math",
+          name: "Mathematics",
+          icon: "🔢",
+          questions: [
+            {
+              id: 1,
+              question: "If x + 5 = 12, what is the value of x?",
+              options: ["5", "6", "7", "8"],
+              correct: 2,
+              explanation: "Subtract 5 from both sides: x = 12 - 5 = 7"
+            },
+            {
+              id: 2,
+              question: "What is 25% of 80?",
+              options: ["15", "20", "25", "30"],
+              correct: 1,
+              explanation: "25% of 80 = (25/100) × 80 = 20"
+            },
+            {
+              id: 3,
+              question: "The area of a rectangle with length 8cm and width 5cm is?",
+              options: ["13 cm²", "26 cm²", "40 cm²", "80 cm²"],
+              correct: 2,
+              explanation: "Area = length × width = 8 × 5 = 40 cm²"
+            }
+          ]
+        },
+        {
+          id: "science",
+          name: "General Science",
+          icon: "🔬",
+          questions: [
+            {
+              id: 1,
+              question: "What is the chemical formula for water?",
+              options: ["H₂O", "CO₂", "O₂", "H₂"],
+              correct: 0,
+              explanation: "Water consists of 2 hydrogen atoms and 1 oxygen atom: H₂O"
+            },
+            {
+              id: 2,
+              question: "Which planet is closest to the Sun?",
+              options: ["Venus", "Earth", "Mercury", "Mars"],
+              correct: 2,
+              explanation: "Mercury is the closest planet to the Sun in our solar system."
+            },
+            {
+              id: 3,
+              question: "What gas do plants absorb from the atmosphere?",
+              options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+              correct: 2,
+              explanation: "Plants absorb CO₂ during photosynthesis to produce oxygen."
+            }
+          ]
+        },
+        {
+          id: "english",
+          name: "English Language",
+          icon: "📖",
+          questions: [
+            {
+              id: 1,
+              question: "Choose the correct synonym for 'Happy':",
+              options: ["Sad", "Joyful", "Angry", "Tired"],
+              correct: 1,
+              explanation: "Joyful means feeling or expressing great happiness, making it a synonym of happy."
+            },
+            {
+              id: 2,
+              question: "What is the past tense of 'run'?",
+              options: ["Runned", "Ran", "Running", "Runs"],
+              correct: 1,
+              explanation: "The irregular past tense of 'run' is 'ran'."
+            },
+            {
+              id: 3,
+              question: "Which sentence is grammatically correct?",
+              options: [
+                "She don't like apples",
+                "She doesn't likes apples",
+                "She doesn't like apples",
+                "She not like apples"
+              ],
+              correct: 2,
+              explanation: "Correct subject-verb agreement with third person singular: 'She doesn't like apples'"
+            }
+          ]
+        }
       ]
     }
   };
 
-  const handleStartLesson = (lesson) => {
-    setCurrentLesson(lesson);
-    // Mock lesson start logic
-    alert(`Starting lesson: ${lesson.title}`);
+  const handleTestSelect = (testType) => {
+    setSelectedTest(testType);
+    setSelectedTopic(null);
+    setCurrentQuestionIndex(0);
+    setScore(0);
+    setAnsweredQuestions([]);
+    setTestCompleted(false);
   };
+
+  const handleTopicSelect = (topic) => {
+    setSelectedTopic(topic);
+    setCurrentQuestionIndex(0);
+    setSelectedAnswer(null);
+    setShowFeedback(false);
+    setScore(0);
+    setAnsweredQuestions([]);
+    setTestCompleted(false);
+  };
+
+  const handleAnswerSelect = (answerIndex) => {
+    if (showFeedback) return; // Prevent changing answer after feedback shown
+    
+    setSelectedAnswer(answerIndex);
+    setShowFeedback(true);
+    
+    const currentQuestion = selectedTopic.questions[currentQuestionIndex];
+    const isCorrect = answerIndex === currentQuestion.correct;
+    
+    if (isCorrect) {
+      setScore(score + 1);
+    }
+    
+    setAnsweredQuestions([...answeredQuestions, {
+      questionId: currentQuestion.id,
+      selected: answerIndex,
+      correct: currentQuestion.correct,
+      isCorrect
+    }]);
+  };
+
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex < selectedTopic.questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setSelectedAnswer(null);
+      setShowFeedback(false);
+    } else {
+      setTestCompleted(true);
+    }
+  };
+
+  const handleRetakeTest = () => {
+    setCurrentQuestionIndex(0);
+    setSelectedAnswer(null);
+    setShowFeedback(false);
+    setScore(0);
+    setAnsweredQuestions([]);
+    setTestCompleted(false);
+  };
+
+  const handleBackToTopics = () => {
+    setSelectedTopic(null);
+    setCurrentQuestionIndex(0);
+    setSelectedAnswer(null);
+    setShowFeedback(false);
+    setScore(0);
+    setAnsweredQuestions([]);
+    setTestCompleted(false);
+  };
+
+  const handleBackToTests = () => {
+    setSelectedTest(null);
+    setSelectedTopic(null);
+    setCurrentQuestionIndex(0);
+    setSelectedAnswer(null);
+    setShowFeedback(false);
+    setScore(0);
+    setAnsweredQuestions([]);
+    setTestCompleted(false);
+  };
+
+  const currentQuestion = selectedTopic?.questions[currentQuestionIndex];
 
   return (
     <>
       <MainNavbar />
-      <div className="learning-page">
-        <ParticleBackground />
-        
-        <div className="learning-header">
-          <h1>Learning Center 📚</h1>
-          <p>Continue your educational journey with interactive lessons</p>
-        </div>
-
-        <div className="learning-content">
-          <div className="subject-selector">
-            <h2>Choose Your Subject</h2>
-            <div className="subject-tabs">
-              {Object.entries(subjects).map(([key, subject]) => (
-                <button
-                  key={key}
-                  className={`subject-tab ${selectedSubject === key ? 'active' : ''}`}
-                  onClick={() => setSelectedSubject(key)}
-                >
-                  <span className="subject-icon">{subject.icon}</span>
-                  <span className="subject-name">{subject.name}</span>
-                </button>
-              ))}
-            </div>
+      <div className="learning-section">
+        <div className="learning-container">
+          {/* Header */}
+          <div className="learning-header">
+            <h1>📚 Learning Center</h1>
+            <p>Choose your test and start practicing!</p>
           </div>
 
-          <div className="lessons-container">
-            <div className="lessons-header">
-              <h3>{subjects[selectedSubject].name} Lessons</h3>
-              <div className="progress-summary">
-                <span>
-                  {subjects[selectedSubject].lessons.filter(l => l.completed).length} of {subjects[selectedSubject].lessons.length} completed
-                </span>
-              </div>
-            </div>
-
-            <div className="lessons-grid">
-              {subjects[selectedSubject].lessons.map((lesson) => (
-                <div key={lesson.id} className={`lesson-card ${lesson.completed ? 'completed' : lesson.progress > 0 ? 'in-progress' : 'not-started'}`}>
-                  <div className="lesson-status">
-                    {lesson.completed ? '✅' : lesson.progress > 0 ? '⏳' : '🔒'}
-                  </div>
-                  
-                  <div className="lesson-info">
-                    <h4>{lesson.title}</h4>
-                    <div className="lesson-meta">
-                      <span className="duration">⏱️ {lesson.duration}</span>
-                      <span className="difficulty">📊 Beginner</span>
-                    </div>
-                  </div>
-
-                  <div className="lesson-progress">
-                    <div className="progress-bar">
-                      <div 
-                        className="progress-fill" 
-                        style={{ width: `${lesson.progress}%` }}
-                      ></div>
-                    </div>
-                    <span className="progress-text">{lesson.progress}%</span>
-                  </div>
-
-                  <div className="lesson-actions">
-                    {lesson.completed ? (
-                      <button className="review-btn">Review</button>
-                    ) : lesson.progress > 0 ? (
-                      <button className="continue-btn" onClick={() => handleStartLesson(lesson)}>
-                        Continue
-                      </button>
-                    ) : (
-                      <button className="start-btn" onClick={() => handleStartLesson(lesson)}>
-                        Start
-                      </button>
-                    )}
+          {/* Test Selection View */}
+          {!selectedTest && (
+            <div className="test-selection">
+              <div className="test-cards">
+                <div className="test-card" onClick={() => handleTestSelect('MAT')}>
+                  <div className="test-icon">{testData.MAT.icon}</div>
+                  <h2>{testData.MAT.name}</h2>
+                  <p>{testData.MAT.description}</p>
+                  <div className="test-topics-count">
+                    {testData.MAT.topics.length} Topics
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
 
-          <div className="learning-stats">
-            <div className="stat-item">
-              <div className="stat-icon">🎯</div>
-              <div className="stat-info">
-                <div className="stat-value">12</div>
-                <div className="stat-label">Lessons Completed</div>
+                <div className="test-card" onClick={() => handleTestSelect('SAT')}>
+                  <div className="test-icon">{testData.SAT.icon}</div>
+                  <h2>{testData.SAT.name}</h2>
+                  <p>{testData.SAT.description}</p>
+                  <div className="test-topics-count">
+                    {testData.SAT.topics.length} Topics
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="stat-item">
-              <div className="stat-icon">⏰</div>
-              <div className="stat-info">
-                <div className="stat-value">4.5h</div>
-                <div className="stat-label">Time Spent Learning</div>
+          )}
+
+          {/* Topic Selection View */}
+          {selectedTest && !selectedTopic && (
+            <div className="topic-selection">
+              <button className="back-btn" onClick={handleBackToTests}>
+                ← Back to Tests
+              </button>
+              
+              <div className="selected-test-header">
+                <span className="test-icon-large">{testData[selectedTest].icon}</span>
+                <h2>{testData[selectedTest].name}</h2>
+              </div>
+
+              <div className="topics-grid">
+                {testData[selectedTest].topics.map((topic) => (
+                  <div 
+                    key={topic.id} 
+                    className="topic-card"
+                    onClick={() => handleTopicSelect(topic)}
+                  >
+                    <div className="topic-icon">{topic.icon}</div>
+                    <h3>{topic.name}</h3>
+                    <div className="topic-questions">
+                      {topic.questions.length} Questions
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="stat-item">
-              <div className="stat-icon">🔥</div>
-              <div className="stat-info">
-                <div className="stat-value">7</div>
-                <div className="stat-label">Day Streak</div>
+          )}
+
+          {/* Question View */}
+          {selectedTest && selectedTopic && !testCompleted && (
+            <div className="question-view">
+              <button className="back-btn" onClick={handleBackToTopics}>
+                ← Back to Topics
+              </button>
+
+              <div className="test-progress">
+                <div className="progress-info">
+                  <span>Question {currentQuestionIndex + 1} of {selectedTopic.questions.length}</span>
+                  <span>Score: {score}/{selectedTopic.questions.length}</span>
+                </div>
+                <div className="progress-bar">
+                  <div 
+                    className="progress-fill" 
+                    style={{ width: `${((currentQuestionIndex + 1) / selectedTopic.questions.length) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+
+              <div className="question-card">
+                <div className="question-header">
+                  <span className="topic-badge">
+                    {selectedTopic.icon} {selectedTopic.name}
+                  </span>
+                </div>
+
+                <h2 className="question-text">{currentQuestion.question}</h2>
+
+                <div className="options-container">
+                  {currentQuestion.options.map((option, index) => {
+                    let optionClass = "option";
+                    
+                    if (showFeedback) {
+                      if (index === currentQuestion.correct) {
+                        optionClass += " correct";
+                      } else if (index === selectedAnswer && index !== currentQuestion.correct) {
+                        optionClass += " incorrect";
+                      } else {
+                        optionClass += " disabled";
+                      }
+                    } else if (selectedAnswer === index) {
+                      optionClass += " selected";
+                    }
+
+                    return (
+                      <div
+                        key={index}
+                        className={optionClass}
+                        onClick={() => handleAnswerSelect(index)}
+                      >
+                        <span className="option-label">{String.fromCharCode(65 + index)}</span>
+                        <span className="option-text">{option}</span>
+                        {showFeedback && index === currentQuestion.correct && (
+                          <span className="feedback-icon">✓</span>
+                        )}
+                        {showFeedback && index === selectedAnswer && index !== currentQuestion.correct && (
+                          <span className="feedback-icon">✗</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {showFeedback && (
+                  <div className={`explanation ${selectedAnswer === currentQuestion.correct ? 'correct-explanation' : 'incorrect-explanation'}`}>
+                    <div className="explanation-header">
+                      {selectedAnswer === currentQuestion.correct ? (
+                        <><span className="emoji">🎉</span> Correct!</>
+                      ) : (
+                        <><span className="emoji">💡</span> Incorrect</>
+                      )}
+                    </div>
+                    <p>{currentQuestion.explanation}</p>
+                  </div>
+                )}
+
+                {showFeedback && (
+                  <button className="next-btn" onClick={handleNextQuestion}>
+                    {currentQuestionIndex < selectedTopic.questions.length - 1 ? 'Next Question →' : 'View Results →'}
+                  </button>
+                )}
               </div>
             </div>
-          </div>
+          )}
+
+          {/* Test Completed View */}
+          {testCompleted && (
+            <div className="test-completed">
+              <div className="results-card">
+                <div className="results-icon">
+                  {score === selectedTopic.questions.length ? '🏆' : 
+                   score >= selectedTopic.questions.length * 0.7 ? '🎉' : 
+                   score >= selectedTopic.questions.length * 0.5 ? '👍' : '📚'}
+                </div>
+                
+                <h2>Test Completed!</h2>
+                
+                <div className="score-display">
+                  <div className="score-circle">
+                    <span className="score-number">{score}</span>
+                    <span className="score-total">/ {selectedTopic.questions.length}</span>
+                  </div>
+                  <p className="score-percentage">
+                    {Math.round((score / selectedTopic.questions.length) * 100)}%
+                  </p>
+                </div>
+
+                <div className="performance-message">
+                  {score === selectedTopic.questions.length && (
+                    <p>🌟 Perfect Score! Excellent work!</p>
+                  )}
+                  {score >= selectedTopic.questions.length * 0.7 && score < selectedTopic.questions.length && (
+                    <p>Great job! You're doing really well!</p>
+                  )}
+                  {score >= selectedTopic.questions.length * 0.5 && score < selectedTopic.questions.length * 0.7 && (
+                    <p>Good effort! Keep practicing to improve!</p>
+                  )}
+                  {score < selectedTopic.questions.length * 0.5 && (
+                    <p>Keep learning! Practice makes perfect!</p>
+                  )}
+                </div>
+
+                <div className="results-actions">
+                  <button className="retake-btn" onClick={handleRetakeTest}>
+                    🔄 Retake Test
+                  </button>
+                  <button className="topics-btn" onClick={handleBackToTopics}>
+                    📚 Choose Another Topic
+                  </button>
+                  <button className="home-btn" onClick={handleBackToTests}>
+                    🏠 Back to Tests
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <Footer />

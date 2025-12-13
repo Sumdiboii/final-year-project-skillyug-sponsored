@@ -38,30 +38,30 @@ const ContactUs = () => {
     <>
       <Navbar />
       
-      <div className="contact-wrap">
+      <div className="contus-contact-wrap">
         
         
-        <div className="contact-container">
-          <div className="contact-hero">
-            <h1 className="contact-title">Contact Us</h1>
-            <p className="contact-sub">Get in touch with Skillyug Education</p>
+        <div className="contus-contact-container">
+          <div className="contus-contact-hero">
+            <h1 className="contus-contact-title">Contact Us</h1>
+            <p className="contus-contact-sub">Get in touch with Skillyug Education</p>
           </div>
 
-          <div className="contact-grid">
+          <div className="contus-contact-grid">
             {/* Contact Info & Map Section */}
-            <div className="contact-left">
-              <div className="contact-info-card">
+            <div className="contus-contact-left">
+              <div className="contus-contact-info-card">
                 
-                <div className="info-list">
-                  <div className="info-item">
-                    <span className="info-icon">📧</span>
+                <div className="contus-info-list">
+                  <div className="contus-info-item">
+                    <span className="contus-info-icon">📧</span>
                     <div>
                       <h3>Email - support@skillyug.com</h3>
                       
                     </div>
                   </div>
-                  <div className="info-item">
-                    <span className="info-icon">📱</span>
+                  <div className="contus-info-item">
+                    <span className="contus-info-icon">📱</span>
                     <div>
                       <h3>Phone - +91 9876543210</h3>
                       
@@ -70,7 +70,7 @@ const ContactUs = () => {
                 </div>
               </div>
 
-              <div className="map-container">
+              <div className="contus-map-container">
                 <iframe
                   title="Skillyug Education Location"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248849.886539092!2d77.49085284872588!3d12.953945614926863!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c9b44e6d%3A0xf8dfc3e8517e4fe0!2sBengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1733154000000!5m2!1sen!2sin"
@@ -85,11 +85,11 @@ const ContactUs = () => {
             </div>
 
             {/* Contact Form Section */}
-            <div className="contact-right">
-              <div className="form-card">
+            <div className="contus-contact-right">
+              <div className="contus-form-card">
                 <h2>Send us a Message</h2>
-                <form onSubmit={handleSubmit} className="contact-form">
-                  <div className="form-group">
+                <form onSubmit={handleSubmit} className="contus-contact-form">
+                  <div className="contus-form-group">
                     <label htmlFor="email">Email *</label>
                     <input
                       type="email"
@@ -102,7 +102,7 @@ const ContactUs = () => {
                     />
                   </div>
 
-                  <div className="form-group">
+                  <div className="contus-form-group">
                     <label htmlFor="message">Message *</label>
                     <textarea
                       id="message"
@@ -115,7 +115,7 @@ const ContactUs = () => {
                     ></textarea>
                   </div>
 
-                  <button type="submit" className="btn btn-primary">
+                  <button type="submit" className="contus-btn btn-primary">
                     Send Message
                   </button>
                 </form>
@@ -130,3 +130,4 @@ const ContactUs = () => {
 };
 
 export default ContactUs;
+

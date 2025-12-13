@@ -1,5 +1,5 @@
 /* Terms & Conditions Page Styles */
-.terms-wrap {
+.trms-terms-wrap {
   width: 100vw;
   min-height: 100vh;
   background: rgb(15, 5, 70);
@@ -9,7 +9,7 @@
   padding: 100px 0 50px;
 }
 
-.terms-container {
+.trms-terms-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
@@ -18,13 +18,13 @@
 }
 
 /* Hero Section */
-.terms-hero {
+.trms-terms-hero {
   text-align: center;
   margin-bottom: 3rem;
   animation: fadeIn 0.8s ease-out;
 }
 
-.terms-title {
+.trms-terms-title {
   font-size: 3.5rem;
   font-weight: 700;
   color: #ffffff;
@@ -36,19 +36,19 @@
   
 }
 
-.terms-sub {
+.trms-terms-sub {
   font-size: 1.3rem;
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 0.5rem;
 }
 
-.terms-date {
+.trms-terms-date {
   font-size: 1rem;
   color: rgba(255, 255, 255, 0.6);
 }
 
 /* Introduction */
-.terms-intro {
+.trms-terms-intro {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
   border-radius: 25px;
@@ -58,7 +58,7 @@
   animation: slideIn 0.8s ease-out;
 }
 
-.terms-intro p {
+.trms-terms-intro p {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.8;
@@ -67,14 +67,14 @@
 }
 
 /* Terms Cards */
-.terms-cards {
+.trms-terms-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
   margin-bottom: 3rem;
 }
 
-.terms-card {
+.trms-terms-card {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
   border-radius: 25px;
@@ -86,7 +86,7 @@
   overflow: hidden;
 }
 
-.terms-card::before {
+.trms-terms-card::before {
   content: '';
   position: absolute;
   top: -50%;
@@ -103,26 +103,26 @@
   animation: shine 3s infinite;
 }
 
-.terms-card:hover {
+.trms-terms-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   background: rgba(255, 255, 255, 0.15);
 }
 
-.card-icon {
+.trms-card-icon {
   font-size: 3rem;
   margin-bottom: 1.5rem;
   display: block;
 }
 
-.terms-card h2 {
+.trms-terms-card h2 {
   font-size: 1.5rem;
   font-weight: 600;
   color: #ffffff;
   margin-bottom: 1rem;
 }
 
-.terms-card p {
+.trms-terms-card p {
   font-size: 1rem;
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
@@ -177,79 +177,80 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-  .terms-container {
+  .trms-terms-container {
     padding: 1.5rem;
   }
   
-  .terms-title {
+  .trms-terms-title {
     font-size: 2.8rem;
   }
   
-  .terms-cards {
+  .trms-terms-cards {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  .terms-wrap {
+  .trms-terms-wrap {
     padding: 80px 0 30px;
   }
   
-  .terms-container {
+  .trms-terms-container {
     padding: 1rem;
   }
   
-  .terms-hero {
+  .trms-terms-hero {
     margin-bottom: 2rem;
   }
   
-  .terms-title {
+  .trms-terms-title {
     font-size: 2.2rem;
   }
   
-  .terms-sub {
+  .trms-terms-sub {
     font-size: 1.1rem;
   }
   
-  .terms-cards {
+  .trms-terms-cards {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
   
-  .terms-card {
+  .trms-terms-card {
     padding: 2rem;
   }
   
-  .terms-intro,
-  .terms-contact-section {
+  .trms-terms-intro,
+  .trms-terms-contact-section {
     padding: 2rem;
   }
 }
 
 @media (max-width: 480px) {
-  .terms-title {
+  .trms-terms-title {
     font-size: 1.8rem;
   }
   
-  .card-icon {
+  .trms-card-icon {
     font-size: 2.5rem;
   }
   
-  .terms-card {
+  .trms-terms-card {
     padding: 1.5rem;
   }
   
-  .terms-card h2 {
+  .trms-terms-card h2 {
     font-size: 1.3rem;
   }
   
-  .terms-intro,
-  .terms-contact-section {
+  .trms-terms-intro,
+  .trms-terms-contact-section {
     padding: 1.5rem;
   }
   
-  .terms-contact-section h2 {
+  .trms-terms-contact-section h2 {
     font-size: 1.5rem;
   }
 }
+

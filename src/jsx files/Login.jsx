@@ -26,78 +26,78 @@ const Login = () => {
   };
 
   return (
-    <div className="login-page">
+    <div className="lgn-login-page">
       {/* Particles in the background */}
       <ParticleBackground />
       
-      <div className="login-card">
-        <div className="login-header">
-          <img src="assets/blue-skillyug-logo-1.jpg" alt="Skillyug" className="login-logo" />
-          <h2 className="login-title" >Welcome back</h2>
-          <p className="login-subtitle">Sign in to continue to your dashboard</p>
+      <div className="lgn-login-card">
+        <div className="lgn-login-header">
+          <img src="assets/blue-skillyug-logo-1.jpg" alt="Skillyug" className="lgn-login-logo" />
+          <h2 className="lgn-login-title" >Welcome back</h2>
+          <p className="lgn-login-subtitle">Sign in to continue to your dashboard</p>
         </div>
 
-         <button type="button" className="admin-btn" onClick={handleAdminLogin}>
+         <button type="button" className="lgn-admin-btn" onClick={handleAdminLogin}>
           <img
-            className="admin-icon"
+            className="lgn-admin-icon"
             src="assets/skillyug-logo-removebg-preview.png"
             alt="Admin Logo"
           />
           Administrator Login
         </button>
 
-        <button type="button" className="google-btn" onClick={handleGoogle}>
+        <button type="button" className="lgn-google-btn" onClick={handleGoogle}>
           <img
-            className="google-icon"
+            className="lgn-google-icon"
             src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
             alt="Google"
           />
           Continue with Google
         </button>
 
-        <div className="divider"><span>or</span></div>
+        <div className="lgn-divider"><span>or</span></div>
 
-        <form className="login-form" onSubmit={handleSubmit}>
-          <label className="login-label" htmlFor="email">Email</label>
+        <form className="lgn-login-form" onSubmit={handleSubmit}>
+          <label className="lgn-login-label" htmlFor="email">Email</label>
           <input
             id="email"
             type="email"
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="login-input"
+            className="lgn-login-input"
             required
           />
 
-          <label className="login-label" htmlFor="password">Password</label>
+          <label className="lgn-login-label" htmlFor="password">Password</label>
           <input
             id="password"
             type="password"
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="login-input"
+            className="lgn-login-input"
             required
           />
 
-          <div className="login-actions">
-            <label className="remember">
+          <div className="lgn-login-actions">
+            <label className="lgn-remember">
               <input type="checkbox" />
               <span>Remember me</span>
             </label>
-            <a href="#" className="forgot-link">Forgot password?</a>
+            <a href="#" className="lgn-forgot-link">Forgot password?</a>
           </div>
 
-          <button type="submit" className="login-btn">Sign In</button>
+          <button type="submit" className="lgn-login-btn">Sign In</button>
 
         </form>
 
-         <button type="button" className="back1-btn" onClick={() => navigate("/")}>
+         <button type="button" className="lgn-back1-btn" onClick={() => { navigate("/"); window.scrollTo(0, 0); }}>
           
           Back 
         </button>
 
-        <p className="login-hint">Don’t have an account? <a href="/pricing">Sign up</a></p>
+        <p className="lgn-login-hint">Don't have an account? <a href="/pricing">Sign up</a></p>
       </div>
       
     </div>

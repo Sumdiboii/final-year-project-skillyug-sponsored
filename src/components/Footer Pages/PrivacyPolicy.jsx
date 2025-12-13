@@ -53,27 +53,27 @@ const PrivacyPolicy = () => {
   return (
     <>
       <Navbar />
-      <div className="privacy-wrap">
+      <div className="privpol-privacy-wrap">
         
         
-        <div className="privacy-container">
-          <div className="privacy-hero">
-            <h1 className="privacy-title">Privacy Policy</h1>
-            <p className="privacy-sub">Your privacy is our priority</p>
-            <p className="privacy-date">Last Updated: January 2024</p>
+        <div className="privpol-privacy-container">
+          <div className="privpol-privacy-hero">
+            <h1 className="privpol-privacy-title">Privacy Policy</h1>
+            <p className="privpol-privacy-sub">Your privacy is our priority</p>
+            <p className="privpol-privacy-date">Last Updated: January 2024</p>
           </div>
 
-          <div className="privacy-intro">
+          <div className="privpol-privacy-intro">
             <p>
               At Skillyug Education, we are committed to protecting your personal information and your right to privacy. 
               This Privacy Policy explains how we collect, use, and safeguard your data when you use PrepMark and our educational services.
             </p>
           </div>
 
-          <div className="privacy-cards">
+          <div className="privpol-privacy-cards">
             {privacySections.map((section, index) => (
-              <div key={index} className="privacy-card">
-                <div className="card-icon">{section.icon}</div>
+              <div key={index} className="privpol-privacy-card">
+                <div className="privpol-card-icon">{section.icon}</div>
                 <h2>{section.title}</h2>
                 <p>{section.description}</p>
               </div>
@@ -89,3 +89,4 @@ const PrivacyPolicy = () => {
 };
 
 export default PrivacyPolicy;
+

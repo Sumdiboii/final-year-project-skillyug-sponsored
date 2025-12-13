@@ -32,7 +32,7 @@ const MainNavbar = () => {
 				<li><Link to="/statistics" onClick={close}>Statistics</Link></li>
 				<li><Link to="/practice" onClick={close}>Practice</Link></li>
 				<li><Link to="/exams" onClick={close}>Exams</Link></li>
-				<li><Link to="/learning" onClick={close}>Learning</Link></li>
+				
 				<li><Link to="/profile" onClick={close}>Profile</Link></li>
 				<li><Link to="/" className="nav-link" onClick={close}>Log Out</Link></li>
 			</ul>
