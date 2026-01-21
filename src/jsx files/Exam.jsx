@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../css files/Exam.css';
 import MainNavbar from '../components/MainNavbar';
 import Footer from '../components/Footer';
@@ -7,547 +7,287 @@ import ParticleBackground from '../components/StarBg';
 
 const Exam = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [timeLeft, setTimeLeft] = useState(120 * 60); // 2 hours in seconds
-  const [examStarted, setExamStarted] = useState(false);
-  const [examCompleted, setExamCompleted] = useState(false);
-  const [showInstructions, setShowInstructions] = useState(true);
-  const [flaggedQuestions, setFlaggedQuestions] = useState(new Set());
-  const [sectionIndex, setSectionIndex] = useState(0);
+  // TODO: Still working on cooldown feature
+  // const [examAttempts, setExamAttempts] = useState({});
+  const [showInstructionsModal, setShowInstructionsModal] = useState(false);
 
-  // Get exam data from navigation state or use default
-  const examData = location.state?.examData || {
-    title: 'MAT Mock Test 2024',
-    duration: '120 minutes',
-    sections: 5,
-    totalQuestions: 100,
-    maxMarks: 400
-  };
+  // TODO: Still working on cooldown feature
+  // useEffect(() => {
+  //   // Load exam attempts from localStorage
+  //   const stored = localStorage.getItem('examAttempts');
+  //   if (stored) {
+  //     setExamAttempts(JSON.parse(stored));
+  //   }
+  // }, []);
 
-  // Mock exam questions organized by sections
-  const examSections = [
+  const examOptions = [
     {
-      id: 'lang-comp',
-      title: 'Language Comprehension',
-      duration: 25,
-      questions: [
-        {
-          id: 1,
-          question: "Choose the word that is most similar in meaning to 'ELOQUENT':",
-          options: ['Fluent', 'Silent', 'Harsh', 'Confused'],
-          correct: 0,
-          marks: 4
-        },
-        {
-          id: 2,
-          question: "Fill in the blank: The speaker's _______ delivery captivated the entire audience.",
-          options: ['monotonous', 'articulate', 'hesitant', 'aggressive'],
-          correct: 1,
-          marks: 4
-        },
-        {
-          id: 3,
-          question: "Choose the correctly spelled word:",
-          options: ['Accomodation', 'Accommodation', 'Acommodation', 'Acomodation'],
-          correct: 1,
-          marks: 4
-        }
-      ]
+      id: 'mat',
+      title: 'Mental Ability  Mock Test',
+      duration: '90',
+      questions: 90,
+      gradient: '#cc4915;',
+      description: 'Test your mental aptitude with logical reasoning, pattern recognition, and analytical thinking.',
     },
     {
-      id: 'math-skills',
-      title: 'Mathematical Skills',
-      duration: 30,
-      questions: [
-        {
-          id: 4,
-          question: "If 3x + 7 = 22, what is the value of x?",
-          options: ['3', '5', '7', '9'],
-          correct: 1,
-          marks: 4
-        },
-        {
-          id: 5,
-          question: "What is 15% of 240?",
-          options: ['32', '36', '38', '42'],
-          correct: 1,
-          marks: 4
-        },
-        {
-          id: 6,
-          question: "The ratio of 3:5 is equivalent to:",
-          options: ['6:10', '9:12', '12:15', '15:20'],
-          correct: 0,
-          marks: 4
-        }
-      ]
+      id: 'sat',
+      title: 'Scholastic Aptitude  Mock Test',
+      duration: '90',
+      questions: 90,
+      gradient: '#cc4915;',
+      description: 'Comprehensive assessment of Mathematics, Science, and Social Studies knowledge.',
     },
     {
-      id: 'data-analysis',
-      title: 'Data Analysis & Sufficiency',
-      duration: 25,
-      questions: [
-        {
-          id: 7,
-          question: "A company's profit increased by 20% in the first quarter. If the initial profit was ₹50,000, what is the new profit?",
-          options: ['₹55,000', '₹60,000', '₹65,000', '₹70,000'],
-          correct: 1,
-          marks: 4
-        },
-        {
-          id: 8,
-          question: "Based on the data: Sales in Q1: 100 units, Q2: 150 units, Q3: 120 units. What is the average quarterly sales?",
-          options: ['120 units', '123.33 units', '125 units', '130 units'],
-          correct: 1,
-          marks: 4
-        }
-      ]
-    },
-    {
-      id: 'intelligence',
-      title: 'Intelligence & Critical Reasoning',
-      duration: 25,
-      questions: [
-        {
-          id: 9,
-          question: "If all roses are flowers and some flowers are red, which conclusion is definitely true?",
-          options: ['All roses are red', 'Some roses are red', 'No roses are red', 'Cannot be determined'],
-          correct: 3,
-          marks: 4
-        },
-        {
-          id: 10,
-          question: "Complete the series: 2, 6, 12, 20, 30, ?",
-          options: ['40', '42', '44', '46'],
-          correct: 1,
-          marks: 4
-        }
-      ]
-    },
-    {
-      id: 'indian-global',
-      title: 'Indian & Global Environment',
-      duration: 15,
-      questions: [
-        {
-          id: 11,
-          question: "Which Indian state is known as the 'Silicon Valley of India'?",
-          options: ['Maharashtra', 'Karnataka', 'Tamil Nadu', 'Telangana'],
-          correct: 1,
-          marks: 4
-        },
-        {
-          id: 12,
-          question: "The headquarters of the World Health Organization (WHO) is located in:",
-          options: ['Geneva', 'New York', 'Paris', 'London'],
-          correct: 0,
-          marks: 4
-        }
-      ]
+      id: 'full',
+      title: 'NMMS Mock Examination',
+      duration: '180',
+      questions: 180,
+      gradient: '#cc4915;',
+      description: 'Complete NMMS examination combining both MAT and SAT assessments.',
     }
   ];
 
-  const currentSection = examSections[sectionIndex];
-  const allQuestions = examSections.flatMap(section => section.questions);
-  const currentQuestionData = allQuestions[currentQuestion];
+  // TODO: Still working on cooldown feature
+  // const canAttemptExam = (examId) => {
+  //   const lastAttempt = examAttempts[examId];
+  //   if (!lastAttempt) return true;
+  //
+  //   const daysSinceLastAttempt = (Date.now() - lastAttempt) / (1000 * 60 * 60 * 24);
+  //   return daysSinceLastAttempt >= 3;
+  // };
+  //
+  // const getDaysRemaining = (examId) => {
+  //   const lastAttempt = examAttempts[examId];
+  //   if (!lastAttempt) return 0;
+  //
+  //   const daysSinceLastAttempt = (Date.now() - lastAttempt) / (1000 * 60 * 60 * 24);
+  //   const daysRemaining = Math.ceil(3 - daysSinceLastAttempt);
+  //   return daysRemaining > 0 ? daysRemaining : 0;
+  // };
 
-  // Timer effect
-  useEffect(() => {
-    if (examStarted && timeLeft > 0 && !examCompleted) {
-      const timer = setInterval(() => {
-        setTimeLeft((prevTime) => {
-          if (prevTime <= 1) {
-            setExamCompleted(true);
-            return 0;
-          }
-          return prevTime - 1;
+  const handleStartExam = (examId) => {
+    // TODO: Still working on cooldown feature
+    // if (!canAttemptExam(examId)) {
+    //   const daysLeft = getDaysRemaining(examId);
+    //   alert(`⏳ You can attempt this exam again in ${daysLeft} day${daysLeft !== 1 ? 's' : ''}. Please wait for the cooldown period to complete.`);
+    //   return;
+    // }
+
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen()
+        .then(() => {
+          // TODO: Still working on cooldown feature
+          // // Save attempt timestamp
+          // const newAttempts = { ...examAttempts, [examId]: Date.now() };
+          // localStorage.setItem('examAttempts', JSON.stringify(newAttempts));
+          // setExamAttempts(newAttempts);
+
+          navigate(`/exam-test/${examId}`, { 
+            state: { 
+              examType: examId,
+              proctored: true,
+              duration: examId === 'full' ? 180 : 90
+            } 
+          });
+        })
+        .catch(() => {
+          alert('⚠️ Fullscreen mode is required to start the proctored exam. Please allow fullscreen access and try again.');
         });
-      }, 1000);
-      return () => clearInterval(timer);
-    }
-  }, [examStarted, timeLeft, examCompleted]);
-
-  // Scroll to top when component mounts
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  const formatTime = (seconds) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const handleAnswerSelect = (optionIndex) => {
-    setSelectedAnswers(prev => ({
-      ...prev,
-      [currentQuestionData.id]: optionIndex
-    }));
-  };
-
-  const handleQuestionNavigation = (questionIndex) => {
-    setCurrentQuestion(questionIndex);
-  };
-
-  const handleFlagQuestion = () => {
-    const questionId = currentQuestionData.id;
-    setFlaggedQuestions(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(questionId)) {
-        newSet.delete(questionId);
-      } else {
-        newSet.add(questionId);
-      }
-      return newSet;
-    });
-  };
-
-  const handleNextQuestion = () => {
-    if (currentQuestion < allQuestions.length - 1) {
-      setCurrentQuestion(prev => prev + 1);
+    } else {
+      alert('⚠️ Your browser does not support fullscreen mode. Please use a modern browser like Chrome, Firefox, or Edge.');
     }
   };
-
-  const handlePreviousQuestion = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion(prev => prev - 1);
-    }
-  };
-
-  const handleStartExam = () => {
-    setShowInstructions(false);
-    setExamStarted(true);
-  };
-
-  const handleSubmitExam = () => {
-    setExamCompleted(true);
-    // Calculate results
-    const correctAnswers = allQuestions.filter(q => 
-      selectedAnswers[q.id] === q.correct
-    ).length;
-    alert(`Exam submitted! You answered ${correctAnswers} out of ${allQuestions.length} questions correctly.`);
-  };
-
-  const getQuestionStatus = (questionIndex) => {
-    const question = allQuestions[questionIndex];
-    const isAnswered = selectedAnswers[question.id] !== undefined;
-    const isFlagged = flaggedQuestions.has(question.id);
-    const isCurrent = questionIndex === currentQuestion;
-    
-    if (isCurrent) return 'current';
-    if (isFlagged) return 'flagged';
-    if (isAnswered) return 'answered';
-    return 'unanswered';
-  };
-
-  if (showInstructions) {
-    return (
-      <div className="exam-page">
-        <ParticleBackground />
-        <MainNavbar />
-        
-        <div className="exam-container">
-          <div className="glass-card exam-instructions">
-            <div className="instructions-header">
-              <div className="exam-icon">📝</div>
-              <h1 className="exam-title">{examData.title}</h1>
-              <p className="exam-subtitle">Mock Test Instructions</p>
-            </div>
-            
-            <div className="exam-info">
-              <div className="info-grid">
-                <div className="info-item">
-                  <div className="info-icon">⏰</div>
-                  <div className="info-details">
-                    <span className="info-label">Duration</span>
-                    <span className="info-value">{examData.duration}</span>
-                  </div>
-                </div>
-                <div className="info-item">
-                  <div className="info-icon">📊</div>
-                  <div className="info-details">
-                    <span className="info-label">Questions</span>
-                    <span className="info-value">{examData.totalQuestions}</span>
-                  </div>
-                </div>
-                <div className="info-item">
-                  <div className="info-icon">🎯</div>
-                  <div className="info-details">
-                    <span className="info-label">Max Marks</span>
-                    <span className="info-value">{examData.maxMarks}</span>
-                  </div>
-                </div>
-                <div className="info-item">
-                  <div className="info-icon">📋</div>
-                  <div className="info-details">
-                    <span className="info-label">Sections</span>
-                    <span className="info-value">{examData.sections}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="instructions-content">
-              <h3>General Instructions:</h3>
-              <ul className="instructions-list">
-                <li>This exam contains 5 sections with a total of 12 demo questions</li>
-                <li>Each question carries 4 marks, no negative marking</li>
-                <li>Time limit is 2 hours (120 minutes)</li>
-                <li>You can navigate between questions using the question palette</li>
-                <li>Flag important questions for review</li>
-                <li>Ensure stable internet connection throughout the exam</li>
-                <li>Do not refresh the browser during the exam</li>
-                <li>Submit the exam before time runs out</li>
-              </ul>
-              
-              <h3>Section Details:</h3>
-              <div className="sections-grid">
-                {examSections.map((section, index) => (
-                  <div key={section.id} className="section-card">
-                    <h4>{section.title}</h4>
-                    <p>{section.questions.length} Questions</p>
-                    <span>{section.duration} minutes</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div className="exam-actions">
-              <button 
-                onClick={() => navigate('/practice')} 
-                className="back-btn"
-              >
-                Back to Practice
-              </button>
-              <button 
-                onClick={handleStartExam} 
-                className="start-exam-btn"
-              >
-                Start Exam
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <Footer />
-      </div>
-    );
-  }
-
-  if (examCompleted) {
-    const correctAnswers = allQuestions.filter(q => 
-      selectedAnswers[q.id] === q.correct
-    ).length;
-    const totalQuestions = allQuestions.length;
-    const percentage = Math.round((correctAnswers / totalQuestions) * 100);
-    
-    return (
-      <div className="exam-page">
-        <ParticleBackground />
-        <MainNavbar />
-        
-        <div className="exam-container">
-          <div className="glass-card exam-results">
-            <div className="results-header">
-              <div className="success-icon">🎉</div>
-              <h1>Exam Completed!</h1>
-              <p>Your performance summary</p>
-            </div>
-            
-            <div className="results-stats">
-              <div className="stat-card">
-                <div className="stat-icon">✅</div>
-                <div className="stat-info">
-                  <span className="stat-value">{correctAnswers}</span>
-                  <span className="stat-label">Correct</span>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">❌</div>
-                <div className="stat-info">
-                  <span className="stat-value">{totalQuestions - correctAnswers}</span>
-                  <span className="stat-label">Incorrect</span>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">📊</div>
-                <div className="stat-info">
-                  <span className="stat-value">{percentage}%</span>
-                  <span className="stat-label">Score</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="results-actions">
-              <button 
-                onClick={() => navigate('/practice')} 
-                className="practice-btn"
-              >
-                More Practice
-              </button>
-              <button 
-                onClick={() => navigate('/home')} 
-                className="home-btn"
-              >
-                Dashboard
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <Footer />
-      </div>
-    );
-  }
 
   return (
-    <div className="exam-page">
-      <ParticleBackground />
+    <>
       <MainNavbar />
-      
-      <div className="exam-interface">
-        {/* Header with timer and exam info */}
-        <div className="exam-header">
-          <div className="exam-info-bar">
-            <div className="exam-title-section">
-              <h2>{examData.title}</h2>
-              <span className="section-name">{currentSection.title}</span>
-            </div>
-            <div className="timer-section">
-              <div className="timer">
-                <span className="timer-icon">⏰</span>
-                <span className="timer-value">{formatTime(timeLeft)}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="exam-page">
         
-        <div className="exam-content">
-          {/* Question Panel */}
-          <div className="question-panel">
-            <div className="glass-card question-card">
-              <div className="question-header">
-                <div className="question-number">
-                  Question {currentQuestion + 1} of {allQuestions.length}
-                </div>
-                <div className="question-actions">
-                  <button 
-                    onClick={handleFlagQuestion}
-                    className={`flag-btn ${flaggedQuestions.has(currentQuestionData.id) ? 'flagged' : ''}`}
-                  >
-                    🚩 {flaggedQuestions.has(currentQuestionData.id) ? 'Flagged' : 'Flag'}
-                  </button>
-                </div>
-              </div>
-              
-              <div className="question-content">
-                <h3 className="question-text">{currentQuestionData.question}</h3>
-                
-                <div className="options-container">
-                  {currentQuestionData.options.map((option, index) => (
-                    <div 
-                      key={index} 
-                      className={`option ${
-                        selectedAnswers[currentQuestionData.id] === index ? 'selected' : ''
-                      }`}
-                      onClick={() => handleAnswerSelect(index)}
-                    >
-                      <div className="option-marker">{String.fromCharCode(65 + index)}</div>
-                      <span className="option-text">{option}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="question-navigation">
-                <button 
-                  onClick={handlePreviousQuestion}
-                  disabled={currentQuestion === 0}
-                  className="nav-btn prev-btn"
-                >
-                  ← Previous
-                </button>
-                
-                <div className="question-info">
-                  <span>Marks: {currentQuestionData.marks}</span>
-                </div>
-                
-                <button 
-                  onClick={handleNextQuestion}
-                  disabled={currentQuestion === allQuestions.length - 1}
-                  className="nav-btn next-btn"
-                >
-                  Next →
-                </button>
-              </div>
+        {/* Section 1: Exam Dashboard - Full Screen */}
+        <section className="exam-dashboard-section">
+          <ParticleBackground />
+          <div className="exam-dashboard-header">
+            <h1>🎯 Exam Dashboard</h1>
+            <p>Proctored assessments with real exam conditions</p>
+          </div>
+          <div className="exam-dashboard-content">
+            <div className="exam-dashboard-actions">
+              <button className="exam-dashboard-btn exam-primary" onClick={() => {
+                document.getElementById('exam-section').scrollIntoView({ behavior: 'smooth' });
+              }}>
+                Give Exam
+              </button>
+              <button className="exam-dashboard-btn exam-secondary" onClick={() => {
+                navigate('/exam-history');
+              }}>
+                View Exam History
+              </button>
+              <button className="exam-dashboard-btn exam-secondary" onClick={() => setShowInstructionsModal(true)}>
+                View Instructions
+              </button>
             </div>
           </div>
-          
-          {/* Question Palette */}
-          <div className="question-palette">
-            <div className="glass-card palette-card">
-              <div className="palette-header">
-                <h3>Questions</h3>
-                <button 
-                  onClick={handleSubmitExam}
-                  className="submit-exam-btn"
-                >
-                  Submit Exam
-                </button>
+        </section>
+
+        {/* Section 2: Exam Cards - Scrollable */}
+        <section className="exam-cards-section" id="exam-section">
+          <div className="exam-options-container">
+              {examOptions.map((exam) => {
+                // TODO: Still working on cooldown feature
+                // const canAttempt = canAttemptExam(exam.id);
+                // const daysLeft = getDaysRemaining(exam.id);
+
+                return (
+                  <div key={exam.id} className="exam-card-modern">
+                    {/* Gradient Background Strip */}
+                    <div className="exam-card-gradient-strip" style={{ background: exam.gradient }}></div>
+                    
+                    {/* Card Header */}
+                    <div className="exam-card-header">
+                      <h3 className="exam-title">{exam.title}</h3>
+                      {/* TODO: Still working on cooldown feature */}
+                      {/* {!canAttempt && (
+                        <div className="exam-locked-badge">
+                          <span className="lock-icon">🔒</span>
+                          <span className="lock-text">{daysLeft}d</span>
+                        </div>
+                      )} */}
+                    </div>
+
+                    {/* Info Grid */}
+                    <div className="exam-info-grid">
+                      <div className="exam-info-item">
+                       
+                        <div className="info-details">
+                          <span className="info-value">{exam.duration}</span>
+                          <span className="info-label">Minutes</span>
+                        </div>
+                      </div>
+                      <div className="exam-info-item">
+                       
+                        <div className="info-details">
+                          <span className="info-value">{exam.questions}</span>
+                          <span className="info-label">Questions</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <p className="exam-card-description">{exam.description}</p>
+
+                    {/* Action Button */}
+                    <button 
+                      className="exam-action-btn"
+                      style={{ 
+                        background: exam.gradient,
+                        cursor: 'pointer'
+                      }}
+                      onClick={() => handleStartExam(exam.id)}
+                    >
+                      <span className="btn-content">
+                        <span className="btn-text">Start Test</span>
+                      </span>
+                    </button>
+                    {/* TODO: Still working on cooldown feature */}
+                    {/* <button 
+                      className={`exam-action-btn ${!canAttempt ? 'btn-disabled' : ''}`}
+                      style={{ 
+                        background: canAttempt ? exam.gradient : 'rgba(255, 255, 255, 0.1)',
+                        cursor: canAttempt ? 'pointer' : 'not-allowed'
+                      }}
+                      onClick={() => handleStartExam(exam.id)}
+                      disabled={!canAttempt}
+                    >
+                      <span className="btn-content">
+                        {canAttempt ? (
+                          <>
+                            <span className="btn-text">Start Test</span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="btn-text">Available in {daysLeft} day{daysLeft !== 1 ? 's' : ''}</span>
+                          </>
+                        )}
+                      </span>
+                    </button> */}
+                  </div>
+                );
+              })}
+          </div>
+        </section>
+      </div>
+
+      {/* Exam Instructions Modal */}
+      {showInstructionsModal && (
+        <div className="exam-rules-modal-overlay" onClick={() => setShowInstructionsModal(false)}>
+          <div className="exam-rules-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="exam-rules-modal-header">
+              <h2>📋 Exam Instructions & Guidelines</h2>
+              <button className="exam-rules-modal-close" onClick={() => setShowInstructionsModal(false)}>
+                ✕
+              </button>
+            </div>
+            
+            <div className="exam-rules-modal-body">
+              <div className="exam-rules-section">
+                <h3>📝 Test Instructions</h3>
+                <ul className="exam-rules-list">
+                  <li><span className="exam-rule-icon">✓</span> Read each question carefully before answering</li>
+                  <li><span className="exam-rule-icon">✓</span> You can navigate between questions using Next/Previous buttons</li>
+                  <li><span className="exam-rule-icon">✓</span> Mark questions for review if you're unsure</li>
+                  <li><span className="exam-rule-icon">✓</span> Submit your exam before time expires</li>
+                  <li><span className="exam-rule-icon">✓</span> Ensure stable internet connection throughout the test</li>
+                </ul>
               </div>
-              
-              <div className="palette-legend">
-                <div className="legend-item">
-                  <div className="legend-indicator answered"></div>
-                  <span>Answered</span>
-                </div>
-                <div className="legend-item">
-                  <div className="legend-indicator flagged"></div>
-                  <span>Flagged</span>
-                </div>
-                <div className="legend-item">
-                  <div className="legend-indicator current"></div>
-                  <span>Current</span>
-                </div>
-                <div className="legend-item">
-                  <div className="legend-indicator unanswered"></div>
-                  <span>Not Answered</span>
-                </div>
+
+              <div className="exam-rules-section">
+                <h3>🔒 Exam Rules</h3>
+                <ul className="exam-rules-list">
+                  <li><span className="exam-rule-icon">✓</span> Exam will run in fullscreen mode - exiting will auto-submit</li>
+                  <li><span className="exam-rule-icon">✓</span> Only 1 attempt allowed per 3 days for each exam</li>
+                  <li><span className="exam-rule-icon">✓</span> No tab switching or window minimizing allowed</li>
+                  <li><span className="exam-rule-icon">✓</span> Auto-submit when timer reaches zero</li>
+                  <li><span className="exam-rule-icon">✓</span> Results will be shared with your registered guardian</li>
+                </ul>
               </div>
-              
-              <div className="palette-grid">
-                {allQuestions.map((question, index) => (
-                  <button
-                    key={question.id}
-                    onClick={() => handleQuestionNavigation(index)}
-                    className={`palette-btn ${getQuestionStatus(index)}`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
+
+              <div className="exam-rules-section">
+                <h3>📊 Marking Scheme</h3>
+                <ul className="exam-rules-list">
+                  <li><span className="exam-rule-icon">+1</span> One mark for each correct answer</li>
+                  <li><span className="exam-rule-icon">0</span> No negative marking for wrong answers</li>
+                  <li><span className="exam-rule-icon">0</span> Zero marks for unattempted questions</li>
+                </ul>
               </div>
-              
-              <div className="exam-summary">
-                <div className="summary-stat">
-                  <span>Answered: {Object.keys(selectedAnswers).length}</span>
-                </div>
-                <div className="summary-stat">
-                  <span>Flagged: {flaggedQuestions.size}</span>
-                </div>
-                <div className="summary-stat">
-                  <span>Remaining: {allQuestions.length - Object.keys(selectedAnswers).length}</span>
-                </div>
+
+              <div className="exam-rules-section">
+                <h3>💻 System Requirements</h3>
+                <ul className="exam-rules-list">
+                  <li><span className="exam-rule-icon">•</span> Stable internet connection (minimum 2 Mbps)</li>
+                  <li><span className="exam-rule-icon">•</span> Modern web browser (Chrome, Firefox, or Edge)</li>
+                  <li><span className="exam-rule-icon">•</span> Fullscreen mode support required</li>
+                  <li><span className="exam-rule-icon">•</span> Laptop/Desktop only (mobile not supported)</li>
+                  <li><span className="exam-rule-icon">•</span> Fully charged device or power connected</li>
+                </ul>
               </div>
+
+              <div className="exam-rules-warning">
+                <span className="exam-warning-icon">⚠️</span>
+                <p>Please read all instructions carefully before starting the exam. Once started, the exam cannot be paused or restarted. Make sure you have sufficient time and a quiet environment.</p>
+              </div>
+            </div>
+
+            <div className="exam-rules-modal-footer">
+              <button className="exam-rules-modal-btn" onClick={() => setShowInstructionsModal(false)}>
+                I Understand
+              </button>
             </div>
           </div>
         </div>
-      </div>
-      
+      )}
+
       <Footer />
-    </div>
+    </>
   );
 };
 

@@ -32,6 +32,8 @@ import Terms from "./components/Footer Pages/Terms";
 import Refund from "./components/Footer Pages/Refund";
 
 import Exam from './jsx files/Exam';
+import ExamTest from './jsx files/ExamTest';
+import ExamResults from './jsx files/ExamResults';
 
 function AppRoutes() {
   const location = useLocation();
@@ -73,6 +75,8 @@ function AppRoutes() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/refund-policy" element={<Refund />} />
         <Route path="/exams" element={<Exam />} />
+        <Route path="/exam-test/:examType" element={<ExamTest />} />
+        <Route path="/exam-results" element={<ExamResults />} />
       </Routes>
     </>
   );

@@ -374,6 +374,23 @@
     .lp-landingpage-2-5{ flex-direction: column; padding: 2rem 1rem}
 }
 
+/* Hide astronaut on portrait/vertical screens */
+@media (orientation: portrait) {
+    .lp-right-container-landingpage-1 {
+        display: none !important;
+    }
+    .lp-left-container-landingpage-1 {
+        width: 100vw;
+    }
+}
+
+/* Make astronaut smaller on tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .lp-red-scroll-box {
+        transform: scale(0.6);
+    }
+}
+
 .lp-landing-page {
 	background-color: rgb(15, 5, 70);
 	min-height: fit-content;
@@ -575,14 +592,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #fff;
+    background: rgb(15, 5, 70);
 }
 .lp-flipcard-front {
     z-index: 2;
 }
 .lp-flipcard-back {
     transform: rotateY(180deg);
-    background: rgb(15, 5, 70);;
+    background: rgb(15, 5, 70);
     color: #fff;
     font-size: 1.1rem;
     box-sizing:border-box;
@@ -832,7 +849,7 @@
     align-items: center;
     justify-content:center;
     box-sizing: border-box;
-    height: 100vh;
+    min-height: fit-content;
     width: 55vw;
     background-color:transparent;
     padding: 2rem;
@@ -863,11 +880,12 @@
 .lp-statt-value { font-size: 2.1rem; font-weight: 900; letter-spacing: .2px; }
 .lp-statt-label { font-size: 0.95rem; opacity: 0.9; }
 
-/* @media (max-width: 900px) {
-    .landingpage-3 { flex-direction: column; height: auto; gap: 2rem; padding: 2rem 1rem; }
-    .left-container-landingpage-3, .right-container-landingpage-3 { width: 100vw; height: auto; }
-    .lp3-chart-wrap, .lp3-stats-grid { max-width: 90vw; }
-} */
+@media (max-width: 900px) {
+    .lp-landingpage-3 { flex-direction: column; height: auto; gap: 2rem; padding: 2rem 1rem; }
+    .lp-left-container-landingpage-3, .lp-right-container-landingpage-3 { width: 100vw; height: auto; min-height: fit-content; }
+    .lp-lp3-chart-wrap, .lp-lp3-stats-grid { max-width: 90vw; }
+    .lp-lp3-stats-grid { min-height: auto; }
+}
 
 .lp-landingpage-4{
     display: flex;
@@ -1327,6 +1345,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: transparent;
 }
 
 /* Floating Stars Background */
@@ -1369,7 +1388,7 @@
     z-index: 10;
     position: relative;
     margin:0;
-    background-color: transparent   ;
+    background-color: transparent  ;
     
 }
 
@@ -1390,7 +1409,7 @@
 
 /* Text Content */
 .lp-download-text-content {
-    flex: 1.5;
+    flex: 1;
     color: white;
      height:70%;
     width:100%;
@@ -1583,9 +1602,15 @@
     .lp-app-stores {
         gap: 1rem;
         margin-bottom: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     
     .lp-app-store-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         min-width: auto;
     }
     
@@ -1618,12 +1643,14 @@
     .lp-app-stores {
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         gap: 0.8rem;
     }
     
     .lp-app-store-btn {
         width: 100%;
         max-width: 200px;
+        margin: 0 auto;
     }
     
     .lp-app-store-image {

@@ -219,7 +219,10 @@
 .price-pricing-container-1 .price-pricing-container-1-bottom-1 > div,
 .price-pricing-container-1 .price-pricing-container-1-bottom-2 > div,
 .price-pricing-container-1 .price-pricing-container-1-bottom-3 > div {
-    transition: transform 600ms ease, box-shadow 600ms ease, border-radius 600ms ease, opacity 600ms ease;
+    transition: transform 800ms cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 800ms cubic-bezier(0.4, 0, 0.2, 1), 
+                border-radius 800ms cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 800ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* On hover, the cell overlays and fills the entire students card */
@@ -232,13 +235,13 @@
     border-radius: 1.5rem;
     z-index: 200;
     box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-    animation: cellFill 0.7s ease forwards;
+    animation: cellFill 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes cellFill {
     0% {
-        transform: scale(0.6);
-        opacity: 0.6;
+        transform: scale(0.85);
+        opacity: 0.7;
     }
     100% {
         transform: scale(1);
@@ -266,7 +269,9 @@
 .price-pricing-container-2-bottom-3 > div {
     flex: 1 1 0%;
     height: 100%;
-    transition: flex-basis 280ms ease, flex 280ms ease;
+    transition: flex-basis 500ms cubic-bezier(0.4, 0, 0.2, 1), 
+                flex 500ms cubic-bezier(0.4, 0, 0.2, 1),
+                transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Remove inter-box gap during interaction */
@@ -277,6 +282,7 @@
 .price-pricing-container-2-bottom-2:hover,
 .price-pricing-container-2-bottom-3:hover {
     gap: 0;
+    transition: gap 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Collapse all siblings on row hover */
@@ -351,6 +357,7 @@
     height: 100%;
     border-radius: 2rem;
     gap: 1rem;
+    transition: gap 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .price-pricing-container-1-bottom-1-1,
 .price-pricing-container-1-bottom-1-2,

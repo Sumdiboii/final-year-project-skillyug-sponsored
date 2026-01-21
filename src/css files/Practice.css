@@ -717,9 +717,9 @@
 
 .quiz-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem !important;
 }
 
 .quiz-icon {
@@ -815,6 +815,7 @@
 .quiz-actions {
   display: flex;
   gap: 1rem;
+  justify-content: center;
 }
 
 .quiz-btn {
@@ -826,6 +827,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.95rem;
+  max-width: 200px;
 }
 
 .start-btn {

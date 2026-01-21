@@ -8,6 +8,7 @@ import AstronautSVG from "../components/Astronaut";
 import Ship from "../components/Astronaut";
 import HexagonProfileSlider from "../components/VerticalSlider";
 import QuizFireworks from "../components/QuizFireworks";
+import Chatbot from "../components/Chatbot";
 
 
 const LandingPage = () => {
@@ -911,6 +912,7 @@ const LandingPage = () => {
                   })()}
             </div>
            <Footer />
+           <Chatbot />
 		</div>
 	);
 };
