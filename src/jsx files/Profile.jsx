@@ -201,7 +201,7 @@ const Profile = () => {
                   )}
                 </div>
 
-                <div className="info-item">
+                {/* <div className="info-item">
                   <label className="info-label">Address</label>
                   {!isEditing ? (
                     <p className="info-value">{studentInfo.address}</p>
@@ -214,7 +214,7 @@ const Profile = () => {
                       rows="3"
                     />
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
 

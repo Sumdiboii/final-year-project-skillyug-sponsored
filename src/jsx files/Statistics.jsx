@@ -1,487 +1,280 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css files/Statistics.css';
 import MainNavbar from '../components/MainNavbar';
 import Footer from '../components/Footer';
+import ParticleBackground from '../components/StarBg';
 
 const Statistics = () => {
-  const [selectedTest, setSelectedTest] = useState(null);
-  const [viewMode, setViewMode] = useState('overview'); // overview, gradecards, insights
+  const [activeTab, setActiveTab] = useState('overview');
+  const [timeRange, setTimeRange] = useState('month'); // week, month, year, all
+  const [selectedSubject, setSelectedSubject] = useState('all');
 
-  // Overall Performance Metrics
-  const performanceMetrics = {
-    overallScore: 78,
-    totalTests: 24,
-    testsThisMonth: 8,
-    averageTimePerTest: 28,
-    improvement: 12,
-    rank: 142,
-    totalStudents: 1250,
-    studyStreak: 12,
-    totalStudyHours: 48.5
+  // Comprehensive Analytics Data
+  const analyticsData = {
+    overview: {
+      totalTests: 156,
+      totalPractice: 89,
+      studyHours: 245.5,
+      currentStreak: 18,
+      longestStreak: 32,
+      averageScore: 78.5,
+      improvement: 15.2,
+      rank: 142,
+      totalStudents: 2450,
+      percentile: 94
+    },
+    
+    weeklyProgress: [
+      { week: 'Week 1', score: 65, tests: 4, hours: 8 },
+      { week: 'Week 2', score: 70, tests: 5, hours: 10 },
+      { week: 'Week 3', score: 73, tests: 6, hours: 12 },
+      { week: 'Week 4', score: 78, tests: 7, hours: 14 }
+    ],
+    
+    monthlyProgress: [
+      { month: 'Aug', score: 62, tests: 18, hours: 42 },
+      { month: 'Sep', score: 68, tests: 22, hours: 51 },
+      { month: 'Oct', score: 72, tests: 25, hours: 58 },
+      { month: 'Nov', score: 75, tests: 28, hours: 62 },
+      { month: 'Dec', score: 78, tests: 31, hours: 68 },
+      { month: 'Jan', score: 80, tests: 32, hours: 70 }
+    ],
+    
+    subjectPerformance: [
+      { subject: 'Mathematics', score: 82, tests: 45, improvement: 18, trend: 'up', color: '#3b82f6' },
+      { subject: 'Science', score: 76, tests: 38, improvement: 12, trend: 'up', color: '#10b981' },
+      { subject: 'English', score: 85, tests: 42, improvement: 8, trend: 'up', color: '#f59e0b' },
+      { subject: 'Social Studies', score: 74, tests: 31, improvement: 15, trend: 'up', color: '#8b5cf6' }
+    ],
+    
+    topicStrengths: [
+      { topic: 'Algebra', mastery: 92, tests: 28 },
+      { topic: 'Geometry', mastery: 88, tests: 24 },
+      { topic: 'Logical Reasoning', mastery: 95, tests: 32 },
+      { topic: 'Vocabulary', mastery: 90, tests: 26 },
+      { topic: 'Reading Comprehension', mastery: 86, tests: 22 }
+    ],
+    
+    topicWeaknesses: [
+      { topic: 'Physics - Mechanics', mastery: 58, tests: 15 },
+      { topic: 'Chemistry - Equations', mastery: 62, tests: 12 },
+      { topic: 'Trigonometry', mastery: 65, tests: 18 },
+      { topic: 'Grammar', mastery: 68, tests: 14 }
+    ],
+    
+    timeAnalysis: {
+      peakPerformanceTime: '10 AM - 12 PM',
+      averageStudySession: 45,
+      totalSessions: 156,
+      weekdayAvg: 52,
+      weekendAvg: 38,
+      hourlyDistribution: [
+        { hour: '6-8 AM', sessions: 12, score: 72 },
+        { hour: '8-10 AM', sessions: 28, score: 76 },
+        { hour: '10-12 PM', sessions: 35, score: 82 },
+        { hour: '2-4 PM', sessions: 22, score: 74 },
+        { hour: '4-6 PM', sessions: 18, score: 70 },
+        { hour: '6-8 PM', sessions: 25, score: 78 },
+        { hour: '8-10 PM', sessions: 16, score: 73 }
+      ]
+    },
+    
+    accuracyTrends: {
+      overall: 78.5,
+      easy: 94.2,
+      medium: 76.8,
+      hard: 58.3,
+      timeVsAccuracy: [
+        { time: '< 1 min', accuracy: 92 },
+        { time: '1-2 min', accuracy: 85 },
+        { time: '2-3 min', accuracy: 78 },
+        { time: '3-5 min', accuracy: 72 },
+        { time: '> 5 min', accuracy: 65 }
+      ]
+    },
+    
+    recentTests: [
+      { id: 1, name: 'MAT - Full Mock Test', date: '2026-01-20', score: 85, rank: 125, percentile: 95 },
+      { id: 2, name: 'SAT Math Practice', date: '2026-01-18', score: 82, rank: 142, percentile: 92 },
+      { id: 3, name: 'Science Quiz', date: '2026-01-15', score: 78, rank: 158, percentile: 90 },
+      { id: 4, name: 'English Comprehension', date: '2026-01-12', score: 88, rank: 98, percentile: 96 },
+      { id: 5, name: 'MAT - Reasoning', date: '2026-01-10', score: 80, rank: 135, percentile: 93 }
+    ],
+    
+    achievements: [
+      { id: 1, title: '100 Tests Completed', icon: '🎯', date: '2025-12-15', rarity: 'gold' },
+      { id: 2, title: '30-Day Streak', icon: '🔥', date: '2025-11-20', rarity: 'platinum' },
+      { id: 3, title: 'Top 10% Student', icon: '⭐', date: '2026-01-01', rarity: 'diamond' },
+      { id: 4, title: 'Perfect Score Master', icon: '💯', date: '2025-12-28', rarity: 'gold' },
+      { id: 5, title: '200+ Study Hours', icon: '📚', date: '2026-01-15', rarity: 'silver' }
+    ],
+    
+    recommendations: [
+      {
+        type: 'urgent',
+        title: 'Physics Mechanics Needs Attention',
+        description: 'Your performance in Physics Mechanics has dropped to 58%. Consider booking a tutoring session.',
+        action: 'Schedule Tutoring'
+      },
+      {
+        type: 'improvement',
+        title: 'Trigonometry Practice',
+        description: 'Regular practice in Trigonometry can boost your score by 15-20%.',
+        action: 'Start Practice'
+      },
+      {
+        type: 'strength',
+        title: 'Maintain Logical Reasoning Excellence',
+        description: 'You\'re in the top 5% for Logical Reasoning. Keep up the great work!',
+        action: 'View Details'
+      }
+    ]
   };
 
-  // Test Grade Cards with Detailed Analysis
-  const testGradeCards = [
-    {
-      id: 1,
-      testName: "MAT - Pattern Recognition",
-      testType: "MAT",
-      date: "Dec 10, 2025",
-      score: 85,
-      totalQuestions: 10,
-      correctAnswers: 9,
-      incorrectAnswers: 1,
-      timeSpent: 12,
-      averageTime: 15,
-      grade: "A",
-      percentile: 82,
-      strengths: ["Logical Sequences", "Number Patterns", "Visual Recognition"],
-      weaknesses: ["Complex Series"],
-      recommendations: [
-        "Practice more complex arithmetic series problems",
-        "Focus on multi-step pattern recognition",
-        "Review advanced sequence completion"
-      ],
-      topicWiseBreakdown: [
-        { topic: "Number Series", score: 90, total: 3 },
-        { topic: "Visual Patterns", score: 100, total: 4 },
-        { topic: "Logical Sequences", score: 66, total: 3 }
-      ],
-      difficultyAnalysis: {
-        easy: { attempted: 4, correct: 4 },
-        medium: { attempted: 4, correct: 4 },
-        hard: { attempted: 2, correct: 1 }
-      }
-    },
-    {
-      id: 2,
-      testName: "SAT - Mathematics",
-      testType: "SAT",
-      date: "Dec 8, 2025",
-      score: 70,
-      totalQuestions: 10,
-      correctAnswers: 7,
-      incorrectAnswers: 3,
-      timeSpent: 18,
-      averageTime: 15,
-      grade: "B",
-      percentile: 68,
-      strengths: ["Basic Arithmetic", "Fractions"],
-      weaknesses: ["Algebra", "Word Problems", "Geometry"],
-      recommendations: [
-        "Strengthen algebra fundamentals - practice linear equations daily",
-        "Work on word problem comprehension and translation",
-        "Review basic geometry formulas and concepts",
-        "Practice time management - currently taking 20% more time than average"
-      ],
-      topicWiseBreakdown: [
-        { topic: "Arithmetic", score: 100, total: 3 },
-        { topic: "Algebra", score: 50, total: 4 },
-        { topic: "Geometry", score: 66, total: 3 }
-      ],
-      difficultyAnalysis: {
-        easy: { attempted: 4, correct: 4 },
-        medium: { attempted: 4, correct: 3 },
-        hard: { attempted: 2, correct: 0 }
-      }
-    },
-    {
-      id: 3,
-      testName: "MAT - Verbal Analogy",
-      testType: "MAT",
-      date: "Dec 6, 2025",
-      score: 90,
-      totalQuestions: 10,
-      correctAnswers: 9,
-      incorrectAnswers: 1,
-      timeSpent: 10,
-      averageTime: 15,
-      grade: "A+",
-      percentile: 92,
-      strengths: ["Word Relationships", "Logical Connections", "Vocabulary"],
-      weaknesses: ["Complex Analogies"],
-      recommendations: [
-        "Excellent performance! Maintain current study routine",
-        "Challenge yourself with higher difficulty analogies",
-        "Expand vocabulary with advanced terms"
-      ],
-      topicWiseBreakdown: [
-        { topic: "Simple Analogies", score: 100, total: 5 },
-        { topic: "Complex Analogies", score: 75, total: 5 }
-      ],
-      difficultyAnalysis: {
-        easy: { attempted: 3, correct: 3 },
-        medium: { attempted: 5, correct: 5 },
-        hard: { attempted: 2, correct: 1 }
-      }
-    },
-    {
-      id: 4,
-      testName: "SAT - General Science",
-      testType: "SAT",
-      date: "Dec 4, 2025",
-      score: 66,
-      totalQuestions: 10,
-      correctAnswers: 7,
-      incorrectAnswers: 3,
-      timeSpent: 22,
-      averageTime: 15,
-      grade: "C",
-      percentile: 58,
-      strengths: ["Basic Biology", "Scientific Terms"],
-      weaknesses: ["Physics Concepts", "Chemistry", "Scientific Method"],
-      recommendations: [
-        "CRITICAL: Strengthen physics fundamentals - this is a weak area",
-        "Review basic chemistry concepts and equations",
-        "Practice more science questions daily (at least 10)",
-        "Watch educational videos for better concept understanding",
-        "Improve speed - currently taking 47% more time than average"
-      ],
-      topicWiseBreakdown: [
-        { topic: "Biology", score: 100, total: 3 },
-        { topic: "Physics", score: 33, total: 4 },
-        { topic: "Chemistry", score: 66, total: 3 }
-      ],
-      difficultyAnalysis: {
-        easy: { attempted: 4, correct: 4 },
-        medium: { attempted: 4, correct: 2 },
-        hard: { attempted: 2, correct: 1 }
-      }
-    },
-    {
-      id: 5,
-      testName: "SAT - English Language",
-      testType: "SAT",
-      date: "Dec 2, 2025",
-      score: 80,
-      totalQuestions: 10,
-      correctAnswers: 8,
-      incorrectAnswers: 2,
-      timeSpent: 14,
-      averageTime: 15,
-      grade: "A-",
-      percentile: 78,
-      strengths: ["Vocabulary", "Grammar", "Comprehension"],
-      weaknesses: ["Synonyms", "Sentence Formation"],
-      recommendations: [
-        "Good performance overall",
-        "Practice more synonym exercises",
-        "Work on complex sentence structures",
-        "Read more to improve vocabulary naturally"
-      ],
-      topicWiseBreakdown: [
-        { topic: "Vocabulary", score: 100, total: 3 },
-        { topic: "Grammar", score: 75, total: 4 },
-        { topic: "Comprehension", score: 66, total: 3 }
-      ],
-      difficultyAnalysis: {
-        easy: { attempted: 4, correct: 4 },
-        medium: { attempted: 4, correct: 3 },
-        hard: { attempted: 2, correct: 1 }
-      }
-    }
-  ];
-
-  // Subject-wise Analytics
-  const subjectAnalytics = [
-    {
-      subject: "MAT - Mental Ability",
-      testsGiven: 8,
-      averageScore: 83,
-      highestScore: 95,
-      lowestScore: 70,
-      trend: "improving",
-      trendPercentage: 15,
-      timeSpent: "12.5 hrs",
-      lastTestDate: "Dec 10, 2025",
-      strengths: ["Pattern Recognition", "Logical Reasoning", "Analogies"],
-      areasToImprove: ["Spatial Reasoning", "Complex Series"],
-      recommendation: "Consistent performance with steady improvement. Focus on spatial reasoning for better scores."
-    },
-    {
-      subject: "SAT - Mathematics",
-      testsGiven: 6,
-      averageScore: 72,
-      highestScore: 85,
-      lowestScore: 58,
-      trend: "stable",
-      trendPercentage: 2,
-      timeSpent: "15.2 hrs",
-      lastTestDate: "Dec 8, 2025",
-      strengths: ["Basic Arithmetic", "Fractions", "Percentages"],
-      areasToImprove: ["Algebra", "Geometry", "Word Problems"],
-      recommendation: "NEEDS ATTENTION: Math scores are below target. Dedicate 30 mins daily to algebra practice."
-    },
-    {
-      subject: "SAT - General Science",
-      testsGiven: 5,
-      averageScore: 68,
-      highestScore: 80,
-      lowestScore: 56,
-      trend: "declining",
-      trendPercentage: -8,
-      timeSpent: "10.8 hrs",
-      lastTestDate: "Dec 4, 2025",
-      strengths: ["Biology", "Environmental Science"],
-      areasToImprove: ["Physics", "Chemistry", "Scientific Method"],
-      recommendation: "CRITICAL: Science scores declining. Immediate intervention needed. Consider extra tutoring for physics."
-    },
-    {
-      subject: "SAT - English Language",
-      testsGiven: 5,
-      averageScore: 79,
-      highestScore: 88,
-      lowestScore: 70,
-      trend: "improving",
-      trendPercentage: 10,
-      timeSpent: "10.0 hrs",
-      lastTestDate: "Dec 2, 2025",
-      strengths: ["Vocabulary", "Reading Comprehension", "Grammar"],
-      areasToImprove: ["Sentence Formation", "Advanced Vocabulary"],
-      recommendation: "Good progress. Continue reading practice to maintain momentum."
-    }
-  ];
-
-  // AI-Generated Insights for Parents
-  const parentInsights = [
-    {
-      type: "critical",
-      icon: "🚨",
-      title: "Immediate Attention Required",
-      description: "SAT Science performance is declining (-8% trend). Physics and Chemistry concepts need urgent focus.",
-      action: "Consider enrolling in science tutoring or watching educational videos together."
-    },
-    {
-      type: "warning",
-      icon: "⚠️",
-      title: "Math Needs Improvement",
-      description: "Math scores (72% avg) are below the target of 80%. Algebra and word problems are weak areas.",
-      action: "Set daily 30-minute algebra practice sessions. Use practice apps or workbooks."
-    },
-    {
-      type: "positive",
-      icon: "✅",
-      title: "Strong Mental Ability",
-      description: "MAT scores are excellent (83% avg) with 15% improvement trend. Student excels in logical thinking.",
-      action: "Maintain current study routine. Consider advanced MAT challenges."
-    },
-    {
-      type: "info",
-      icon: "💡",
-      title: "Time Management",
-      description: "Student is taking 20-47% more time than average on some tests, especially science.",
-      action: "Practice timed tests to improve speed without compromising accuracy."
-    },
-    {
-      type: "positive",
-      icon: "🎯",
-      title: "Consistent Study Habit",
-      description: "12-day study streak maintained with 48.5 hours total study time this month.",
-      action: "Encourage and reward this consistency to maintain motivation."
-    },
-    {
-      type: "info",
-      icon: "📊",
-      title: "Overall Percentile",
-      description: "Student ranks 142 out of 1250 students (Top 12%). Overall performance is above average.",
-      action: "With focused effort on weak areas, can improve to top 10%."
-    }
-  ];
-
-  // Monthly Progress Comparison
-  const monthlyProgress = [
-    { month: "Sep", score: 65 },
-    { month: "Oct", score: 70 },
-    { month: "Nov", score: 75 },
-    { month: "Dec", score: 78 }
-  ];
-
-  // Render Grade Card Details
-  const renderGradeCard = (test) => {
+  // Progress Chart Component (SVG-based)
+  const ProgressChart = ({ data, type = 'line' }) => {
+    const maxScore = 100;
+    const chartHeight = 200;
+    const chartWidth = 600;
+    const padding = 40;
+    
+    const points = data.map((item, index) => {
+      const x = (chartWidth - 2 * padding) / (data.length - 1) * index + padding;
+      const y = chartHeight - (item.score / maxScore * (chartHeight - 2 * padding)) - padding;
+      return `${x},${y}`;
+    }).join(' ');
+    
     return (
-      <div className="grade-card-modal">
-        <div className="grade-card-content">
-          <button className="close-btn" onClick={() => setSelectedTest(null)}>✕</button>
-          
-          <div className="grade-card-header">
-            <div className="test-title-section">
-              <span className="test-type-badge">{test.testType}</span>
-              <h2>{test.testName}</h2>
-              <p className="test-date">Taken on {test.date}</p>
-            </div>
-            <div className="grade-display">
-              <div className="grade-circle">
-                <div className="grade-letter">{test.grade}</div>
-                <div className="grade-score">{test.score}%</div>
+      <svg className="progress-chart" viewBox={`0 0 ${chartWidth} ${chartHeight}`}>
+        {/* Grid lines */}
+        {[0, 25, 50, 75, 100].map(value => {
+          const y = chartHeight - (value / maxScore * (chartHeight - 2 * padding)) - padding;
+          return (
+            <g key={value}>
+              <line
+                x1={padding}
+                y1={y}
+                x2={chartWidth - padding}
+                y2={y}
+                stroke="rgba(255,255,255,0.1)"
+                strokeWidth="1"
+              />
+              <text x={padding - 10} y={y + 5} fill="rgba(255,255,255,0.5)" fontSize="12" textAnchor="end">
+                {value}
+              </text>
+            </g>
+          );
+        })}
+        
+        {/* Line chart */}
+        <polyline
+          points={points}
+          fill="none"
+          stroke="#cc4915"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        
+        {/* Gradient fill */}
+        <defs>
+          <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#cc4915" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#cc4915" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <polygon
+          points={`${padding},${chartHeight - padding} ${points} ${chartWidth - padding},${chartHeight - padding}`}
+          fill="url(#chartGradient)"
+        />
+        
+        {/* Data points */}
+        {data.map((item, index) => {
+          const x = (chartWidth - 2 * padding) / (data.length - 1) * index + padding;
+          const y = chartHeight - (item.score / maxScore * (chartHeight - 2 * padding)) - padding;
+          return (
+            <g key={index}>
+              <circle cx={x} cy={y} r="5" fill="#cc4915" stroke="white" strokeWidth="2" />
+              <text x={x} y={chartHeight - padding + 20} fill="rgba(255,255,255,0.7)" fontSize="12" textAnchor="middle">
+                {item.month || item.week || index + 1}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+    );
+  };
+
+  // Bar Chart Component
+  const BarChart = ({ data, metric = 'score' }) => {
+    const maxValue = Math.max(...data.map(item => item[metric]));
+    const chartHeight = 250;
+    
+    return (
+      <div className="bar-chart">
+        {data.map((item, index) => (
+          <div key={index} className="bar-item">
+            <div className="bar-container">
+              <div 
+                className="bar-fill" 
+                style={{ 
+                  height: `${(item[metric] / maxValue) * 100}%`,
+                  backgroundColor: item.color || '#cc4915'
+                }}
+              >
+                <span className="bar-value">{item[metric]}{metric === 'mastery' ? '%' : ''}</span>
               </div>
             </div>
+            <span className="bar-label">{item.subject || item.topic}</span>
           </div>
+        ))}
+      </div>
+    );
+  };
 
-          <div className="grade-card-body">
-            {/* Performance Summary */}
-            <div className="performance-summary">
-              <div className="summary-item">
-                <span className="summary-label">Score</span>
-                <span className="summary-value">{test.score}%</span>
-              </div>
-              <div className="summary-item">
-                <span className="summary-label">Correct</span>
-                <span className="summary-value correct">{test.correctAnswers}/{test.totalQuestions}</span>
-              </div>
-              <div className="summary-item">
-                <span className="summary-label">Incorrect</span>
-                <span className="summary-value incorrect">{test.incorrectAnswers}/{test.totalQuestions}</span>
-              </div>
-              <div className="summary-item">
-                <span className="summary-label">Time Taken</span>
-                <span className="summary-value">{test.timeSpent} min</span>
-              </div>
-              <div className="summary-item">
-                <span className="summary-label">Percentile</span>
-                <span className="summary-value">{test.percentile}th</span>
-              </div>
-            </div>
-
-            {/* Topic-wise Breakdown */}
-            <div className="analysis-section">
-              <h3>📊 Topic-wise Performance</h3>
-              <div className="topic-breakdown">
-                {test.topicWiseBreakdown.map((topic, idx) => (
-                  <div key={idx} className="topic-item">
-                    <div className="topic-header">
-                      <span className="topic-name">{topic.topic}</span>
-                      <span className="topic-score">{topic.score}%</span>
-                    </div>
-                    <div className="topic-progress-bar">
-                      <div 
-                        className="topic-progress-fill"
-                        style={{ 
-                          width: `${topic.score}%`,
-                          background: topic.score >= 80 ? '#10b981' : topic.score >= 60 ? '#f59e0b' : '#ef4444'
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Difficulty Analysis */}
-            <div className="analysis-section">
-              <h3>🎯 Difficulty Level Analysis</h3>
-              <div className="difficulty-grid">
-                <div className="difficulty-card easy">
-                  <div className="difficulty-label">Easy</div>
-                  <div className="difficulty-stats">
-                    {test.difficultyAnalysis.easy.correct}/{test.difficultyAnalysis.easy.attempted}
-                  </div>
-                  <div className="difficulty-percent">
-                    {Math.round((test.difficultyAnalysis.easy.correct / test.difficultyAnalysis.easy.attempted) * 100)}%
-                  </div>
-                </div>
-                <div className="difficulty-card medium">
-                  <div className="difficulty-label">Medium</div>
-                  <div className="difficulty-stats">
-                    {test.difficultyAnalysis.medium.correct}/{test.difficultyAnalysis.medium.attempted}
-                  </div>
-                  <div className="difficulty-percent">
-                    {Math.round((test.difficultyAnalysis.medium.correct / test.difficultyAnalysis.medium.attempted) * 100)}%
-                  </div>
-                </div>
-                <div className="difficulty-card hard">
-                  <div className="difficulty-label">Hard</div>
-                  <div className="difficulty-stats">
-                    {test.difficultyAnalysis.hard.correct}/{test.difficultyAnalysis.hard.attempted}
-                  </div>
-                  <div className="difficulty-percent">
-                    {Math.round((test.difficultyAnalysis.hard.correct / test.difficultyAnalysis.hard.attempted) * 100)}%
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Strengths & Weaknesses */}
-            <div className="analysis-section">
-              <div className="strengths-weaknesses-grid">
-                <div className="strength-section">
-                  <h3>💪 Strengths</h3>
-                  <ul className="strength-list">
-                    {test.strengths.map((strength, idx) => (
-                      <li key={idx}>
-                        <span className="bullet">✓</span>
-                        {strength}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="weakness-section">
-                  <h3>📉 Areas to Improve</h3>
-                  <ul className="weakness-list">
-                    {test.weaknesses.map((weakness, idx) => (
-                      <li key={idx}>
-                        <span className="bullet">!</span>
-                        {weakness}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Recommendations */}
-            <div className="analysis-section">
-              <h3>💡 Personalized Recommendations</h3>
-              <div className="recommendations-list">
-                {test.recommendations.map((rec, idx) => (
-                  <div key={idx} className="recommendation-item">
-                    <span className="rec-number">{idx + 1}</span>
-                    <p>{rec}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Time Comparison */}
-            <div className="analysis-section">
-              <h3>⏱️ Time Analysis</h3>
-              <div className="time-comparison">
-                <div className="time-bar-container">
-                  <div className="time-label">Your Time</div>
-                  <div className="time-bar">
-                    <div 
-                      className="time-bar-fill your-time"
-                      style={{ width: `${(test.timeSpent / Math.max(test.timeSpent, test.averageTime)) * 100}%` }}
-                    >
-                      {test.timeSpent} min
-                    </div>
-                  </div>
-                </div>
-                <div className="time-bar-container">
-                  <div className="time-label">Average Time</div>
-                  <div className="time-bar">
-                    <div 
-                      className="time-bar-fill avg-time"
-                      style={{ width: `${(test.averageTime / Math.max(test.timeSpent, test.averageTime)) * 100}%` }}
-                    >
-                      {test.averageTime} min
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {test.timeSpent > test.averageTime && (
-                <p className="time-note">
-                  ⚠️ You took {Math.round(((test.timeSpent - test.averageTime) / test.averageTime) * 100)}% more time than average. 
-                  Practice more to improve speed.
-                </p>
-              )}
-              {test.timeSpent < test.averageTime && (
-                <p className="time-note success">
-                  ✅ Excellent! You completed {Math.round(((test.averageTime - test.timeSpent) / test.averageTime) * 100)}% faster than average.
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
+  // Circular Progress Component
+  const CircularProgress = ({ value, max = 100, size = 120, label }) => {
+    const percentage = (value / max) * 100;
+    const circumference = 2 * Math.PI * 45;
+    const strokeDashoffset = circumference - (percentage / 100) * circumference;
+    
+    return (
+      <div className="circular-progress">
+        <svg width={size} height={size} viewBox="0 0 100 100">
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            fill="none"
+            stroke="rgba(255,255,255,0.1)"
+            strokeWidth="8"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            fill="none"
+            stroke="#cc4915"
+            strokeWidth="8"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
+            strokeLinecap="round"
+            transform="rotate(-90 50 50)"
+            style={{ transition: 'stroke-dashoffset 1s ease' }}
+          />
+          <text
+            x="50"
+            y="50"
+            textAnchor="middle"
+            dy="7"
+            fontSize="20"
+            fontWeight="bold"
+            fill="white"
+          >
+            {Math.round(percentage)}%
+          </text>
+        </svg>
+        {label && <p className="progress-label">{label}</p>}
       </div>
     );
   };
@@ -489,142 +282,142 @@ const Statistics = () => {
   return (
     <>
       <MainNavbar />
-      <div className="statistics-section">
-        <div className="statistics-container">
+      <ParticleBackground />
+      <div className="stats-container">
+        <div className="stats-content">
+          
           {/* Header */}
-          <div className="statistics-header">
-            <h1>📊 Learning Analytics</h1>
-            <p>Comprehensive performance insights and progress tracking</p>
+          <div className="stats-header">
+            <div className="stats-header-left">
+              <h1 className="stats-title">Performance Analytics</h1>
+              <p className="stats-subtitle">Comprehensive insights into your learning journey</p>
+            </div>
+            <div className="stats-header-right">
+              <select 
+                className="time-range-select" 
+                value={timeRange}
+                onChange={(e) => setTimeRange(e.target.value)}
+              >
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="year">This Year</option>
+                <option value="all">All Time</option>
+              </select>
+            </div>
           </div>
 
-          {/* View Mode Tabs */}
-          <div className="view-mode-tabs">
+          {/* Navigation Tabs */}
+          <div className="stats-tabs">
             <button 
-              className={`tab-btn ${viewMode === 'overview' ? 'active' : ''}`}
-              onClick={() => setViewMode('overview')}
+              className={`stats-tab ${activeTab === 'overview' ? 'active' : ''}`}
+              onClick={() => setActiveTab('overview')}
             >
-              📈 Overview
+              <span className="tab-icon">📊</span>
+              Overview
             </button>
             <button 
-              className={`tab-btn ${viewMode === 'gradecards' ? 'active' : ''}`}
-              onClick={() => setViewMode('gradecards')}
+              className={`stats-tab ${activeTab === 'performance' ? 'active' : ''}`}
+              onClick={() => setActiveTab('performance')}
             >
-              📝 Grade Cards
+              <span className="tab-icon">📈</span>
+              Performance
             </button>
             <button 
-              className={`tab-btn ${viewMode === 'insights' ? 'active' : ''}`}
-              onClick={() => setViewMode('insights')}
+              className={`stats-tab ${activeTab === 'subjects' ? 'active' : ''}`}
+              onClick={() => setActiveTab('subjects')}
             >
-              💡 Parent Insights
+              <span className="tab-icon">📚</span>
+              Subjects
+            </button>
+            <button 
+              className={`stats-tab ${activeTab === 'insights' ? 'active' : ''}`}
+              onClick={() => setActiveTab('insights')}
+            >
+              <span className="tab-icon">💡</span>
+              Insights
             </button>
           </div>
 
-          {/* Overview Tab */}
-          {viewMode === 'overview' && (
-            <div className="overview-content">
-              {/* Performance Metrics */}
+          {/* OVERVIEW TAB */}
+          {activeTab === 'overview' && (
+            <div className="stats-section">
+              
+              {/* Key Metrics */}
               <div className="metrics-grid">
                 <div className="metric-card">
-                  <div className="metric-icon">📊</div>
-                  <div className="metric-value">{performanceMetrics.overallScore}%</div>
-                  <div className="metric-label">Overall Score</div>
-                  <div className="metric-change positive">+{performanceMetrics.improvement}% this month</div>
+                  <div className="metric-icon">🎯</div>
+                  <div className="metric-content">
+                    <h3 className="metric-value">{analyticsData.overview.totalTests}</h3>
+                    <p className="metric-label">Total Tests</p>
+                    <span className="metric-change positive">+12 this month</span>
+                  </div>
                 </div>
+                
                 <div className="metric-card">
                   <div className="metric-icon">📝</div>
-                  <div className="metric-value">{performanceMetrics.totalTests}</div>
-                  <div className="metric-label">Total Tests</div>
-                  <div className="metric-change">{performanceMetrics.testsThisMonth} this month</div>
+                  <div className="metric-content">
+                    <h3 className="metric-value">{analyticsData.overview.totalPractice}</h3>
+                    <p className="metric-label">Practice Sessions</p>
+                    <span className="metric-change positive">+8 this week</span>
+                  </div>
                 </div>
+                
                 <div className="metric-card">
-                  <div className="metric-icon">🏆</div>
-                  <div className="metric-value">#{performanceMetrics.rank}</div>
-                  <div className="metric-label">Current Rank</div>
-                  <div className="metric-change">out of {performanceMetrics.totalStudents}</div>
+                  <div className="metric-icon">⏱️</div>
+                  <div className="metric-content">
+                    <h3 className="metric-value">{analyticsData.overview.studyHours}h</h3>
+                    <p className="metric-label">Study Hours</p>
+                    <span className="metric-change positive">+15h this month</span>
+                  </div>
                 </div>
+                
                 <div className="metric-card">
                   <div className="metric-icon">🔥</div>
-                  <div className="metric-value">{performanceMetrics.studyStreak}</div>
-                  <div className="metric-label">Study Streak</div>
-                  <div className="metric-change">days in a row</div>
+                  <div className="metric-content">
+                    <h3 className="metric-value">{analyticsData.overview.currentStreak}</h3>
+                    <p className="metric-label">Day Streak</p>
+                    <span className="metric-info">Best: {analyticsData.overview.longestStreak} days</span>
+                  </div>
+                </div>
+                
+                <div className="metric-card highlighted">
+                  <div className="metric-icon">⭐</div>
+                  <div className="metric-content">
+                    <h3 className="metric-value">{analyticsData.overview.averageScore}%</h3>
+                    <p className="metric-label">Average Score</p>
+                    <span className="metric-change positive">+{analyticsData.overview.improvement}% improvement</span>
+                  </div>
+                </div>
+                
+                <div className="metric-card highlighted">
+                  <div className="metric-icon">🏆</div>
+                  <div className="metric-content">
+                    <h3 className="metric-value">#{analyticsData.overview.rank}</h3>
+                    <p className="metric-label">Your Rank</p>
+                    <span className="metric-info">Top {analyticsData.overview.percentile}%</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Monthly Progress Chart */}
-              <div className="chart-section">
-                <h2>📈 Monthly Progress Trend</h2>
-                <div className="progress-chart">
-                  {monthlyProgress.map((month, idx) => (
-                    <div key={idx} className="chart-column">
-                      <div className="chart-bar-wrapper">
-                        <div 
-                          className="chart-bar"
-                          style={{ height: `${(month.score / 100) * 200}px` }}
-                        >
-                          <span className="bar-value">{month.score}%</span>
-                        </div>
-                      </div>
-                      <span className="chart-label">{month.month}</span>
-                    </div>
-                  ))}
+              {/* Progress Chart */}
+              <div className="chart-card">
+                <div className="chart-header">
+                  <h3 className="chart-title">Score Progression</h3>
+                  <p className="chart-subtitle">Your performance trend over the last 6 months</p>
                 </div>
+                <ProgressChart data={analyticsData.monthlyProgress} />
               </div>
 
-              {/* Subject-wise Analytics */}
-              <div className="subject-analytics-section">
-                <h2>📚 Subject-wise Performance</h2>
-                <div className="subject-cards-grid">
-                  {subjectAnalytics.map((subject, idx) => (
-                    <div key={idx} className="subject-analytics-card">
-                      <div className="subject-card-header">
-                        <h3>{subject.subject}</h3>
-                        <span className={`trend-badge ${subject.trend}`}>
-                          {subject.trend === 'improving' && '📈'}
-                          {subject.trend === 'declining' && '📉'}
-                          {subject.trend === 'stable' && '➡️'}
-                          {subject.trend === 'improving' && `+${subject.trendPercentage}%`}
-                          {subject.trend === 'declining' && `${subject.trendPercentage}%`}
-                          {subject.trend === 'stable' && `${subject.trendPercentage}%`}
-                        </span>
-                      </div>
-                      
-                      <div className="subject-stats">
-                        <div className="stat-row">
-                          <span>Average Score:</span>
-                          <span className="stat-value">{subject.averageScore}%</span>
-                        </div>
-                        <div className="stat-row">
-                          <span>Tests Given:</span>
-                          <span className="stat-value">{subject.testsGiven}</span>
-                        </div>
-                        <div className="stat-row">
-                          <span>Highest:</span>
-                          <span className="stat-value success">{subject.highestScore}%</span>
-                        </div>
-                        <div className="stat-row">
-                          <span>Lowest:</span>
-                          <span className="stat-value warning">{subject.lowestScore}%</span>
-                        </div>
-                        <div className="stat-row">
-                          <span>Time Spent:</span>
-                          <span className="stat-value">{subject.timeSpent}</span>
-                        </div>
-                      </div>
-
-                      <div className="subject-details">
-                        <div className="detail-section">
-                          <strong>💪 Strengths:</strong>
-                          <p>{subject.strengths.join(', ')}</p>
-                        </div>
-                        <div className="detail-section">
-                          <strong>📉 Needs Work:</strong>
-                          <p>{subject.areasToImprove.join(', ')}</p>
-                        </div>
-                        <div className="detail-section recommendation">
-                          <strong>💡 Recommendation:</strong>
-                          <p>{subject.recommendation}</p>
-                        </div>
-                      </div>
+              {/* Recent Achievements */}
+              <div className="achievements-section">
+                <h3 className="section-title">🏅 Recent Achievements</h3>
+                <div className="achievements-grid">
+                  {analyticsData.achievements.map(achievement => (
+                    <div key={achievement.id} className={`achievement-card ${achievement.rarity}`}>
+                      <div className="achievement-icon">{achievement.icon}</div>
+                      <h4 className="achievement-title">{achievement.title}</h4>
+                      <p className="achievement-date">{new Date(achievement.date).toLocaleDateString()}</p>
+                      <span className={`achievement-badge ${achievement.rarity}`}>{achievement.rarity}</span>
                     </div>
                   ))}
                 </div>
@@ -632,161 +425,323 @@ const Statistics = () => {
             </div>
           )}
 
-          {/* Grade Cards Tab */}
-          {viewMode === 'gradecards' && (
-            <div className="gradecards-content">
-              <div className="gradecards-header">
-                <h2>📝 Detailed Grade Cards</h2>
-                <p>Click on any test to view in-depth analysis</p>
-              </div>
+          {/* PERFORMANCE TAB */}
+          {activeTab === 'performance' && (
+            <div className="stats-section">
               
-              <div className="gradecards-grid">
-                {testGradeCards.map((test) => (
-                  <div 
-                    key={test.id} 
-                    className="gradecard-preview"
-                    onClick={() => setSelectedTest(test)}
-                  >
-                    <div className="preview-header">
-                      <span className="test-type-tag">{test.testType}</span>
-                      <span className={`grade-badge grade-${test.grade.replace('+', 'plus').replace('-', 'minus')}`}>
-                        {test.grade}
+              {/* Accuracy Analysis */}
+              <div className="performance-overview">
+                <div className="accuracy-card">
+                  <h3 className="card-title">Overall Accuracy</h3>
+                  <CircularProgress 
+                    value={analyticsData.accuracyTrends.overall} 
+                    size={150}
+                    label="Average Accuracy"
+                  />
+                </div>
+                
+                <div className="difficulty-breakdown">
+                  <h3 className="card-title">Difficulty-wise Accuracy</h3>
+                  <div className="difficulty-bars">
+                    <div className="difficulty-item">
+                      <span className="diff-label">Easy</span>
+                      <div className="diff-bar-container">
+                        <div className="diff-bar" style={{ width: `${analyticsData.accuracyTrends.easy}%`, backgroundColor: '#10b981' }}>
+                          <span className="diff-value">{analyticsData.accuracyTrends.easy}%</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="difficulty-item">
+                      <span className="diff-label">Medium</span>
+                      <div className="diff-bar-container">
+                        <div className="diff-bar" style={{ width: `${analyticsData.accuracyTrends.medium}%`, backgroundColor: '#f59e0b' }}>
+                          <span className="diff-value">{analyticsData.accuracyTrends.medium}%</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="difficulty-item">
+                      <span className="diff-label">Hard</span>
+                      <div className="diff-bar-container">
+                        <div className="diff-bar" style={{ width: `${analyticsData.accuracyTrends.hard}%`, backgroundColor: '#ef4444' }}>
+                          <span className="diff-value">{analyticsData.accuracyTrends.hard}%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Time Analysis */}
+              <div className="chart-card">
+                <div className="chart-header">
+                  <h3 className="chart-title">⏰ Peak Performance Time</h3>
+                  <p className="chart-subtitle">Your best performance is at {analyticsData.timeAnalysis.peakPerformanceTime}</p>
+                </div>
+                <div className="time-distribution">
+                  {analyticsData.timeAnalysis.hourlyDistribution.map((slot, index) => (
+                    <div key={index} className="time-slot">
+                      <div className="slot-header">
+                        <span className="slot-time">{slot.hour}</span>
+                        <span className="slot-score">{slot.score}%</span>
+                      </div>
+                      <div className="slot-bar-container">
+                        <div 
+                          className="slot-bar" 
+                          style={{ 
+                            width: `${(slot.sessions / 35) * 100}%`,
+                            backgroundColor: slot.score >= 80 ? '#10b981' : slot.score >= 70 ? '#f59e0b' : '#ef4444'
+                          }}
+                        >
+                          <span className="slot-sessions">{slot.sessions} sessions</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Recent Tests Table */}
+              <div className="recent-tests-card">
+                <h3 className="card-title">📋 Recent Test Results</h3>
+                <div className="tests-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Test Name</th>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Rank</th>
+                        <th>Percentile</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {analyticsData.recentTests.map(test => (
+                        <tr key={test.id}>
+                          <td className="test-name">{test.name}</td>
+                          <td>{new Date(test.date).toLocaleDateString()}</td>
+                          <td className="test-score">{test.score}%</td>
+                          <td>#{test.rank}</td>
+                          <td className="test-percentile">{test.percentile}%</td>
+                          <td>
+                            <span className={`status-badge ${test.score >= 80 ? 'excellent' : test.score >= 60 ? 'good' : 'needs-work'}`}>
+                              {test.score >= 80 ? '🌟 Excellent' : test.score >= 60 ? '👍 Good' : '📈 Practice'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SUBJECTS TAB */}
+          {activeTab === 'subjects' && (
+            <div className="stats-section">
+              
+              {/* Subject Performance */}
+              <div className="chart-card">
+                <div className="chart-header">
+                  <h3 className="chart-title">Subject-wise Performance</h3>
+                  <p className="chart-subtitle">Overall performance across all subjects</p>
+                </div>
+                <BarChart data={analyticsData.subjectPerformance} metric="score" />
+              </div>
+
+              {/* Strengths and Weaknesses */}
+              <div className="strengths-weaknesses-grid">
+                <div className="strengths-card">
+                  <h3 className="card-title">💪 Your Strengths</h3>
+                  <div className="topic-list">
+                    {analyticsData.topicStrengths.map((topic, index) => (
+                      <div key={index} className="topic-item strength">
+                        <div className="topic-header">
+                          <span className="topic-name">{topic.topic}</span>
+                          <span className="topic-mastery">{topic.mastery}%</span>
+                        </div>
+                        <div className="topic-progress-bar">
+                          <div 
+                            className="topic-progress-fill" 
+                            style={{ width: `${topic.mastery}%`, backgroundColor: '#10b981' }}
+                          ></div>
+                        </div>
+                        <span className="topic-tests">{topic.tests} tests completed</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="weaknesses-card">
+                  <h3 className="card-title">🎯 Areas to Improve</h3>
+                  <div className="topic-list">
+                    {analyticsData.topicWeaknesses.map((topic, index) => (
+                      <div key={index} className="topic-item weakness">
+                        <div className="topic-header">
+                          <span className="topic-name">{topic.topic}</span>
+                          <span className="topic-mastery">{topic.mastery}%</span>
+                        </div>
+                        <div className="topic-progress-bar">
+                          <div 
+                            className="topic-progress-fill" 
+                            style={{ width: `${topic.mastery}%`, backgroundColor: '#ef4444' }}
+                          ></div>
+                        </div>
+                        <span className="topic-tests">{topic.tests} tests completed</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Subject Cards Grid */}
+              <div className="subject-cards-grid">
+                {analyticsData.subjectPerformance.map((subject, index) => (
+                  <div key={index} className="subject-detail-card" style={{ borderTopColor: subject.color }}>
+                    <div className="subject-card-header">
+                      <h4 className="subject-card-title">{subject.subject}</h4>
+                      <span className={`subject-trend ${subject.trend}`}>
+                        {subject.trend === 'up' ? '📈' : '📉'} {subject.improvement}%
                       </span>
                     </div>
-                    
-                    <h3>{test.testName}</h3>
-                    <p className="preview-date">{test.date}</p>
-                    
-                    <div className="preview-score-section">
-                      <div className="score-circle-preview">
-                        <svg width="80" height="80">
-                          <circle
-                            cx="40"
-                            cy="40"
-                            r="35"
-                            fill="none"
-                            stroke="rgba(255,255,255,0.1)"
-                            strokeWidth="6"
-                          />
-                          <circle
-                            cx="40"
-                            cy="40"
-                            r="35"
-                            fill="none"
-                            stroke="#10b981"
-                            strokeWidth="6"
-                            strokeDasharray={`${(test.score / 100) * 220} 220`}
-                            transform="rotate(-90 40 40)"
-                            strokeLinecap="round"
-                          />
-                          <text
-                            x="40"
-                            y="45"
-                            textAnchor="middle"
-                            fill="white"
-                            fontSize="20"
-                            fontWeight="bold"
-                          >
-                            {test.score}%
-                          </text>
-                        </svg>
+                    <div className="subject-card-body">
+                      <CircularProgress value={subject.score} size={100} />
+                      <div className="subject-stats">
+                        <div className="subject-stat">
+                          <span className="stat-label">Tests Taken</span>
+                          <span className="stat-value">{subject.tests}</span>
+                        </div>
+                        <div className="subject-stat">
+                          <span className="stat-label">Improvement</span>
+                          <span className="stat-value positive">+{subject.improvement}%</span>
+                        </div>
                       </div>
                     </div>
-                    
-                    <div className="preview-stats">
-                      <div className="preview-stat">
-                        <span>✓ {test.correctAnswers}</span>
-                      </div>
-                      <div className="preview-stat">
-                        <span>✗ {test.incorrectAnswers}</span>
-                      </div>
-                      <div className="preview-stat">
-                        <span>⏱ {test.timeSpent}m</span>
-                      </div>
-                    </div>
-                    
-                    <button className="view-details-btn">View Detailed Analysis →</button>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Parent Insights Tab */}
-          {viewMode === 'insights' && (
-            <div className="insights-content">
-              <div className="insights-header">
-                <h2>💡 Parent Insights & Recommendations</h2>
-                <p>AI-powered analysis to help guide your child's learning journey</p>
-              </div>
-
-              <div className="insights-grid">
-                {parentInsights.map((insight, idx) => (
-                  <div key={idx} className={`insight-card ${insight.type}`}>
-                    <div className="insight-icon">{insight.icon}</div>
-                    <div className="insight-content">
-                      <h3>{insight.title}</h3>
-                      <p className="insight-description">{insight.description}</p>
-                      <div className="insight-action">
-                        <strong>Recommended Action:</strong>
-                        <p>{insight.action}</p>
+          {/* INSIGHTS TAB */}
+          {activeTab === 'insights' && (
+            <div className="stats-section">
+              
+              {/* AI Recommendations */}
+              <div className="recommendations-section">
+                <h3 className="section-title">🤖 Personalized Recommendations</h3>
+                <div className="recommendations-grid">
+                  {analyticsData.recommendations.map((rec, index) => (
+                    <div key={index} className={`recommendation-card ${rec.type}`}>
+                      <div className="rec-header">
+                        <span className={`rec-badge ${rec.type}`}>
+                          {rec.type === 'urgent' ? '⚠️ Urgent' : rec.type === 'improvement' ? '📈 Improve' : '✨ Strength'}
+                        </span>
                       </div>
+                      <h4 className="rec-title">{rec.title}</h4>
+                      <p className="rec-description">{rec.description}</p>
+                      <button className="rec-action-btn">{rec.action} →</button>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
-              {/* Summary Report for Parents */}
-              <div className="parent-summary-section">
-                <h2>📋 Executive Summary</h2>
-                <div className="summary-card">
-                  <div className="summary-row">
-                    <span className="summary-icon">🎯</span>
-                    <div className="summary-content">
-                      <strong>Overall Performance:</strong>
-                      <p>Your child is performing above average (78% overall, Top 12%). Strong in logical thinking (MAT), needs improvement in Math and Science.</p>
+              {/* Study Patterns */}
+              <div className="study-patterns-card">
+                <h3 className="card-title">📊 Study Patterns Analysis</h3>
+                <div className="patterns-grid">
+                  <div className="pattern-item">
+                    <div className="pattern-icon">⏱️</div>
+                    <div className="pattern-content">
+                      <h4 className="pattern-value">{analyticsData.timeAnalysis.averageStudySession} min</h4>
+                      <p className="pattern-label">Avg Session Length</p>
+                      <span className="pattern-insight">Optimal: 45-60 minutes</span>
                     </div>
                   </div>
                   
-                  <div className="summary-row">
-                    <span className="summary-icon">📈</span>
-                    <div className="summary-content">
-                      <strong>Progress Trend:</strong>
-                      <p>+12% improvement this month. Showing consistent growth in most areas with good study habits (12-day streak).</p>
+                  <div className="pattern-item">
+                    <div className="pattern-icon">📅</div>
+                    <div className="pattern-content">
+                      <h4 className="pattern-value">{analyticsData.timeAnalysis.totalSessions}</h4>
+                      <p className="pattern-label">Total Sessions</p>
+                      <span className="pattern-insight">Great consistency!</span>
                     </div>
                   </div>
                   
-                  <div className="summary-row">
-                    <span className="summary-icon">⚠️</span>
-                    <div className="summary-content">
-                      <strong>Areas Needing Attention:</strong>
-                      <p>Science (declining -8%), Math Algebra (72% avg), Time Management (20-47% slower on some tests).</p>
+                  <div className="pattern-item">
+                    <div className="pattern-icon">🌅</div>
+                    <div className="pattern-content">
+                      <h4 className="pattern-value">{analyticsData.timeAnalysis.weekdayAvg} min</h4>
+                      <p className="pattern-label">Weekday Average</p>
+                      <span className="pattern-insight">vs {analyticsData.timeAnalysis.weekendAvg} min weekend</span>
                     </div>
                   </div>
                   
-                  <div className="summary-row">
-                    <span className="summary-icon">💪</span>
-                    <div className="summary-content">
-                      <strong>Key Strengths:</strong>
-                      <p>Pattern Recognition, Logical Reasoning, Verbal Analogies, Vocabulary, Basic Math - these are solid foundations to build on.</p>
+                  <div className="pattern-item">
+                    <div className="pattern-icon">🎯</div>
+                    <div className="pattern-content">
+                      <h4 className="pattern-value">{analyticsData.timeAnalysis.peakPerformanceTime}</h4>
+                      <p className="pattern-label">Peak Time</p>
+                      <span className="pattern-insight">Schedule important tests here</span>
                     </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Guardian Summary */}
+              <div className="guardian-summary-card">
+                <h3 className="card-title">👨‍👩‍👧 Guardian Summary Report</h3>
+                <div className="summary-content">
+                  <div className="summary-section">
+                    <h4 className="summary-section-title">📈 Overall Progress</h4>
+                    <p className="summary-text">
+                      Your child has shown <strong className="highlight-positive">+{analyticsData.overview.improvement}% improvement</strong> over the past month. 
+                      They've completed <strong>{analyticsData.overview.totalTests} tests</strong> and maintained a <strong>{analyticsData.overview.currentStreak}-day study streak</strong>. 
+                      Current rank: <strong>#{analyticsData.overview.rank}</strong> out of {analyticsData.overview.totalStudents} students (Top {analyticsData.overview.percentile}%).
+                    </p>
                   </div>
                   
-                  <div className="summary-row">
-                    <span className="summary-icon">🎓</span>
-                    <div className="summary-content">
-                      <strong>Suggested Focus Areas:</strong>
-                      <p>1) Science tutoring for physics/chemistry, 2) Daily 30min algebra practice, 3) Timed test practice for speed improvement.</p>
-                    </div>
+                  <div className="summary-section">
+                    <h4 className="summary-section-title">💪 Key Strengths</h4>
+                    <ul className="summary-list">
+                      {analyticsData.topicStrengths.slice(0, 3).map((topic, index) => (
+                        <li key={index}>
+                          <strong>{topic.topic}</strong> - {topic.mastery}% mastery ({topic.tests} tests)
+                        </li>
+                      ))}
+                    </ul>
                   </div>
+                  
+                  <div className="summary-section">
+                    <h4 className="summary-section-title">🎯 Areas Needing Attention</h4>
+                    <ul className="summary-list warning">
+                      {analyticsData.topicWeaknesses.slice(0, 3).map((topic, index) => (
+                        <li key={index}>
+                          <strong>{topic.topic}</strong> - {topic.mastery}% (Needs practice)
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  
+                  <div className="summary-section">
+                    <h4 className="summary-section-title">💡 Recommendations</h4>
+                    <ul className="summary-list">
+                      <li>Schedule regular practice sessions for weaker topics (30 min daily)</li>
+                      <li>Maintain current study streak - consistency is key</li>
+                      <li>Focus on {analyticsData.timeAnalysis.peakPerformanceTime} for important tests</li>
+                      <li>Consider tutoring for Physics and Chemistry topics</li>
+                    </ul>
+                  </div>
+                  
+                  <button className="download-report-btn">
+                    📄 Download Detailed PDF Report
+                  </button>
                 </div>
               </div>
             </div>
           )}
         </div>
-
-        {/* Grade Card Modal */}
-        {selectedTest && renderGradeCard(selectedTest)}
       </div>
       <Footer />
     </>

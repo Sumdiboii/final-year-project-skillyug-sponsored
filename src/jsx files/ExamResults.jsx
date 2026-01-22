@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../css files/ExamResults.css';
 import MainNavbar from '../components/MainNavbar';
@@ -24,6 +24,32 @@ const ExamResults = () => {
     navigate('/exam');
     return null;
   }
+
+  // Save exam history to localStorage
+  useEffect(() => {
+    const examLog = {
+      examType,
+      totalQuestions,
+      attempted,
+      correct,
+      wrong,
+      unattempted,
+      score,
+      percentage,
+      timeSpent,
+      date: new Date().toISOString()
+    };
+
+    // Get existing history
+    const existingHistory = localStorage.getItem('examHistory');
+    const history = existingHistory ? JSON.parse(existingHistory) : [];
+    
+    // Add new log
+    history.push(examLog);
+    
+    // Save updated history
+    localStorage.setItem('examHistory', JSON.stringify(history));
+  }, [examType, totalQuestions, attempted, correct, wrong, unattempted, score, percentage, timeSpent]);
 
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
@@ -269,7 +295,10 @@ const ExamResults = () => {
             <span className="btn-icon">📄</span>
             Download Grade Card
           </button>
-          <button className="btn-secondary" onClick={() => navigate('/exam')}>
+          <button className="btn-secondary" onClick={() => {
+            window.scrollTo(0, 0);
+            navigate('/exams');
+          }}>
             <span className="btn-icon">🔄</span>
             Take Another Test
           </button>

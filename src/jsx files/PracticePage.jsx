@@ -3,7 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import '../css files/PracticePage.css';
 import MainNavbar from "../components/MainNavbar";
 import Footer from "../components/Footer";
-import ParticleBackground from '../components/StarBg';
+import ParticleBackground from "../components/StarBg";
+
 
 const PracticePage = () => {
   const navigate = useNavigate();
@@ -37,43 +38,49 @@ const PracticePage = () => {
       question: "If CODING is written as DPEJOH, how is FLOWER written?",
       options: ["GMPXFS", "GMPXFR", "GMPWFS", "HMPXFS"],
       correct: 0,
-      type: "coding-decoding"
+      type: "coding-decoding",
+      explanation: "Each letter is shifted by +1 position in the alphabet. C→D, O→P, D→E, I→J, N→O, G→H. Similarly, F→G, L→M, O→P, W→X, E→F, R→S."
     },
     {
       id: 2,
       question: "Find the odd one out: 3, 7, 11, 14, 17",
       options: ["3", "7", "14", "17"],
       correct: 2,
-      type: "classification"
+      type: "classification",
+      explanation: "All numbers except 14 are prime numbers. 14 is divisible by 2 and 7, making it a composite number."
     },
     {
       id: 3,
       question: "Complete the series: 2, 6, 12, 20, 30, ?",
       options: ["42", "40", "38", "44"],
       correct: 0,
-      type: "series"
+      type: "series",
+      explanation: "The pattern is n×(n+1): 1×2=2, 2×3=6, 3×4=12, 4×5=20, 5×6=30, 6×7=42."
     },
     {
       id: 4,
       question: "If North becomes South, East becomes West, what does North-East become?",
       options: ["South-West", "North-West", "South-East", "North-East"],
       correct: 0,
-      type: "direction"
+      type: "direction",
+      explanation: "When directions are inverted, North becomes South and East becomes West. Therefore, North-East becomes South-West."
     },
     {
       id: 5,
       question: "A is B's brother. B is C's father. How is A related to C?",
       options: ["Father", "Uncle", "Brother", "Son"],
       correct: 1,
-      type: "blood-relations"
+      type: "blood-relations",
+      explanation: "A is B's brother, and B is C's father. This makes A the brother of C's father, which means A is C's uncle."
     },
-    // Generate more questions up to 25
-    ...Array.from({ length: 20 }, (_, i) => ({
+    // Generate more questions up to 20
+    ...Array.from({ length: 15 }, (_, i) => ({
       id: i + 6,
       question: `Sample question ${i + 6} for ${quizData.title}. This would be dynamically generated based on the quiz type and difficulty level.`,
       options: ["Option A", "Option B", "Option C", "Option D"],
       correct: Math.floor(Math.random() * 4),
-      type: "general"
+      type: "general",
+      explanation: `This is a sample explanation for question ${i + 6}. In a real application, this would provide detailed reasoning for the correct answer and help students understand the concept better.`
     }))
   ];
 
@@ -128,7 +135,32 @@ const PracticePage = () => {
 
   const handleSubmitQuiz = () => {
     setQuizCompleted(true);
+    
+    // Save practice log to localStorage
+    const score = calculateScore();
+    const practiceLog = {
+      date: new Date().toISOString(),
+      topic: quizData.title,
+      score: `${score.correct}/${score.total}`,
+      correct: score.correct,
+      total: score.total,
+      percentage: score.percentage,
+      timeTaken: formatTime(30 * 60 - timeLeft)
+    };
+    
+    // Get existing logs or initialize empty array
+    const existingLogs = JSON.parse(localStorage.getItem('practiceLogs') || '[]');
+    // Add new log at the beginning
+    existingLogs.unshift(practiceLog);
+    // Save back to localStorage
+    localStorage.setItem('practiceLogs', JSON.stringify(existingLogs));
+    
     setShowResults(true);
+  };
+
+  const handleBackToPractice = () => {
+    window.scrollTo(0, 0);
+    navigate('/practice');
   };
 
   const calculateScore = () => {
@@ -153,57 +185,49 @@ const PracticePage = () => {
     return (
       <>
         <MainNavbar />
-        <div className="practice-page-container">
-          <div className="quiz-intro">
-            <ParticleBackground />
-            <div className="quiz-intro-content">
-              <div className="quiz-intro-header">
+        <div className="pp-practice-page-container">
+          <div className="pp-quiz-intro">
+            <div className="pp-quiz-intro-content">
+              <div className="pp-quiz-intro-header">
                 <h1>🎯 {quizData.title}</h1>
-                <p className="quiz-subtitle">Get ready to test your knowledge!</p>
+                <p className="pp-quiz-subtitle">तुमच्या ज्ञानाची चाचणी घ्यायला तयार व्हा!</p>
               </div>
 
-              <div className="quiz-info-cards">
-                <div className="info-card">
-                  <div className="info-icon">📝</div>
-                  <div className="info-details">
-                    <span className="info-label">Questions</span>
-                    <span className="info-value">{questions.length}</span>
+              <div className="pp-quiz-info-cards">
+                <div className="pp-info-card">
+                  <div className="pp-info-icon">📝</div>
+                  <div className="pp-info-details">
+                    <span className="pp-info-label">प्रश्न</span>
+                    <span className="pp-info-value">{questions.length}</span>
                   </div>
                 </div>
-                <div className="info-card">
-                  <div className="info-icon">⏱️</div>
-                  <div className="info-details">
-                    <span className="info-label">Duration</span>
-                    <span className="info-value">{quizData.duration}</span>
-                  </div>
-                </div>
-                <div className="info-card">
-                  <div className="info-icon">📊</div>
-                  <div className="info-details">
-                    <span className="info-label">Difficulty</span>
-                    <span className="info-value">{quizData.difficulty}</span>
+                <div className="pp-info-card">
+                  <div className="pp-info-icon">⏱️</div>
+                  <div className="pp-info-details">
+                    <span className="pp-info-label">कालावधी</span>
+                    <span className="pp-info-value">{quizData.duration}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="quiz-instructions">
-                <h3>📋 Instructions</h3>
+              <div className="pp-quiz-instructions">
+                <h3>📋 सूचना</h3>
                 <ul>
-                  <li>Read each question carefully before answering</li>
-                  <li>You can navigate between questions using Previous/Next buttons</li>
-                  <li>Selected answers are automatically saved</li>
-                  <li>Submit your quiz before time runs out</li>
-                  <li>You can review and change answers before submitting</li>
+                  <li>उत्तर द्यायच्या आधी प्रत्येक प्रश्न काळजीपूर्वक वाचा</li>
+                  <li>मागील/पुढील बटणाचा वापर करून तुम्ही प्रश्नांदरम्यान फिरू शकता</li>
+                  <li>निवडलेली उत्तरे आपोआप जतन होतात</li>
+                  <li>वेळ संपण्याआधी तुमची परीक्षा सबमिट करा</li>
+                  <li>सबमिट करण्यापूर्वी तुम्ही उत्तरांचे पुनरावलोकन आणि बदल करू शकता</li>
                 </ul>
               </div>
 
-              <div className="quiz-actions">
-                <button className="start-quiz-btn" onClick={handleStartQuiz}>
-                  <span>Start Quiz</span>
-                  <span className="btn-icon">🚀</span>
+              <div className="pp-quiz-actions">
+                <button className="pp-start-quiz-btn" onClick={handleStartQuiz}>
+                  <span>परीक्षा सुरू करा</span>
+                 
                 </button>
-                <button className="back-btn-pr" onClick={() => navigate('/practice')}>
-                  <span>← Back to Practice</span>
+                <button className="pp-back-btn-pr" onClick={handleBackToPractice}>
+                  <span>मागे जा</span>
                 </button>
               </div>
             </div>
@@ -221,58 +245,77 @@ const PracticePage = () => {
     return (
       <>
         <MainNavbar />
-        <div className="practice-page-container">
-          <div className="quiz-results">
-            <div className="results-content">
-              <div className="results-header">
-                <h1>🎉 Quiz Completed!</h1>
-                <p>Here's how you performed on {quizData.title}</p>
+        <ParticleBackground />
+        <div className="pp-practice-page-container">
+          <div className="pp-results-container">
+            <div className="pp-results-card">
+              {/* Header */}
+              <div className="pp-results-header-compact">
+                <div className="pp-completion-badge">
+                  <span className="pp-badge-icon">✓</span>
+                  <span className="pp-badge-text">Quiz Completed</span>
+                </div>
+                <h2 className="pp-quiz-title">{quizData.title}</h2>
               </div>
 
-              <div className="score-display">
-                <div className="score-circle">
-                  <div className="score-percentage" style={{ color: scoreMessage.color }}>
-                    {score.percentage}%
-                  </div>
-                  <div className="score-fraction">
+              {/* Main Score Display */}
+              <div className="pp-main-score-section">
+                <div className="pp-score-card">
+                  <div className="pp-score-label">Your Score</div>
+                  <div className="pp-score-big" style={{ color: scoreMessage.color }}>
                     {score.correct}/{score.total}
                   </div>
+                  <div className="pp-score-percent" style={{ color: scoreMessage.color }}>
+                    {score.percentage}%
+                  </div>
+                  <div className="pp-verdict-badge" style={{ 
+                    backgroundColor: scoreMessage.color + '20',
+                    borderColor: scoreMessage.color 
+                  }}>
+                    <span style={{ color: scoreMessage.color }}>{scoreMessage.message}</span>
+                  </div>
                 </div>
-                <div className="score-message" style={{ color: scoreMessage.color }}>
-                  {scoreMessage.message}
+
+                {/* Time Display */}
+                <div className="pp-time-card">
+                  <div className="pp-time-icon">⏱️</div>
+                  <div className="pp-time-value">{formatTime(30 * 60 - timeLeft)}</div>
+                  <div className="pp-time-label">Time Taken</div>
                 </div>
               </div>
 
-              <div className="results-stats">
-                <div className="stat-item correct">
-                  <div className="stat-icon">✅</div>
-                  <div className="stat-details">
-                    <span className="stat-value">{score.correct}</span>
-                    <span className="stat-label">Correct</span>
-                  </div>
+              {/* Quick Stats */}
+              <div className="pp-quick-stats">
+                <div className="pp-quick-stat pp-stat-correct">
+                  <span className="pp-quick-stat-icon">✓</span>
+                  <span className="pp-quick-stat-value">{score.correct}</span>
+                  <span className="pp-quick-stat-label">Correct</span>
                 </div>
-                <div className="stat-item incorrect">
-                  <div className="stat-icon">❌</div>
-                  <div className="stat-details">
-                    <span className="stat-value">{score.total - score.correct}</span>
-                    <span className="stat-label">Incorrect</span>
-                  </div>
+                <div className="pp-quick-stat pp-stat-wrong">
+                  <span className="pp-quick-stat-icon">✗</span>
+                  <span className="pp-quick-stat-value">{score.total - score.correct}</span>
+                  <span className="pp-quick-stat-label">Wrong</span>
                 </div>
-                <div className="stat-item time">
-                  <div className="stat-icon">⏱️</div>
-                  <div className="stat-details">
-                    <span className="stat-value">{formatTime(30 * 60 - timeLeft)}</span>
-                    <span className="stat-label">Time Taken</span>
-                  </div>
+                <div className="pp-quick-stat pp-stat-accuracy">
+                  <span className="pp-quick-stat-icon">📊</span>
+                  <span className="pp-quick-stat-value">{score.percentage}%</span>
+                  <span className="pp-quick-stat-label">Accuracy</span>
                 </div>
               </div>
 
-              <div className="results-actions">
-                <button className="action-btn primary" onClick={() => navigate('/practice')}>
-                  <span>Back to Practice</span>
-                </button>
-                <button className="action-btn secondary" onClick={() => window.location.reload()}>
+              {/* Actions */}
+              <div className="pp-results-actions-compact">
+                <button className="pp-btn-retake" onClick={() => window.location.reload()}>
+                  <span className="pp-btn-icon">🔄</span>
                   <span>Retake Quiz</span>
+                </button>
+                <button className="pp-btn-logs" onClick={() => navigate('/practice-logs')}>
+                  <span className="pp-btn-icon">📊</span>
+                  <span>Practice Logs</span>
+                </button>
+                <button className="pp-btn-back" onClick={handleBackToPractice}>
+                  <span className="pp-btn-icon">←</span>
+                  <span>Back to Practice</span>
                 </button>
               </div>
             </div>
@@ -286,98 +329,151 @@ const PracticePage = () => {
   return (
     <>
       <MainNavbar />
-      <div className="practice-page-container">
-        <div className="quiz-interface">
-          {/* Quiz Header */}
-          <div className="quiz-header">
-            <div className="quiz-progress">
-              <div className="progress-info">
-                <span className="question-counter">
-                  Question {currentQuestion + 1} of {questions.length}
-                </span>
-                <div className="progress-bar">
-                  <div 
-                    className="progress-fill" 
-                    style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
-                  ></div>
+      <div className="pp-practice-page-container">
+        <div className="pp-examtest-container">
+          {/* Top Header */}
+          <div className="pp-examtest-header">
+            <div className="pp-header-brand">
+              <img src="/assets/PrepMark.png" alt="PrepMark" className="pp-brand-logo" />
+            </div>
+            <div className="pp-header-title">
+              {quizData.title}
+            </div>
+            <div className="pp-header-timer">
+              <div className="pp-timer-box">
+                <span className="pp-timer-icon">⏱</span>
+                <span className="pp-timer-value">{formatTime(timeLeft)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Layout */}
+          <div className="pp-examtest-main">
+            {/* Left Panel - Questions (60vw) */}
+            <div className="pp-examtest-left">
+              <div className="pp-question-panel">
+                {/* Question Header */}
+                <div className="pp-question-header-bar">
+                  <span className="pp-question-num">Question {currentQuestion + 1} / {questions.length}</span>
+                </div>
+
+                {/* Question Display */}
+                <div className="pp-question-display">
+                  <h3 className="pp-question-text">{questions[currentQuestion].question}</h3>
+                </div>
+
+                {/* Options */}
+                <div className="pp-options-container">
+                  {questions[currentQuestion].options.map((option, index) => (
+                    <div
+                      key={index}
+                      className={`pp-option-card ${answers[currentQuestion] === index ? 'pp-selected' : ''}`}
+                      onClick={() => handleAnswerSelect(index)}
+                    >
+                      <div className="pp-option-radio">
+                        <div className="pp-radio-outer">
+                          {answers[currentQuestion] === index && <div className="pp-radio-inner"></div>}
+                        </div>
+                      </div>
+                      <div className="pp-option-label">{String.fromCharCode(65 + index)}</div>
+                      <div className="pp-option-content">{option}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="timer">
-                <span className="timer-icon">⏰</span>
-                <span className="timer-text">{formatTime(timeLeft)}</span>
-              </div>
-            </div>
-          </div>
 
-          {/* Question Content */}
-          <div className="question-section">
-            <div className="question-card">
-              <div className="question-header">
-                <span className="question-number">Q{currentQuestion + 1}</span>
-                <span className="question-type">{questions[currentQuestion].type}</span>
-              </div>
-              <h3 className="question-text">{questions[currentQuestion].question}</h3>
-              
-              <div className="options-list">
-                {questions[currentQuestion].options.map((option, index) => (
-                  <div 
-                    key={index} 
-                    className={`option-item ${selectedAnswer === index ? 'selected' : ''}`}
-                    onClick={() => handleAnswerSelect(index)}
-                  >
-                    <div className="option-radio">
-                      <span className="option-letter">{String.fromCharCode(65 + index)}</span>
-                    </div>
-                    <span className="option-text">{option}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <div className="quiz-navigation">
-            <div className="nav-buttons">
-              <button 
-                className="nav-btn prev" 
-                onClick={handlePrevQuestion}
-                disabled={currentQuestion === 0}
-              >
-                ← Previous
-              </button>
-              
-              {currentQuestion === questions.length - 1 ? (
-                <button className="nav-btn submit" onClick={handleSubmitQuiz}>
-                  Submit Quiz 🎯
+              {/* Navigation Buttons */}
+              <div className="pp-question-nav-footer">
+                <button
+                  className="pp-nav-button pp-prev-btn"
+                  onClick={handlePrevQuestion}
+                  disabled={currentQuestion === 0}
+                >
+                  ← Previous
                 </button>
-              ) : (
-                <button 
-                  className="nav-btn next" 
+                <button
+                  className="pp-nav-button pp-next-btn"
                   onClick={handleNextQuestion}
+                  disabled={currentQuestion === questions.length - 1}
                 >
                   Next →
                 </button>
-              )}
+              </div>
             </div>
 
-            {/* Question Navigator */}
-            <div className="question-navigator">
-              <div className="navigator-grid">
-                {questions.map((_, index) => (
-                  <button
-                    key={index}
-                    className={`nav-dot ${index === currentQuestion ? 'current' : ''} ${
-                      answers[index] !== undefined ? 'answered' : ''
-                    }`}
-                    onClick={() => {
-                      setCurrentQuestion(index);
-                      setSelectedAnswer(answers[index] || '');
-                    }}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
+            {/* Right Panel - Navigation & Stats */}
+            <div className="pp-examtest-right">
+              {/* Question Grid */}
+              <div className="pp-question-grid-panel">
+                <div className="pp-grid-header">Question Navigator</div>
+                <div className="pp-question-grid">
+                  {questions.map((question, index) => {
+                    const isAnswered = answers[index] !== undefined;
+                    const isCurrent = index === currentQuestion;
+                    
+                    return (
+                      <button
+                        key={index}
+                        className={`pp-grid-box ${isCurrent ? 'pp-current' : ''} ${isAnswered ? 'pp-answered' : ''}`}
+                        onClick={() => {
+                          setCurrentQuestion(index);
+                          setSelectedAnswer(answers[index] || '');
+                        }}
+                      >
+                        {isAnswered ? '✓' : index + 1}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
+
+              {/* Explanation Box */}
+              <div className="pp-explanation-panel">
+                <div className="pp-explanation-header">
+                  <span className="pp-explanation-icon">💡</span>
+                  <span className="pp-explanation-title">Explanation</span>
+                </div>
+                <div className="pp-explanation-content">
+                  {answers[currentQuestion] !== undefined ? (
+                    <>
+                      <div className={`pp-answer-status ${answers[currentQuestion] === questions[currentQuestion].correct ? 'pp-correct' : 'pp-incorrect'}`}>
+                        {answers[currentQuestion] === questions[currentQuestion].correct ? (
+                          <><span className="pp-status-icon">✓</span> Correct Answer!</>
+                        ) : (
+                          <><span className="pp-status-icon">✗</span> Incorrect. Correct answer: {String.fromCharCode(65 + questions[currentQuestion].correct)}</>
+                        )}
+                      </div>
+                      <div className="pp-explanation-text">
+                        {questions[currentQuestion].explanation}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="pp-no-answer">
+                      <span className="pp-no-answer-icon">📝</span>
+                      <span className="pp-no-answer-text">Select an answer to see the explanation</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Stats Panel */}
+              <div className="pp-stats-panel">
+                <div className="pp-stats-grid">
+                  <div className="pp-stat-item pp-answered-stat">
+                    <div className="pp-stat-value">{Object.keys(answers).length}</div>
+                    <div className="pp-stat-label">Answered</div>
+                  </div>
+                  <div className="pp-stat-item pp-unattempted-stat">
+                    <div className="pp-stat-value">{questions.length - Object.keys(answers).length}</div>
+                    <div className="pp-stat-label">Unattempted</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button className="pp-submit-button" onClick={handleSubmitQuiz}>
+                Submit Quiz
+              </button>
             </div>
           </div>
         </div>

@@ -22,6 +22,7 @@ import Statistics from "./jsx files/Statistics";
 import Settings from "./jsx files/Settings";
 import Practice from "./jsx files/Practice";
 import PracticePage from "./jsx files/PracticePage";
+import PracticeLogs from "./jsx files/PracticeLogs";
 import Learning from "./jsx files/Learning";
 import AdminLogin from "./jsx files/AdminLogin";
 import AdminHome from "./jsx files/AdminHome";
@@ -34,6 +35,7 @@ import Refund from "./components/Footer Pages/Refund";
 import Exam from './jsx files/Exam';
 import ExamTest from './jsx files/ExamTest';
 import ExamResults from './jsx files/ExamResults';
+import ExamHistory from './jsx files/ExamHistory';
 
 function AppRoutes() {
   const location = useLocation();
@@ -65,6 +67,7 @@ function AppRoutes() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/practice" element={<Practice />} />
         <Route path="/practice-quiz" element={<PracticePage />} />
+        <Route path="/practice-logs" element={<PracticeLogs />} />
         <Route path="/learning" element={<Learning />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin-home" element={<AdminHome />} />
@@ -77,6 +80,7 @@ function AppRoutes() {
         <Route path="/exams" element={<Exam />} />
         <Route path="/exam-test/:examType" element={<ExamTest />} />
         <Route path="/exam-results" element={<ExamResults />} />
+        <Route path="/exam-history" element={<ExamHistory />} />
       </Routes>
     </>
   );

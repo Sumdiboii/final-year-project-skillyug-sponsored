@@ -342,8 +342,27 @@ const Practice = () => {
           <div className="dashboard-content">
             
             <div className="dashboard-actions">
-              <button className="dashboard-btn primary">Start Quick Practice</button>
-              <button className="dashboard-btn secondary">Practice Log</button>
+              <button 
+                className="dashboard-btn primary" 
+                onClick={() => navigate('/practice-quiz', { 
+                  state: { 
+                    quizData: {
+                      title: 'Quick Practice Quiz',
+                      questions: 20,
+                      duration: '30 min',
+                      difficulty: 'Mixed'
+                    }
+                  }
+                })}
+              >
+                Start Quick Practice
+              </button>
+              <button 
+                className="dashboard-btn secondary"
+                onClick={() => navigate('/practice-logs')}
+              >
+                Practice Log
+              </button>
             </div>
           </div>
         </section>
