@@ -162,7 +162,7 @@ No signature required.
               <p className="history-subtitle">Track your exam performance over time</p>
             </div>
             <button className="back-btn" onClick={() => {
-              navigate('/exam');
+              navigate('/exams');
               setTimeout(() => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }, 100);

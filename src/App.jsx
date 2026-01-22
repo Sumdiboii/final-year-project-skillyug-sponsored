@@ -14,6 +14,7 @@ import AdminInfo from "./jsx files/AdminInfo";
 import GuardianVerification from "./jsx files/GuardianVerification";
 import VerifyOTP from "./jsx files/VerifyOTP";
 import Home from "./jsx files/Home";
+import Quest from "./jsx files/Quest";
 
 import './App.css';
 import Loader from "./components/Loader";
@@ -62,6 +63,7 @@ function AppRoutes() {
         <Route path="/guardian-verification" element={<GuardianVerification />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/quest" element={<Quest />} />
         <Route path="/profile" element={<Profile/>} />
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/settings" element={<Settings />} />

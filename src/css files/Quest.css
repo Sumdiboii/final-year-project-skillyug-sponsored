@@ -1,0 +1,370 @@
+.quest-container {
+  min-height: 100vh;
+  min-width:100vw;
+  background: linear-gradient(135deg, rgb(10, 5, 50), rgb(20, 10, 70));
+  padding: 100px 2rem 2rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center
+}
+
+.quest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+}
+
+.quest-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(204, 73, 21, 0.5);
+  margin-top:3rem;
+}
+
+.quest-xp-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  border: 2px solid #FFD700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.quest-xp-label {
+  font-size: 1.1rem;
+  color: #FFD700;
+  font-weight: 600;
+}
+
+.quest-xp-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+.quest-map {
+  position: relative;
+  max-width: 900px;
+  margin-top: 2rem;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 3px solid rgba(204, 73, 21, 0.5);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.quest-map-segment {
+  width: 100%;
+  display: block;
+  filter: brightness(0.8);
+}
+ 
+
+.quest-path-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.quest-path-completed {
+  stroke: #FFD700;
+  stroke-width: 4;
+  stroke-dasharray: 10, 5;
+  animation: pathGlow 2s ease-in-out infinite;
+}
+
+.quest-path-locked {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 3;
+  stroke-dasharray: 5, 5;
+}
+
+@keyframes pathGlow {
+  0%, 100% {
+    stroke-opacity: 0.5;
+    filter: drop-shadow(0 0 5px #FFD700);
+  }
+  50% {
+    stroke-opacity: 1;
+    filter: drop-shadow(0 0 15px #FFD700);
+  }
+}
+
+.quest-checkpoint {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.quest-checkpoint:hover:not(.locked) {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.checkpoint-marker {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #cc4915, #ff6b35);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 15px rgba(204, 73, 21, 0.6);
+  transition: all 0.3s ease;
+  color: #ffffff;
+}
+
+.quest-checkpoint.completed .checkpoint-marker {
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  border-color: #4caf50;
+  box-shadow: 0 0 25px rgba(76, 175, 80, 0.8);
+  animation: completedPulse 2s ease-in-out infinite;
+}
+
+.quest-checkpoint.locked .checkpoint-marker {
+  background: linear-gradient(135deg, rgba(100, 100, 100, 0.5), rgba(150, 150, 150, 0.5));
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+@keyframes completedPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.checkpoint-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  white-space: nowrap;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.quest-checkpoint.locked .checkpoint-name {
+  opacity: 0.5;
+}
+
+/* Modal Styles */
+.quest-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+.quest-modal-content {
+  background: linear-gradient(145deg, rgb(20, 10, 80), rgb(15, 5, 70));
+  border: 2px solid #cc4915;
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(204, 73, 21, 0.5);
+}
+
+.quest-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  font-size: 2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  line-height: 1;
+  padding: 0;
+}
+
+.quest-modal-close:hover {
+  background: rgba(204, 73, 21, 0.8);
+  border-color: #cc4915;
+  transform: rotate(90deg);
+}
+
+.quest-modal-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 15px rgba(204, 73, 21, 0.6);
+}
+
+.quest-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.quest-challenge-info {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quest-challenge-description {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.quest-challenge-description strong {
+  color: #FFD700;
+  font-weight: 700;
+}
+
+.quest-challenge-tasks h3 {
+  font-size: 1.2rem;
+  color: #cc4915;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+}
+
+.quest-challenge-tasks ul {
+  list-style: none;
+  padding: 0;
+}
+
+.quest-challenge-tasks li {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.quest-challenge-tasks li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #cc4915;
+  font-weight: 700;
+}
+
+.quest-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.quest-btn-start,
+.quest-btn-cancel {
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.quest-btn-start {
+  background: linear-gradient(135deg, #cc4915, #ff6b35);
+  color: #ffffff;
+  border-color: #cc4915;
+  box-shadow: 0 4px 15px rgba(204, 73, 21, 0.4);
+}
+
+.quest-btn-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(204, 73, 21, 0.6);
+}
+
+.quest-btn-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.quest-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .quest-title {
+    font-size: 1.8rem;
+  }
+  
+  .quest-xp-display {
+    padding: 0.6rem 1rem;
+  }
+  
+  .checkpoint-marker {
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+  }
+  
+  .checkpoint-name {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+  }
+  
+  .quest-modal-content {
+    padding: 1.5rem;
+  }
+  
+  .quest-modal-title {
+    font-size: 1.5rem;
+  }
+}

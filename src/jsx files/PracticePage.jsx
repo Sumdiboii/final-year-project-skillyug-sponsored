@@ -25,6 +25,7 @@ const PracticePage = () => {
   const [quizStarted, setQuizStarted] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [showExplanation, setShowExplanation] = useState(true);
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -109,6 +110,7 @@ const PracticePage = () => {
 
   const handleStartQuiz = () => {
     setQuizStarted(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleAnswerSelect = (answerIndex) => {
@@ -430,30 +432,41 @@ const PracticePage = () => {
               {/* Explanation Box */}
               <div className="pp-explanation-panel">
                 <div className="pp-explanation-header">
-                  <span className="pp-explanation-icon">💡</span>
-                  <span className="pp-explanation-title">Explanation</span>
+                  <div className="pp-explanation-left">
+                    <span className="pp-explanation-icon">💡</span>
+                    <span className="pp-explanation-title">Explanation</span>
+                  </div>
+                  <button 
+                    className="pp-explanation-toggle"
+                    onClick={() => setShowExplanation(!showExplanation)}
+                    title={showExplanation ? "Hide explanation" : "Show explanation"}
+                  >
+                    {showExplanation ? '🔽' : '▶️'}
+                  </button>
                 </div>
-                <div className="pp-explanation-content">
-                  {answers[currentQuestion] !== undefined ? (
-                    <>
-                      <div className={`pp-answer-status ${answers[currentQuestion] === questions[currentQuestion].correct ? 'pp-correct' : 'pp-incorrect'}`}>
-                        {answers[currentQuestion] === questions[currentQuestion].correct ? (
-                          <><span className="pp-status-icon">✓</span> Correct Answer!</>
-                        ) : (
-                          <><span className="pp-status-icon">✗</span> Incorrect. Correct answer: {String.fromCharCode(65 + questions[currentQuestion].correct)}</>
-                        )}
+                {showExplanation && (
+                  <div className="pp-explanation-content">
+                    {answers[currentQuestion] !== undefined ? (
+                      <>
+                        <div className={`pp-answer-status ${answers[currentQuestion] === questions[currentQuestion].correct ? 'pp-correct' : 'pp-incorrect'}`}>
+                          {answers[currentQuestion] === questions[currentQuestion].correct ? (
+                            <><span className="pp-status-icon">✓</span> Correct Answer!</>
+                          ) : (
+                            <><span className="pp-status-icon">✗</span> Incorrect. Correct answer: {String.fromCharCode(65 + questions[currentQuestion].correct)}</>
+                          )}
+                        </div>
+                        <div className="pp-explanation-text">
+                          {questions[currentQuestion].explanation}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="pp-no-answer">
+                        <span className="pp-no-answer-icon">📝</span>
+                        <span className="pp-no-answer-text">Select an answer to see the explanation</span>
                       </div>
-                      <div className="pp-explanation-text">
-                        {questions[currentQuestion].explanation}
-                      </div>
-                    </>
-                  ) : (
-                    <div className="pp-no-answer">
-                      <span className="pp-no-answer-icon">📝</span>
-                      <span className="pp-no-answer-text">Select an answer to see the explanation</span>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Stats Panel */}

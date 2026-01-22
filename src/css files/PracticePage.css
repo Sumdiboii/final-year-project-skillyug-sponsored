@@ -1319,10 +1319,16 @@
 .pp-explanation-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: space-between;
   margin-bottom: 1rem;
   padding-bottom: 0.75rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pp-explanation-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .pp-explanation-icon {
@@ -1333,6 +1339,26 @@
   font-size: 1rem;
   font-weight: 600;
   color: #ffffff;
+}
+
+.pp-explanation-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pp-explanation-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
 }
 
 .pp-explanation-content {

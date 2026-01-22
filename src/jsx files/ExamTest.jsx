@@ -14,6 +14,9 @@ const ExamTest = () => {
   const [flaggedQuestions, setFlaggedQuestions] = useState(new Set());
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [testCompleted, setTestCompleted] = useState(false);
+  const [showAstronautWarning, setShowAstronautWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState('');
+  const [countdown, setCountdown] = useState(5);
 
   // Generate questions based on exam type: 90 for MAT/SAT, 180 for NMMS
   const generateQuestions = (type) => {
@@ -249,12 +252,32 @@ const ExamTest = () => {
     }
   }, [timeLeft, testCompleted]);
 
+  // Countdown timer for astronaut warning
+  useEffect(() => {
+    let countdownInterval;
+    if (showAstronautWarning && countdown > 0) {
+      countdownInterval = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            handleAutoSubmit();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      if (countdownInterval) clearInterval(countdownInterval);
+    };
+  }, [showAstronautWarning, countdown]);
+
   // Fullscreen monitoring
   useEffect(() => {
     const handleFullscreenChange = () => {
       if (!document.fullscreenElement && !testCompleted) {
-        alert('⚠️ Exiting fullscreen is not allowed. Your test will be submitted.');
-        handleAutoSubmit();
+        setWarningMessage("You left fullscreen mode! Test ends in");
+        setCountdown(100);
+        setShowAstronautWarning(true);
       }
     };
 
@@ -266,13 +289,25 @@ const ExamTest = () => {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden && !testCompleted) {
-        alert('⚠️ Tab switching detected. This is not allowed during proctored tests.');
+        setWarningMessage("Stop switiching the tab! Test now ends in");
+        setCountdown(5);
+        setShowAstronautWarning(true);
       }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [testCompleted]);
+
+  const handleReturnToFullscreen = () => {
+    setShowAstronautWarning(false);
+    setCountdown(5);
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.error('Failed to enter fullscreen:', err);
+      });
+    }
+  };
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -532,6 +567,25 @@ const ExamTest = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Fullscreen Warning Modal */}
+      {showAstronautWarning && (
+        <>
+          <div className="astronaut-warning-overlay"></div>
+          <div className="astronaut-warning-container">
+            <div className="speech-bubble">
+              <p>{warningMessage}</p>
+              <div className="countdown-circle">
+                <span className="countdown-number">{countdown}</span>
+              </div>
+              <button className="return-fullscreen-btn" onClick={handleReturnToFullscreen}>
+               Back to Fullscreen
+              </button>
+              <div className="bubble-pointer"></div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
