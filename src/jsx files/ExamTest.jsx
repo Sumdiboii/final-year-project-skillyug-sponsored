@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { fetchRandomQuestionsFlat, fetchQuestionsForExam } from '../firebase/firestore';
 import '../css files/ExamTest.css';
 
 const ExamTest = () => {
@@ -8,6 +9,9 @@ const ExamTest = () => {
   const location = useLocation();
   const { proctored, duration } = location.state || { proctored: true, duration: 60 };
 
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(duration * 60); // Convert minutes to seconds
@@ -18,222 +22,62 @@ const ExamTest = () => {
   const [warningMessage, setWarningMessage] = useState('');
   const [countdown, setCountdown] = useState(5);
 
-  // Generate questions based on exam type: 90 for MAT/SAT, 180 for NMMS
-  const generateQuestions = (type) => {
-    const questions = [];
-    const questionCount = type === 'full' ? 180 : 90;
-
-    if (type === 'mat') {
-      // MAT Questions - Mental Ability Test (90 questions)
-      const matTopics = [
-        { topic: 'Pattern Recognition', questions: 13 },
-        { topic: 'Analogies', questions: 13 },
-        { topic: 'Classification', questions: 13 },
-        { topic: 'Series Completion', questions: 13 },
-        { topic: 'Coding-Decoding', questions: 13 },
-        { topic: 'Logical Reasoning', questions: 13 },
-        { topic: 'Spatial Reasoning', questions: 12 }
-      ];
-
-      let qId = 1;
-      matTopics.forEach(({ topic, questions: count }) => {
-        for (let i = 0; i < count; i++) {
-          questions.push({
-            id: qId++,
-            topic: topic,
-            question: `${topic} - Question ${i + 1}: ${getMatQuestionText(topic, i)}`,
-            options: generateOptions(topic),
-            correct: Math.floor(Math.random() * 4),
-            marks: 1
-          });
+  // Fetch questions from Firestore based on exam type
+  useEffect(() => {
+    const loadQuestions = async () => {
+      try {
+        setLoading(true);
+        let result;
+        
+        if (examType === 'mat') {
+          // MAT - Mental Ability Test (90 questions)
+          // Fetch random questions from all subjects
+          result = await fetchRandomQuestionsFlat(null, 90);
+        } else if (examType === 'sat') {
+          // SAT - Scholastic Aptitude Test (90 questions)
+          // Fetch from your database subjects: विज्ञान, इतिहास, भूगोल, नागरिकशास्त्र
+          result = await fetchQuestionsForExam([
+            { subject: 'विज्ञान', count: 30 },
+            { subject: 'इतिहास', count: 20 },
+            { subject: 'भूगोल', count: 20 },
+            { subject: 'नागरिकशास्त्र', count: 20 }
+          ]);
+        } else if (examType === 'full') {
+          // Full NMMS Exam (180 questions) - All subjects
+          result = await fetchQuestionsForExam([
+            { subject: 'विज्ञान', count: 60 },
+            { subject: 'इतिहास', count: 40 },
+            { subject: 'भूगोल', count: 40 },
+            { subject: 'नागरिकशास्त्र', count: 40 }
+          ]);
         }
-      });
-    } else if (type === 'sat') {
-      // SAT Questions - Scholastic Aptitude Test (90 questions)
-      const satTopics = [
-        { topic: 'Mathematics', questions: 22 },
-        { topic: 'Physics', questions: 14 },
-        { topic: 'Chemistry', questions: 14 },
-        { topic: 'Biology', questions: 13 },
-        { topic: 'History', questions: 9 },
-        { topic: 'Geography', questions: 9 },
-        { topic: 'Civics', questions: 9 }
-      ];
-
-      let qId = 1;
-      satTopics.forEach(({ topic, questions: count }) => {
-        for (let i = 0; i < count; i++) {
-          questions.push({
-            id: qId++,
-            topic: topic,
-            question: `${topic} - Question ${i + 1}: ${getSatQuestionText(topic, i)}`,
-            options: generateOptions(topic),
-            correct: Math.floor(Math.random() * 4),
+        
+        if (result.success && result.questions.length > 0) {
+          // Transform questions to match component format
+          const transformedQuestions = result.questions.map((q, index) => ({
+            id: q.id || index + 1,
+            question: q.question,
+            options: q.options || [q.opt1, q.opt2, q.opt3, q.opt4],
+            correct: q.correct,
+            topic: q.subject,
+            chapter: q.chapter,
             marks: 1
-          });
+          }));
+          setQuestions(transformedQuestions);
+        } else {
+          setError('No questions found in database. Please upload questions first.');
         }
-      });
-    } else if (type === 'full') {
-      // NMMS Full Exam - MAT + SAT (180 questions total)
-      // First 90 questions: MAT
-      const matTopics = [
-        { topic: 'Pattern Recognition', questions: 13 },
-        { topic: 'Analogies', questions: 13 },
-        { topic: 'Classification', questions: 13 },
-        { topic: 'Series Completion', questions: 13 },
-        { topic: 'Coding-Decoding', questions: 13 },
-        { topic: 'Logical Reasoning', questions: 13 },
-        { topic: 'Spatial Reasoning', questions: 12 }
-      ];
-
-      let qId = 1;
-      matTopics.forEach(({ topic, questions: count }) => {
-        for (let i = 0; i < count; i++) {
-          questions.push({
-            id: qId++,
-            topic: `MAT - ${topic}`,
-            question: `${topic} - Question ${i + 1}: ${getMatQuestionText(topic, i)}`,
-            options: generateOptions(topic),
-            correct: Math.floor(Math.random() * 4),
-            marks: 1
-          });
-        }
-      });
-
-      // Next 90 questions: SAT
-      const satTopics = [
-        { topic: 'Mathematics', questions: 22 },
-        { topic: 'Physics', questions: 14 },
-        { topic: 'Chemistry', questions: 14 },
-        { topic: 'Biology', questions: 13 },
-        { topic: 'History', questions: 9 },
-        { topic: 'Geography', questions: 9 },
-        { topic: 'Civics', questions: 9 }
-      ];
-
-      satTopics.forEach(({ topic, questions: count }) => {
-        for (let i = 0; i < count; i++) {
-          questions.push({
-            id: qId++,
-            topic: `SAT - ${topic}`,
-            question: `${topic} - Question ${i + 1}: ${getSatQuestionText(topic, i)}`,
-            options: generateOptions(topic),
-            correct: Math.floor(Math.random() * 4),
-            marks: 1
-          });
-        }
-      });
-    }
-
-    return questions;
-  };
-
-  const getMatQuestionText = (topic, index) => {
-    const templates = {
-      'Pattern Recognition': [
-        'Identify the next element in the pattern: 2, 4, 8, 16, ?',
-        'What comes next in the sequence: A, C, E, G, ?',
-        'Complete the pattern: ▲, ▼, ▲, ▼, ?'
-      ],
-      'Analogies': [
-        'Book is to Reading as Fork is to ?',
-        'Day is to Night as Summer is to ?',
-        'Teacher is to Student as Doctor is to ?'
-      ],
-      'Classification': [
-        'Find the odd one out: Apple, Mango, Potato, Banana',
-        'Which doesn\'t belong: 2, 4, 6, 9, 8',
-        'Identify the different item: Red, Blue, Green, Rectangle'
-      ],
-      'Series Completion': [
-        'Complete the series: 3, 6, 9, 12, ?',
-        'What comes next: 1, 4, 9, 16, 25, ?',
-        'Find the missing number: 5, 10, 20, 40, ?'
-      ],
-      'Coding-Decoding': [
-        'If CAT is coded as DBU, how is DOG coded?',
-        'In a certain code, RAIN is written as SBJO. How is SNOW written?',
-        'If BOOK = 2151511, then PAGE = ?'
-      ],
-      'Logical Reasoning': [
-        'All roses are flowers. Some flowers are red. Which is definitely true?',
-        'If A > B and B > C, then what is the relation between A and C?',
-        'John is taller than Mike. Mike is taller than Sarah. Who is the shortest?'
-      ],
-      'Spatial Reasoning': [
-        'How many faces does a cube have?',
-        'If you fold this net, what 3D shape will it form?',
-        'What is the mirror image of the letter "b"?'
-      ]
+      } catch (err) {
+        console.error('Error loading questions:', err);
+        setError('Failed to load questions. Please check your internet connection.');
+      } finally {
+        setLoading(false);
+      }
     };
 
-    return templates[topic]?.[index % templates[topic].length] || `Solve this ${topic} problem.`;
-  };
+    loadQuestions();
+  }, [examType]);
 
-  const getSatQuestionText = (topic, index) => {
-    const templates = {
-      'Mathematics': [
-        'If 3x + 7 = 22, what is the value of x?',
-        'What is 15% of 240?',
-        'Solve for y: 2y - 5 = 11'
-      ],
-      'Physics': [
-        'What is the SI unit of force?',
-        'The speed of light in vacuum is approximately?',
-        'Newton\'s first law is also known as?'
-      ],
-      'Chemistry': [
-        'What is the atomic number of Carbon?',
-        'H2O is the chemical formula for?',
-        'Which gas is most abundant in Earth\'s atmosphere?'
-      ],
-      'Biology': [
-        'What is the powerhouse of the cell?',
-        'Photosynthesis occurs in which part of the plant?',
-        'DNA stands for?'
-      ],
-      'History': [
-        'Who was the first Prime Minister of India?',
-        'In which year did India gain independence?',
-        'The Mughal Empire was founded by?'
-      ],
-      'Geography': [
-        'What is the capital of France?',
-        'The longest river in the world is?',
-        'Mount Everest is located in which mountain range?'
-      ],
-      'Civics': [
-        'How many fundamental rights are there in the Indian Constitution?',
-        'Who is known as the Father of the Indian Constitution?',
-        'The President of India is elected by?'
-      ]
-    };
-
-    return templates[topic]?.[index % templates[topic].length] || `Answer this ${topic} question.`;
-  };
-
-  const generateOptions = (topic) => {
-    const optionSets = {
-      'Pattern Recognition': ['32', '30', '24', '20'],
-      'Analogies': ['Eating', 'Cooking', 'Plate', 'Kitchen'],
-      'Classification': ['Option A', 'Option B', 'Option C', 'Option D'],
-      'Series Completion': ['15', '18', '21', '24'],
-      'Coding-Decoding': ['EPH', 'FQI', 'DNG', 'CPG'],
-      'Logical Reasoning': ['Cannot be determined', 'All roses are red', 'Some roses are red', 'No roses are red'],
-      'Spatial Reasoning': ['6', '8', '4', '12'],
-      'Mathematics': ['5', '7', '3', '8'],
-      'Physics': ['Newton', 'Joule', 'Watt', 'Pascal'],
-      'Chemistry': ['6', '8', '12', '14'],
-      'Biology': ['Mitochondria', 'Nucleus', 'Ribosome', 'Chloroplast'],
-      'History': ['Jawaharlal Nehru', 'Mahatma Gandhi', 'Sardar Patel', 'Subhas Chandra Bose'],
-      'Geography': ['Paris', 'London', 'Berlin', 'Rome'],
-      'Civics': ['6', '7', '8', '9']
-    };
-
-    return optionSets[topic] || ['Option A', 'Option B', 'Option C', 'Option D'];
-  };
-
-  const [questions] = useState(() => generateQuestions(examType));
   const currentQuestionData = questions[currentQuestion];
 
   // Timer countdown
@@ -409,6 +253,31 @@ const ExamTest = () => {
 
   if (testCompleted) {
     return null; // Will navigate to results page
+  }
+
+  if (loading) {
+    return (
+      <div className="et-examtest-container">
+        <div className="et-loading-container">
+          <div className="et-loading-spinner"></div>
+          <p>Loading questions from database...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || questions.length === 0) {
+    return (
+      <div className="et-examtest-container">
+        <div className="et-error-container">
+          <h2>⚠️ Unable to Load Questions</h2>
+          <p>{error || 'No questions available for this exam type.'}</p>
+          <button onClick={() => navigate('/exam')} className="et-back-button">
+            Back to Exams
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (

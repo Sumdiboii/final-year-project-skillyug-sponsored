@@ -414,6 +414,26 @@
   transform: none;
 }
 
+.quiz-loading,
+.quiz-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.quiz-loading p,
+.quiz-error p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+.quiz-error p {
+  color: #ff6b6b;
+}
+
 .quiz-results-container {
   display: flex;
   flex-direction: column;

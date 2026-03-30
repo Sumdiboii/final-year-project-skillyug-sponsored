@@ -135,6 +135,7 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loginAdmin } from "../firebase/auth";
 import "../css files/AdminLogin.css";
 import ParticleBackground from "../components/StarBg";
 import Footer from "../components/Footer";
@@ -142,18 +143,33 @@ import Footer from "../components/Footer";
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [authKey, setAuthKey] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add admin login logic here - for now, directly navigate to AdminHome
-    navigate("/admin-home");
-  };
+    setError("");
+    setLoading(true);
 
-//   const handleGoogle = () => {
-//     // Hook your Google OAuth here
-//     alert("Continue with Google clicked");
-//   };
+    try {
+      const result = await loginAdmin(email, password, authKey);
+      
+      if (result.success) {
+        // Admin login successful - navigate to admin home
+        navigate("/admin-home");
+      } else {
+        // Show error message
+        setError(result.error);
+      }
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.");
+      console.error("Admin login error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleUserLogin = () => {
     // Navigate to admin login page
@@ -181,18 +197,21 @@ const AdminLogin = () => {
           User Login
         </button>
 
-        {/* <button type="button" className="google-btn" onClick={handleGoogle}>
-          <img
-            className="google-icon"
-            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-            alt="Google"
-          />
-          Continue with Google
-        </button> */}
-
-        <div className="adlgn-divider"><span>or</span></div>
-
         <form className="adlgn-admin-login-form" onSubmit={handleSubmit}>
+          {error && (
+            <div style={{
+              padding: '0.75rem',
+              marginBottom: '1rem',
+              backgroundColor: '#fee',
+              color: '#c33',
+              borderRadius: '0.5rem',
+              fontSize: '0.9rem',
+              border: '1px solid #fcc'
+            }}>
+              {error}
+            </div>
+          )}
+          
           <label className="adlgn-admin-login-label" htmlFor="email">Email</label>
           <input
             id="email"
@@ -202,6 +221,7 @@ const AdminLogin = () => {
             onChange={(e) => setEmail(e.target.value)}
             className="adlgn-admin-login-input"
             required
+            disabled={loading}
           />
 
           <label className="adlgn-admin-login-label" htmlFor="password">Password</label>
@@ -213,28 +233,28 @@ const AdminLogin = () => {
             onChange={(e) => setPassword(e.target.value)}
             className="adlgn-admin-login-input"
             required
+            disabled={loading}
           />
 
-          <label className="adlgn-admin-login-label" htmlFor="password">Authentication Key</label>
+          <label className="adlgn-admin-login-label" htmlFor="authkey">Authentication Key</label>
           <input
-            id="password"
+            id="authkey"
             type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter admin key"
+            value={authKey}
+            onChange={(e) => setAuthKey(e.target.value)}
             className="adlgn-admin-login-input"
             required
+            disabled={loading}
           />
 
           <div className="adlgn-admin-login-actions">
-            <label className="adlgn-admin-remember">
-              <input type="checkbox" />
-              <span>Remember me</span>
-            </label>
             <a href="#" className="adlgn-admin-forgot-link">Forgot password?</a>
           </div>
 
-          <button type="submit" className="adlgn-admin-login-btn">Sign In</button>
+          <button type="submit" className="adlgn-admin-login-btn" disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign In'}
+          </button>
 
         </form>
 

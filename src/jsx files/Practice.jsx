@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAllSubjects, getChaptersBySubject } from '../firebase/firestore';
 import '../css files/Practice.css';
 import MainNavbar from "../components/MainNavbar";
 import Footer from "../components/Footer";
@@ -8,9 +9,94 @@ import ParticleBackground from '../components/StarBg';
 const Practice = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('quick');
-  const [syllabusTab, setSyllabusTab] = useState('mat'); // For MAT/SAT tabs in Section 2
-  const [satSubTab, setSatSubTab] = useState('math'); // For SAT sub-categories
+  const [syllabusTab, setSyllabusTab] = useState('sat'); // For MAT/SAT tabs in Section 2 (default to SAT)
+  const [satSubTab, setSatSubTab] = useState('science'); // For SAT sub-categories (default to science)
   const [socialSubTab, setSocialSubTab] = useState('history'); // For Social Science sub-categories
+  
+  // Chapter-wise quiz state
+  const [selectedSubject, setSelectedSubject] = useState('');
+  const [availableSubjects, setAvailableSubjects] = useState([]);
+  const [chapters, setChapters] = useState([]);
+  const [loadingChapters, setLoadingChapters] = useState(false);
+
+  // Fetch available subjects from Firestore on component mount
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      const result = await getAllSubjects();
+      if (result.success) {
+        setAvailableSubjects(result.subjects);
+        if (result.subjects.length > 0) {
+          setSelectedSubject(result.subjects[0]); // Set first subject as default
+        }
+      }
+    };
+    fetchSubjects();
+  }, []);
+
+  // Fetch chapters when subject changes
+  useEffect(() => {
+    const fetchChapters = async () => {
+      if (!selectedSubject) return;
+      
+      setLoadingChapters(true);
+      const result = await getChaptersBySubject(selectedSubject);
+      if (result.success) {
+        setChapters(result.chapters);
+      }
+      setLoadingChapters(false);
+    };
+    
+    if (selectedSubject) {
+      fetchChapters();
+    }
+  }, [selectedSubject]);
+
+  // Load chapters when SAT Science tab is selected
+  useEffect(() => {
+    if (syllabusTab === 'sat' && satSubTab === 'science') {
+      const loadChapters = async () => {
+        setLoadingChapters(true);
+        const result = await getChaptersBySubject('विज्ञान');
+        if (result.success) {
+          setChapters(result.chapters);
+        } else {
+          setChapters([]);
+        }
+        setLoadingChapters(false);
+      };
+      loadChapters();
+    }
+  }, [satSubTab, syllabusTab]);
+
+  // Load chapters when social science sub-tabs change
+  useEffect(() => {
+    const loadChapters = async () => {
+      if (syllabusTab !== 'sat' || satSubTab !== 'social') {
+        return; // Only load when SAT Social Science tab is active
+      }
+      
+      setLoadingChapters(true);
+      let subject = '';
+      if (socialSubTab === 'history') {
+        subject = 'इतिहास';
+      } else if (socialSubTab === 'civics') {
+        subject = 'नागरिकशास्त्र';
+      } else if (socialSubTab === 'geography') {
+        subject = 'भूगोल';
+      }
+      
+      if (subject) {
+        const result = await getChaptersBySubject(subject);
+        if (result.success) {
+          setChapters(result.chapters);
+        } else {
+          setChapters([]);
+        }
+      }
+      setLoadingChapters(false);
+    };
+    loadChapters();
+  }, [socialSubTab, satSubTab, syllabusTab]);
 
   const quickPracticeOptions = [
     {
@@ -219,84 +305,8 @@ const Practice = () => {
     }
   ];
 
-  // SAT Math Quiz Data - Unit-based
-  const satMathQuizzes = [
-    { id: 1, title: 'घटक 1', description: 'पूर्णांक, अपूर्णांक व दशांश संख्या', questions: 20, duration: '15 मिनिटे', topics: ['पूर्णांक', 'अपूर्णांक', 'दशांश', 'परिमेय संख्या', 'संख्या प्रणाली'] },
-    { id: 2, title: 'घटक 2', description: 'घातांक व घात नियम', questions: 20, duration: '15 मिनिटे', topics: ['घातांकाचे नियम', 'घात', 'वैज्ञानिक संकेत', 'घातीय समीकरणे', 'मूळ'] },
-    { id: 3, title: 'घटक 3', description: 'बीजगणिताचे मूलभूत तत्त्वे', questions: 20, duration: '15 मिनिटे', topics: ['बीजगणितीय व्यंजक', 'समीकरणे', 'ओळख', 'गुणाकार', 'विघटन'] },
-    { id: 4, title: 'घटक 4', description: 'भूमितीचे मूलभूत तत्त्वे', questions: 20, duration: '15 मिनिटे', topics: ['त्रिकोण', 'चतुर्भुज', 'वर्तुळ', 'रचना', 'कोन'] },
-    { id: 5, title: 'घटक 5', description: 'क्षेत्रमिती व घनमिती', questions: 20, duration: '15 मिनिटे', topics: ['परिमिती', 'क्षेत्रफळ', 'पृष्ठफळ', 'घनफळ', 'मापन'] },
-    { id: 6, title: 'घटक 6', description: 'प्रमाण, समानुपात व टक्केवारी', questions: 20, duration: '15 मिनिटे', topics: ['प्रमाण', 'समानुपात', 'टक्केवारी', 'एककीय पद्धत', 'गुणोत्तर'] },
-    { id: 7, title: 'घटक 7', description: 'नफा, तोटा व व्याज', questions: 20, duration: '15 मिनिटे', topics: ['नफा-तोटा', 'साधे व्याज', 'चक्रवाढ व्याज', 'किंमत', 'सूट'] },
-    { id: 8, title: 'घटक 8', description: 'रेखीय समीकरणे व आलेख', questions: 20, duration: '15 मिनिटे', topics: ['रेखीय समीकरणे', 'युगपत समीकरणे', 'आलेख', 'समस्या सोडवणे', 'चल'] },
-    { id: 9, title: 'घटक 9', description: 'आकडेवारी व सांख्यिकी', questions: 20, duration: '15 मिनिटे', topics: ['दंडाकृती आलेख', 'वर्तुळाकृती आलेख', 'सरासरी', 'मध्यक', 'बहुलक'] },
-    { id: 10, title: 'घटक 10', description: 'संभाव्यता व घटना', questions: 20, duration: '15 मिनिटे', topics: ['मूलभूत संभाव्यता', 'घटना', 'परिणाम', 'उपयोग', 'प्रयोग'] }
-  ];
-
-  // SAT Science Quiz Data - Unit-based
-  const satScienceQuizzes = [
-    { id: 1, title: 'घटक 1', description: 'सजीवसृष्टी व सूक्ष्मजीवांचे वर्गीकरण', questions: 20, duration: '15 मिनिटे', topics: ['सजीवांचे प्रकार व वर्गीकरणाचे निकष', 'सूक्ष्मजीवांचे आकृतिवैशिष्ट्य व प्रकार', 'कोशिका रचना व केंद्रकाचे प्रकार', 'जीवाणू, शैवक आणि प्रोटिस्टाचे आकार व वैशिष्ट्ये', 'सूक्ष्मजीवांचे जीवनक्रम व वर्गीकरणाचे प्रयोग'] },
-    { id: 2, title: 'घटक 2', description: 'आरोग्य व रोग', questions: 20, duration: '15 मिनिटे', topics: ['रोगजनक सूक्ष्मजीव', 'निदान व चाचण्या (ELISA, AIDS इ.)', 'रोग प्रतिबंध व लसीकरण', 'आरोग्य संस्था (NICD, WHO)', 'शारीरिक आरोग्य व जीवनशैली'] },
-    { id: 3, title: 'घटक 3', description: 'बळ व दाब', questions: 20, duration: '15 मिनिटे', topics: ['बल (Force) आणि त्याचे परिणाम', 'दाब (Pressure) व त्याचे मोजमाप', 'घनता (Density) आणि वस्तूंच्या आकृतीवर परिणाम', 'द्रव व ठोसांमध्ये दाबाचा प्रसार', 'जडत्व, झटके आणि Hooke\'s Law (ताण-ताणमापक)'] },
-    { id: 4, title: 'घटक 4', description: 'धाराविद्युत आणि चुंबकत्व', questions: 20, duration: '15 मिनिटे', topics: ['विद्युत प्रवाह (Current) आणि विद्युत प्रचंडता (Voltage, Resistance)', 'विद्युत घटक (Electrodes, Cells, Batteries) आणि त्यांचे प्रकार', 'चुंबकत्व (Magnetism), चुंबक क्षेत्र, आणि द्रव्यांवरील परिणाम', 'विद्युत आणि चुंबकीय उपकरणे (Motors, MRI, Electrolysis)', 'विद्युत परिपथ आणि फ्युज़न (Series-Parallel Circuits, Electromagnetic Induction)'] },
-    { id: 5, title: 'घटक 5', description: 'अणूचे अंतर्गत', questions: 20, duration: '15 मिनिटे', topics: ['अणूचे घटक – प्रोटॉन, न्यूट्रॉन, इलेक्ट्रॉन, केंद्रक', 'परमाणूचे मॉडेल्स – डॉल्टन, थॉमसन, रदरफोर्ड, बोहर', 'इलेक्ट्रॉन व्यवस्था – कक्ष (K, L, M, N), उपकक्ष, वॅलेन्स इलेक्ट्रॉन्स', 'आयसोतोप्स आणि रेडिओधर्मी पदार्थ – समान प्रोटॉन, भिन्न न्यूट्रॉन', 'परमाणूची मोजणी आणि गुणधर्म – अणु संख्या, भारसंख्या, मोल, आकार'] },
-    { id: 6, title: 'घटक 6', description: 'प्रकाश व ध्वनी', questions: 20, duration: '15 मिनिटे', topics: ['प्रकाश गुणधर्म', 'ध्वनी तरंग', 'परावर्तन', 'अपवर्तन', 'प्रकीर्णन'] },
-    { id: 7, title: 'घटक 7', description: 'सजीवांमध्ये प्रजनन', questions: 20, duration: '15 मिनिटे', topics: ['वनस्पती प्रजनन', 'प्राणी प्रजनन', 'जीवनचक्र', 'वाढ', 'विकास'] },
-    { id: 8, title: 'घटक 8', description: 'पेशी रचना व कार्ये', questions: 20, duration: '15 मिनिटे', topics: ['पेशीचे भाग', 'ऊती', 'अवयव', 'अवयव संस्था', 'पेशी विभाजन'] },
-    { id: 9, title: 'घटक 9', description: 'सूक्ष्मजीव व रोग', questions: 20, duration: '15 मिनिटे', topics: ['जीवाणू', 'विषाणू', 'बुरशी', 'रोग', 'लसीकरण'] },
-    { id: 10, title: 'घटक 10', description: 'पर्यावरण व नैसर्गिक साधनसंपत्ती', questions: 20, duration: '15 मिनिटे', topics: ['प्रदूषण', 'संरक्षण', 'परिसंस्था', 'संसाधने', 'जैवविविधता'] },
-    { id: 11, title: 'घटक 11', description: 'मानवी शरीर व इंद्रिय संस्था', questions: 20, duration: '15 मिनिटे', topics: ['रक्त व रक्तद्रव्ये लाल रक्तपेशी, पांढऱ्या पेशी, प्लेटलेट्स, रक्तप्रवाह', 'हृदय आणि परिसंचरण हृदयाची रचना, रक्ताभिसरण, धमनी-शिरा', 'श्वसन प्रणाली फुफ्फुस, गॅस एक्सचेंज, ऑक्सिजन आणि CO₂ परिवहन', 'यकृत, मूत्रपिंड व पचनसंस्था अपचन, मूत्रनिर्मिती, विषाक्त पदार्थ बाहेर काढणे', 'रक्तगट आणि प्रतिकारशक्ती A, B, AB, O समूह, रोगप्रतिकारक पेशी'] },
-    { id: 12, title: 'घटक 12', description: 'आम्ल, क्षार आणि ओळख', questions: 20, duration: '15 मिनिटे', topics: ['आम्लांचे प्रकार, गुणधर्म आणि स्रोत', 'क्षारांचे प्रकार, गुणधर्म आणि स्रोत', 'आम्ल आणि क्षार यांची परस्पर क्रिया आणि परिणाम', 'pH मापन, निरीक्षण व ओळख', 'आम्ल-क्षाराचा दैनंदिन जीवनातील उपयोग'] },
-    { id: 13, title: 'घटक 13', description: 'रासायनिक बदल आणि रासायनिक बंध', questions: 20, duration: '15 मिनिटे', topics: ['आम्ल, क्षार आणि मीठ यांचे रासायनिक बदल व गुणधर्म', 'धातू आणि अधातूंचे रासायनिक बंध आणि इलेक्ट्रॉन विनिमय', 'सांद्रण, अभिक्रिया आणि रेआक्शनचे प्रकार', 'कार्बोनेट्स, ऑक्साइड्स आणि त्यांच्या प्रतिक्रिया', 'दैनंदिन जीवनातील रासायनिक प्रक्रिया आणि वापर'] },
-    { id: 14, title: 'घटक 14', description: 'उष्णतेचे मापन व परिणाम', questions: 20, duration: '15 मिनिटे', topics: ['तापमान आणि त्याची मापन पद्धती – सेल्सिअस, फॅरेनहाईट, केल्विन', 'उष्णतेचे परिमाण आणि सूत्रे – Q = mcΔT, विशिष्ट उष्णता', 'ऊर्जा, काम आणि ऊर्जेचे प्रकार', 'वस्तूंचा उष्णता प्रसरण आणि विस्तार – एकरेषीय, द्विरेषीय, घनतेच्या बदलासह', 'दैनंदिन जीवनातील उष्णतेच्या परिणामांचे निरीक्षण आणि वापर'] },
-    { id: 15, title: 'घटक 15', description: 'ध्वनी', questions: 20, duration: '15 मिनिटे', topics: ['ध्वनीचे स्वरूप आणि निर्माण', 'मानवी कानाचे श्रवण मर्यादा', 'ध्वनीचा प्रसार', 'ध्वनीची मापन पद्धती', 'ध्वनीचे परिणाम आणि अनुप्रयोग'] },
-    { id: 16, title: 'घटक 16', description: 'प्रकाशाचे परावर्तन', questions: 20, duration: '15 मिनिटे', topics: ['प्रकाशाचे स्वरूप आणि स्रोत – प्रकाश, अंधार, अपवर्तन, लस्तू', 'परावर्तनाचे नियम – आपत्ती कोन, पायालतन कोन, i=r, सपाट/वाकलेले पृष्ठभाग', 'प्रतिबिंब आणि छाया – एकविबाही/अनेकविबाही, छाया, वस्तूंचा प्रतिबिंब', 'प्रकाशाचे अनुप्रयोग – लेंस, काच, कोणीस्कोप, दृश्य निर्मिती', 'प्रकाशाचे मापन – कोन, लांबी, प्रतिबिंबाची तीव्रता, प्रकाशाचा प्रसार'] },
-    { id: 17, title: 'घटक 17', description: 'मानवनिर्मित पदार्थ', questions: 20, duration: '15 मिनिटे', topics: ['कृत्रिम पदार्थ फॉकेराइट, थभोकोर, पोलीप्रोप्रीन, पोलीइस्टर, पोलीइचथरीन', 'प्लास्टिक प्रकार व उपयोग थभोकोर, फॉकेराइट, पोरीइचथरीन, पोरीस्टायीन', 'काचेचे प्रकार व उपयोग भवभरका, भळवेमुक्त, लिवेमुक्त, प्राक्स्टकासाठी काच', 'पर्यावरण व टिकाऊपणा Reduce, Reuse, Recycle, Recover', 'गुणधर्म व प्रक्रिया अपायकारकता, पिघरणे, उष्णता, पुनर्वापर'] },
-    { id: 18, title: 'घटक 18', description: 'पर्यावरण', questions: 20, duration: '15 मिनिटे', topics: ['पर्यावरणातील प्राणी गट उत्फादक, भक्षक, उपभक्षक, वरोच्च भक्षक', 'ऊर्जा स्रोत ATP, सूर्यप्रकाश, पाणि, इतर घटक', 'अन्नसाखळी तण निर्माण करणारे घटक उत्फादक, प्राथमिक भक्षक, द्वितीयक भक्षक, उपभक्षक', 'पर्यावरणीय प्रक्रिया नैसर्गिक चक्र, पदार्थांचे विघटन, ऊर्जा प्रवाह, जैवसंश्लेषण', 'पर्यावरणीय टिकाऊपणा प्रदूषण नियंत्रण, घटकांचे पुनर्वापर, जैवविविधता, अन्नसाखळीतील संतुलन'] },
-    { id: 19, title: 'घटक 19', description: 'ताऱ्यांची जीवनकथा', questions: 20, duration: '15 मिनिटे', topics: ['ताऱ्यांचे प्रकार लहान, मध्यम, मोठे, अल्पस्तायी', 'वैशिष्ट्ये द्रव्यमान, तापमान, गुरुत्व, इंधन', 'जीवनचक्र जन्म, मुख्य अनुक्रमिक, लाल दानव, सुपरनोवा, न्यूट्रॉन, कृष्ण विवर', 'ऊर्जा निर्मिती अणूज्वलन, ऊष्मा, प्रकाश, हायड्रोजन फ्यूजन', 'अंतर आणि ब्रह्मांड प्रकाशवर्षे, मापन, प्रकाशशोषण, पृथ्वीवरील परिणाम'] }
-  ];
-
-  // SAT History Quiz Data - Unit-based
-  const satHistoryQuizzes = [
-    { id: 1, title: 'घटक 1', description: 'इतिहासाची साधने', questions: 20, duration: '15 मिनिटे', topics: ['इतिहासाच्या साधनांची संकल्पना', 'भौतिक साधने', 'लिखित साधने', 'मौखिक साधने', 'दृक व श्राव्य साधने'] },
-    { id: 2, title: 'घटक 2', description: 'युरोप आणि भारत', questions: 20, duration: '15 मिनिटे', topics: ['भौगोलिक शोध आणि समुद्रमार्ग', 'युरोपातील प्रबोधन व नवचिंतन', 'औद्योगिक क्रांती', 'युरोपीय व्यापार कंपन्या', 'भारतातील इंग्रजी सत्तेचा उदय'] },
-    { id: 3, title: 'घटक 3', description: 'ब्रिटिश सत्तेचे परिणाम', questions: 20, duration: '15 मिनिटे', topics: ['ब्रिटिश सत्तेचा विस्तार', 'प्रशासन व कायदेविषयक बदल', 'सामाजिक व शैक्षणिक सुधारणा', 'आर्थिक धोरणे व परिणाम', 'वाहतूक, दळणवळण व औद्योगिक बदल'] },
-    { id: 4, title: 'घटक 4', description: '१८५७ चा राष्ट्रीय उठाव', questions: 20, duration: '15 मिनिटे', topics: ['उठावाची पार्श्वभूमी व कारणे', 'उठावाची प्रमुख केंद्रे', 'प्रमुख नेते व नेतृत्व', 'उठावाचे स्वरूप व प्रसार', 'उठावाचे अपयश व परिणाम'] },
-    { id: 5, title: 'घटक 5', description: 'सामाजिक व धार्मिक प्रबोधन', questions: 20, duration: '15 मिनिटे', topics: ['ब्राह्मो समाज व राजा राममोहन रॉय', 'प्राथना समाज व न्यायमूत रानडे', 'सत्यशोधक समाज व महात्मा फुले', 'आय समाज व स्वामी दयानंद सरस्वती', 'स्वामी ववेकानंद व रामकृष्ण मिशन'] },
-    { id: 6, title: 'घटक 6', description: 'स्वातंत्र्य चळवळीच्या युगास प्रारंभ', questions: 20, duration: '15 मिनिटे', topics: ['भारतीय राष्ट्रीय सभेची स्थापना व उद्दिष्टे', 'लोकमान्य टळक व केसरी/मराठा वृत्तपत्र', 'प्रमुख कायदे व होमरुल चळवळ', 'बंगाल फाळणी व असहकार चळवळ', 'भारत सेवक समाज, मुस्लीम लीग व प्रमुख नेते'] },
-    { id: 7, title: 'घटक 7', description: 'असहकार चळवळ', questions: 20, duration: '15 मिनिटे', topics: ['गांधीयुग व सत्याग्रह', 'प्रारंभिक सत्याग्रह (खेडा, मुळशी, अहमदाबाद)', 'रौलट कायदा व जालयनवाला बाग हत्याकांड', 'असहकार चळवळ व स्वदेशी चळवळ', 'प्रमुख नेते व आंदोलन (गांधी, टळक, नेहरू, सायमन कमिशन विरोध)'] },
-    { id: 8, title: 'घटक 8', description: 'सविनय कायदेभंग चळवळ', questions: 20, duration: '15 मिनिटे', topics: ['मीठाचा सत्याग्रह (मीठविरोधी आंदोलन)', 'दांडी यात्रा व पदयात्रा', 'परदेशी मालाचा बहिष्कार', 'गोलमेज परिषदे / पुणे करार / जातीय नवाडा', 'महिला नेतृत्व व प्रमुख सत्याग्रही / प्रमुख घटनाक्रम'] },
-    { id: 9, title: 'घटक 9', description: 'स्वातंत्र्यलढ्याचे अंतिम पव', questions: 20, duration: '15 मिनिटे', topics: ['वैयक्तिक सत्याग्रह आणि आंदोलनकारक', '1942 चा \'छोडो भारत\' आंदोलन', 'नेताजी सुभाषचंद्र बोस व आझाद हंद सेना/सरकार', 'प्रमुख शहीद घटना व प्रतसरकार विरोध', 'प्रांतक नवडणूक आणि राष्ट्रीय सभेचे राजीनामे'] },
-    { id: 10, title: 'घटक 10', description: 'सशस्त्र क्रांतकारी चळवळ', questions: 20, duration: '15 मिनिटे', topics: ['रामोशी बांधवांचे बंड', 'चाफेकर बंधूंचा रँड वध', 'भगतसंग-राजगुरू संघटना', 'गदर आणि इंडिया हाऊस', 'क्रांतकारी शहीद घटना'] },
-    { id: 11, title: 'घटक 11', description: 'समतेचा लढा', questions: 20, duration: '15 मिनिटे', topics: ['कामगार चळवळी: आयटीयूसी, बॉम्बे मल हँडस् असोसिएशन', 'स्त्री शिक्षण व आरोग्य: रमाबाई रानडे, आनंदीबाई जोशी', 'दलित सुधारणा: डॉ. आंबेडकर, राजर्षी शाहू', 'समाजवादी / साम्यवादी विचार: माक्स, शवराम जानबा कांबळे', 'वृत्तपत्र व चळवळी: जनता, समता, मूकनायक, सोमवंशीय मत्र'] },
-    { id: 12, title: 'घटक 12', description: 'स्वातंत्र्यप्राप्ती', questions: 20, duration: '15 मिनिटे', topics: ['द्विराष्ट्र सिद्धांत डॉ. इक्बाल बॅ. जीना चौधरी रहमत अली', 'ब्रिटीश हंगामी सरकार योजना वेव्हेल त्रमंत्री माऊंटबॅटन योजना', 'स्वातंत्र्य संघर्ष प्रत्यक्ष कृतीदन 16 ऑगस्ट 1946 विभाजन तयारी', 'महात्मा गांधी हत्या स्वातंत्र्याचे भावनिक परिणाम', 'स्वातंत्र्य घोषणा 14-15 ऑगस्ट 1947 भारत व पाकस्तान स्वतंत्र'] },
-    { id: 13, title: 'घटक 13', description: 'स्वातंत्र्यलढ्याची परपूत', questions: 20, duration: '15 मिनिटे', topics: ['स्वातंत्र्याच्या शेवटचे व्हाईसरॉय आणि संस्थानांचे प्रश्न', 'हैदराबाद मुक्तिसंग्राम आणि रझाकार विरोध', 'जुनागड, काश्मीर व गोवा वलीनीकरण', 'संस्थानांतील जनसंघटना आणि मोठ्या संस्थानांचे प्रशासन', 'स्वातंत्र्यनंतर भारताचे अखंड स्वरूप आणि विभाजन'] },
-    { id: 14, title: 'घटक 14', description: 'महाराष्ट्र राज्याची निर्मिती', questions: 20, duration: '15 मिनिटे', topics: ['महाराष्ट्र राज्याची स्थापन व अधिकृत घोषणा', 'संयुक्त महाराष्ट्र चळवळ व नागपूर करार', 'राज्य पुनरचना आयोग व प्रांतरचना प्रश्न', 'मुख्यमंत्र्यांची नेमणूक व हुतात्मा स्मारके', 'मुंबई व महाराष्ट्राचे द्विभाषिक व राजनीतिक मुद्दे'] }
-  ];
-
-  // SAT Civics Quiz Data - Unit-based
-  const satCivicsQuizzes = [
-    { id: 1, title: 'घटक 1', description: 'संसदीय शासनपद्धतीची ओळख', questions: 20, duration: '15 मिनिटे', topics: ['शासनपद्धतीचे प्रकार', 'संसदीय शासनपद्धती', 'अध्यक्षीय शासनपद्धती', 'शासनसंस्थांच्या शाखा', 'भारतातील संसदीय लोकशाही'] },
-    { id: 2, title: 'घटक 2', description: 'भारताची संसद', questions: 20, duration: '15 मिनिटे', topics: ['संसदची रचना', 'लोकसभा', 'राज्यसभा', 'कायदेनिर्मिती प्रक्रिया', 'संसदचे अधिकार व कार्ये'] },
-    { id: 3, title: 'घटक 3', description: 'केंद्रीय कायकारी मंडळ', questions: 20, duration: '15 मिनिटे', topics: ['राष्ट्रपती', 'पंतप्रधान', 'मंत्रिमंडळ', 'संसदीय जबाबदारी व नियंत्रण', 'आपत्कालीन तरतुदी'] },
-    { id: 4, title: 'घटक 4', description: 'भारतातील न्यायव्यवस्था', questions: 20, duration: '15 मिनिटे', topics: ['न्यायव्यवस्थेची रचना', 'सर्वोच्च न्यायालय', 'उच्च न्यायालय', 'न्यायालयीन पुनरावलोकन', 'न्यायमंडळाचे स्वातंत्र्य'] },
-    { id: 5, title: 'घटक 5', description: 'राज्यशासन', questions: 20, duration: '15 मिनिटे', topics: ['राज्य विधिमंडळ', 'विधानसभा', 'विधानपरिषद', 'राज्य कार्यकारी मंडळ', 'राज्यपाल व मुख्यमंत्री'] },
-    { id: 6, title: 'घटक 6', description: 'नोकरशाही', questions: 20, duration: '15 मिनिटे', topics: ['नोकरशाहीची संकल्पना व स्वरूप', 'सनदी सेवांचे प्रकार', 'नोकरशाहीची भूमिका व कार्ये', 'राजकीय तटस्थता व जबाबदारी', 'लोकसेवा आयोग व भरती प्रक्रिया'] }
-  ];
-
-  // SAT Geography Quiz Data - Unit-based
-  const satGeographyQuizzes = [
-    { id: 1, title: 'घटक 1', description: 'संसाधने - प्रकार व संरक्षण', questions: 20, duration: '15 मिनिटे', topics: ['नैसर्गिक संसाधने', 'नूतनीकरणयोग्य', 'अनूतनीकरणयोग्य', 'संरक्षण', 'साधनसंपत्ती'] },
-    { id: 2, title: 'घटक 2', description: 'जमीन संसाधने व शेती', questions: 20, duration: '15 मिनिटे', topics: ['जमिनीचा वापर', 'शेती', 'शेतीचे नमुने', 'पिकाची पद्धती', 'जमीन विकास'] },
-    { id: 3, title: 'घटक 3', description: 'जल संसाधने व संरक्षण', questions: 20, duration: '15 मिनिटे', topics: ['जलचक्र', 'नद्या', 'जल संरक्षण', 'पाणीपुरवठा', 'जलसाठवण'] },
-    { id: 4, title: 'घटक 4', description: 'माती संसाधने व संरक्षण', questions: 20, duration: '15 मिनिटे', topics: ['मातीचे प्रकार', 'माती निर्मिती', 'माती संरक्षण', 'मृदा धूप', 'माती प्रदूषण'] },
-    { id: 5, title: 'घटक 5', description: 'वन व वन्यजीव संसाधने', questions: 20, duration: '15 मिनिटे', topics: ['वनाचे प्रकार', 'वन्यजीव', 'संरक्षण', 'जैवविविधता', 'वनसंवर्धन'] },
-    { id: 6, title: 'घटक 6', description: 'खनिज व ऊर्जा संसाधने', questions: 20, duration: '15 मिनिटे', topics: ['खनिजे', 'कोळसा', 'पेट्रोलियम', 'ऊर्जा', 'ऊर्जा स्त्रोत'] },
-    { id: 7, title: 'घटक 7', description: 'उद्योगधंदे व विकास', questions: 20, duration: '15 मिनिटे', topics: ['उद्योगांचे प्रकार', 'औद्योगिक प्रदेश', 'विकास', 'उत्पादन', 'उद्योगीकरण'] },
-    { id: 8, title: 'घटक 8', description: 'मानवी संसाधने व लोकसंख्या', questions: 20, duration: '15 मिनिटे', topics: ['लोकसंख्या', 'वितरण', 'घनता', 'वाढ', 'लोकसंख्या विस्फोट'] },
-    { id: 9, title: 'घटक 9', description: 'हवामान व वनस्पती', questions: 20, duration: '15 मिनिटे', topics: ['हवामान प्रदेश', 'ऋतू', 'वनस्पतीचे प्रकार', 'पाऊस', 'मोन्सून'] },
-    { id: 10, title: 'घटक 10', description: 'भारत - भौतिक वैशिष्ट्ये व प्रदेश', questions: 20, duration: '15 मिनिटे', topics: ['पर्वत', 'मैदाने', 'पठारे', 'किनारी प्रदेश', 'नदी व्यवस्था'] }
-  ];
+  // Note: SAT chapter data is now loaded dynamically from Firestore
+  // No need for hardcoded satScienceQuizzes, satHistoryQuizzes, satCivicsQuizzes, satGeographyQuizzes arrays
 
   const startQuiz = (quiz, examType, subCategory = null) => {
     // Navigate to PracticePage with quiz data
@@ -309,6 +319,43 @@ const Practice = () => {
         }
       }
     });
+  };
+
+  // Handler for starting chapter-wise quiz
+  const startChapterQuiz = (chapterId, chapterName, subject, questionCount = 20) => {
+    navigate('/practice-quiz', {
+      state: {
+        quizData: {
+          title: chapterName,
+          subject: subject,
+          chapter: chapterName,  // Pass chapter name for Firestore query
+          chapterId: chapterId,  // Keep ID for reference
+          questions: questionCount,
+          duration: '15 मिनिटे',
+          examType: 'SAT',
+          isChapterWise: true
+        }
+      }
+    });
+  };
+
+  // Handler for subject tab changes - load chapters for that subject
+  const handleSubjectTabChange = async (subject) => {
+    setLoadingChapters(true);
+    try {
+      const result = await getChaptersBySubject(subject);
+      if (result.success) {
+        setChapters(result.chapters);
+      } else {
+        setChapters([]);
+        console.error('Failed to load chapters:', result.error);
+      }
+    } catch (error) {
+      console.error('Error loading chapters:', error);
+      setChapters([]);
+    } finally {
+      setLoadingChapters(false);
+    }
   };
 
   const startQuickPractice = (practice) => {
@@ -467,90 +514,56 @@ const Practice = () => {
                 {/* SAT Math Quizzes */}
                 {satSubTab === 'math' && (
                   <div className="quiz-grid">
-                    {satMathQuizzes.map((quiz) => (
-                      <div key={quiz.id} className="quiz-card">
-                        <div className="quiz-header">
-                          <div className="quiz-info">
-                            <h3 className="quiz-title">{quiz.title}</h3>
-                            <p className="quiz-description">{quiz.description}</p>
-                          </div>
-                        </div>
-
-                        <div className="quiz-stats">
-                          <div className="quiz-stat">
-                            <span className="stat-label">Questions</span>
-                            <span className="stat-value">{quiz.questions}</span>
-                          </div>
-                          <div className="quiz-stat">
-                            <span className="stat-label">Duration</span>
-                            <span className="stat-value">{quiz.duration}</span>
-                          </div>
-                        </div>
-
-                        <div className="quiz-topics">
-                          <h4>Topics Covered:</h4>
-                          <div className="topics-list">
-                            {quiz.topics.map((topic, index) => (
-                              <span key={index} className="topic-tag">{topic}</span>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className="quiz-actions">
-                          <button 
-                            className="quiz-btn start-btn"
-                            onClick={() => startQuiz(quiz, 'SAT', 'Math')}
-                          >
-                            Start Quiz
-                          </button>
-                        </div>
-                      </div>
-                    ))}
+                    <div className="no-chapters-message">
+                      <p>Mathematics questions are not available yet.</p>
+                      <p style={{fontSize: '0.9rem', marginTop: '0.5rem', color: 'rgba(255,255,255,0.7)'}}>
+                        Please select Science or Social Science from the tabs above.
+                      </p>
+                    </div>
                   </div>
                 )}
 
                 {/* SAT Science Quizzes */}
                 {satSubTab === 'science' && (
                   <div className="quiz-grid">
-                    {satScienceQuizzes.map((quiz) => (
-                      <div key={quiz.id} className="quiz-card">
-                        <div className="quiz-header">
-                          <div className="quiz-info">
-                            <h3 className="quiz-title">{quiz.title}</h3>
-                            <p className="quiz-description">{quiz.description}</p>
+                    {loadingChapters ? (
+                      <div className="loading-message">Loading chapters...</div>
+                    ) : chapters.length > 0 ? (
+                      chapters.map((chapter) => (
+                        <div key={chapter.id} className="quiz-card">
+                          <div className="quiz-header">
+                            <div className="quiz-info">
+                              <h3 className="quiz-title">{chapter.name}</h3>
+                              <p className="quiz-description">घटक {chapter.id}</p>
+                            </div>
                           </div>
-                        </div>
 
-                        <div className="quiz-stats">
-                          <div className="quiz-stat">
-                            <span className="stat-label">Questions</span>
-                            <span className="stat-value">{quiz.questions}</span>
+                          <div className="quiz-stats">
+                            <div className="quiz-stat">
+                              <span className="stat-label">Questions</span>
+                              <span className="stat-value">20</span>
+                            </div>
+                            <div className="quiz-stat">
+                              <span className="stat-label">Duration</span>
+                              <span className="stat-value">15 मिनिटे</span>
+                            </div>
                           </div>
-                          <div className="quiz-stat">
-                            <span className="stat-label">Duration</span>
-                            <span className="stat-value">{quiz.duration}</span>
-                          </div>
-                        </div>
 
-                        <div className="quiz-topics">
-                          <h4>Topics Covered:</h4>
-                          <div className="topics-list">
-                            {quiz.topics.map((topic, index) => (
-                              <span key={index} className="topic-tag">{topic}</span>
-                            ))}
+                          <div className="quiz-actions">
+                            <button 
+                              className="quiz-btn start-btn"
+                              onClick={() => startChapterQuiz(chapter.id, chapter.name, 'विज्ञान', 20)}
+                            >
+                              Start Quiz
+                            </button>
                           </div>
                         </div>
-
-                        <div className="quiz-actions">
-                          <button 
-                            className="quiz-btn start-btn"
-                            onClick={() => startQuiz(quiz, 'SAT', 'Science')}
-                          >
-                            Start Quiz
-                          </button>
-                        </div>
+                      ))
+                    ) : (
+                      <div className="no-chapters-message">
+                        No chapters available. Please upload questions to the database.
                       </div>
-                    ))}
+                    )}
                   </div>
                 )}
 
@@ -582,135 +595,132 @@ const Practice = () => {
                     {/* History Quizzes */}
                     {socialSubTab === 'history' && (
                       <div className="quiz-grid">
-                        {satHistoryQuizzes.map((quiz) => (
-                          <div key={quiz.id} className="quiz-card">
-                            <div className="quiz-header">
-                              <div className="quiz-info">
-                                <h3 className="quiz-title">{quiz.title}</h3>
-                                <p className="quiz-description">{quiz.description}</p>
+                        {loadingChapters ? (
+                          <div className="loading-message">Loading chapters...</div>
+                        ) : chapters.length > 0 ? (
+                          chapters.map((chapter) => (
+                            <div key={chapter.id} className="quiz-card">
+                              <div className="quiz-header">
+                                <div className="quiz-info">
+                                  <h3 className="quiz-title">{chapter.name}</h3>
+                                  <p className="quiz-description">घटक {chapter.id}</p>
+                                </div>
                               </div>
-                            </div>
 
-                            <div className="quiz-stats">
-                              <div className="quiz-stat">
-                                <span className="stat-label">Questions</span>
-                                <span className="stat-value">{quiz.questions}</span>
+                              <div className="quiz-stats">
+                                <div className="quiz-stat">
+                                  <span className="stat-label">Questions</span>
+                                  <span className="stat-value">20</span>
+                                </div>
+                                <div className="quiz-stat">
+                                  <span className="stat-label">Duration</span>
+                                  <span className="stat-value">15 मिनिटे</span>
+                                </div>
                               </div>
-                              <div className="quiz-stat">
-                                <span className="stat-label">Duration</span>
-                                <span className="stat-value">{quiz.duration}</span>
-                              </div>
-                            </div>
 
-                            <div className="quiz-topics">
-                              <h4>Topics Covered:</h4>
-                              <div className="topics-list">
-                                {quiz.topics.map((topic, index) => (
-                                  <span key={index} className="topic-tag">{topic}</span>
-                                ))}
+                              <div className="quiz-actions">
+                                <button 
+                                  className="quiz-btn start-btn"
+                                  onClick={() => startChapterQuiz(chapter.id, chapter.name, 'इतिहास', 20)}
+                                >
+                                  Start Quiz
+                                </button>
                               </div>
                             </div>
-
-                            <div className="quiz-actions">
-                              <button 
-                                className="quiz-btn start-btn"
-                                onClick={() => startQuiz(quiz, 'SAT', 'History')}
-                              >
-                                Start Quiz
-                              </button>
-                            </div>
+                          ))
+                        ) : (
+                          <div className="no-chapters-message">
+                            No chapters available. Please upload questions to the database.
                           </div>
-                        ))}
+                        )}
                       </div>
                     )}
 
                     {/* Civics Quizzes */}
                     {socialSubTab === 'civics' && (
                       <div className="quiz-grid">
-                        {satCivicsQuizzes.map((quiz) => (
-                          <div key={quiz.id} className="quiz-card">
-                            <div className="quiz-header">
-                              <div className="quiz-info">
-                                <h3 className="quiz-title">{quiz.title}</h3>
-                                <p className="quiz-description">{quiz.description}</p>
+                        {loadingChapters ? (
+                          <div className="loading-message">Loading chapters...</div>
+                        ) : chapters.length > 0 ? (
+                          chapters.map((chapter) => (
+                            <div key={chapter.id} className="quiz-card">
+                              <div className="quiz-header">
+                                <div className="quiz-info">
+                                  <h3 className="quiz-title">{chapter.name}</h3>
+                                  <p className="quiz-description">घटक {chapter.id}</p>
+                                </div>
                               </div>
-                            </div>
 
-                            <div className="quiz-stats">
-                              <div className="quiz-stat">
-                                <span className="stat-label">Questions</span>
-                                <span className="stat-value">{quiz.questions}</span>
+                              <div className="quiz-stats">
+                                <div className="quiz-stat">
+                                  <span className="stat-label">Questions</span>
+                                  <span className="stat-value">20</span>
+                                </div>
+                                <div className="quiz-stat">
+                                  <span className="stat-label">Duration</span>
+                                  <span className="stat-value">15 मिनिटे</span>
+                                </div>
                               </div>
-                              <div className="quiz-stat">
-                                <span className="stat-label">Duration</span>
-                                <span className="stat-value">{quiz.duration}</span>
-                              </div>
-                            </div>
 
-                            <div className="quiz-topics">
-                              <h4>Topics Covered:</h4>
-                              <div className="topics-list">
-                                {quiz.topics.map((topic, index) => (
-                                  <span key={index} className="topic-tag">{topic}</span>
-                                ))}
+                              <div className="quiz-actions">
+                                <button 
+                                  className="quiz-btn start-btn"
+                                  onClick={() => startChapterQuiz(chapter.id, chapter.name, 'नागरिकशास्त्र', 20)}
+                                >
+                                  Start Quiz
+                                </button>
                               </div>
                             </div>
-
-                            <div className="quiz-actions">
-                              <button 
-                                className="quiz-btn start-btn"
-                                onClick={() => startQuiz(quiz, 'SAT', 'Civics')}
-                              >
-                                Start Quiz
-                              </button>
-                            </div>
+                          ))
+                        ) : (
+                          <div className="no-chapters-message">
+                            No chapters available. Please upload questions to the database.
                           </div>
-                        ))}
+                        )}
                       </div>
                     )}
 
                     {/* Geography Quizzes */}
                     {socialSubTab === 'geography' && (
                       <div className="quiz-grid">
-                        {satGeographyQuizzes.map((quiz) => (
-                          <div key={quiz.id} className="quiz-card">
-                            <div className="quiz-header">
-                              <div className="quiz-info">
-                                <h3 className="quiz-title">{quiz.title}</h3>
-                                <p className="quiz-description">{quiz.description}</p>
+                        {loadingChapters ? (
+                          <div className="loading-message">Loading chapters...</div>
+                        ) : chapters.length > 0 ? (
+                          chapters.map((chapter) => (
+                            <div key={chapter.id} className="quiz-card">
+                              <div className="quiz-header">
+                                <div className="quiz-info">
+                                  <h3 className="quiz-title">{chapter.name}</h3>
+                                  <p className="quiz-description">घटक {chapter.id}</p>
+                                </div>
                               </div>
-                            </div>
 
-                            <div className="quiz-stats">
-                              <div className="quiz-stat">
-                                <span className="stat-label">Questions</span>
-                                <span className="stat-value">{quiz.questions}</span>
+                              <div className="quiz-stats">
+                                <div className="quiz-stat">
+                                  <span className="stat-label">Questions</span>
+                                  <span className="stat-value">20</span>
+                                </div>
+                                <div className="quiz-stat">
+                                  <span className="stat-label">Duration</span>
+                                  <span className="stat-value">15 मिनिटे</span>
+                                </div>
                               </div>
-                              <div className="quiz-stat">
-                                <span className="stat-label">Duration</span>
-                                <span className="stat-value">{quiz.duration}</span>
-                              </div>
-                            </div>
 
-                            <div className="quiz-topics">
-                              <h4>Topics Covered:</h4>
-                              <div className="topics-list">
-                                {quiz.topics.map((topic, index) => (
-                                  <span key={index} className="topic-tag">{topic}</span>
-                                ))}
+                              <div className="quiz-actions">
+                                <button 
+                                  className="quiz-btn start-btn"
+                                  onClick={() => startChapterQuiz(chapter.id, chapter.name, 'भूगोल', 20)}
+                                >
+                                  Start Quiz
+                                </button>
                               </div>
                             </div>
-
-                            <div className="quiz-actions">
-                              <button 
-                                className="quiz-btn start-btn"
-                                onClick={() => startQuiz(quiz, 'SAT', 'Geography')}
-                              >
-                                Start Quiz
-                              </button>
-                            </div>
+                          ))
+                        ) : (
+                          <div className="no-chapters-message">
+                            No chapters available. Please upload questions to the database.
                           </div>
-                        ))}
+                        )}
                       </div>
                     )}
                   </div>

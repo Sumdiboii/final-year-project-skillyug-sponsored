@@ -28,6 +28,8 @@ const Exam = () => {
       questions: 90,
       gradient: '#cc4915;',
       description: 'Test your mental aptitude with logical reasoning, pattern recognition, and analytical thinking.',
+      disabled: true,  // Disabled until MAT questions are uploaded
+      comingSoon: true
     },
     {
       id: 'sat',
@@ -36,6 +38,7 @@ const Exam = () => {
       questions: 90,
       gradient: '#cc4915;',
       description: 'Comprehensive assessment of Mathematics, Science, and Social Studies knowledge.',
+      disabled: false
     },
     {
       id: 'full',
@@ -43,7 +46,8 @@ const Exam = () => {
       duration: '180',
       questions: 180,
       gradient: '#cc4915;',
-      description: 'Complete NMMS examination combining both MAT and SAT assessments.',
+      description: 'Complete NMMS examination with comprehensive SAT assessment covering all subjects.',
+      disabled: false
     }
   ];
 
@@ -145,6 +149,12 @@ const Exam = () => {
                     {/* Card Header */}
                     <div className="exam-card-header">
                       <h3 className="exam-title">{exam.title}</h3>
+                      {exam.comingSoon && (
+                        <div className="exam-locked-badge">
+                          <span className="lock-icon">🔒</span>
+                          <span className="lock-text">Soon</span>
+                        </div>
+                      )}
                       {/* TODO: Still working on cooldown feature */}
                       {/* {!canAttempt && (
                         <div className="exam-locked-badge">
@@ -177,15 +187,18 @@ const Exam = () => {
 
                     {/* Action Button */}
                     <button 
-                      className="exam-action-btn"
+                      className={`exam-action-btn ${exam.disabled ? 'btn-disabled' : ''}`}
                       style={{ 
-                        background: exam.gradient,
-                        cursor: 'pointer'
+                        background: exam.disabled ? 'rgba(255, 255, 255, 0.1)' : exam.gradient,
+                        cursor: exam.disabled ? 'not-allowed' : 'pointer'
                       }}
-                      onClick={() => handleStartExam(exam.id)}
+                      onClick={() => !exam.disabled && handleStartExam(exam.id)}
+                      disabled={exam.disabled}
                     >
                       <span className="btn-content">
-                        <span className="btn-text">Start Test</span>
+                        <span className="btn-text">
+                          {exam.disabled ? 'Coming Soon' : 'Start Test'}
+                        </span>
                       </span>
                     </button>
                     {/* TODO: Still working on cooldown feature */}

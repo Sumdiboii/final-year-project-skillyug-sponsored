@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loginWithEmail } from "../firebase/auth";
 import "../css files/Login.css";
 import ParticleBackground from "../components/StarBg";
 import Footer from "../components/Footer";
@@ -7,17 +8,31 @@ import Footer from "../components/Footer";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add login logic here - for now, directly navigate to Home
-    navigate("/home");
-  };
+    setError("");
+    setLoading(true);
 
-  const handleGoogle = () => {
-    // Hook your Google OAuth here
-    alert("Continue with Google clicked");
+    try {
+      const result = await loginWithEmail(email, password);
+      
+      if (result.success) {
+        // Login successful - navigate to home
+        navigate("/home");
+      } else {
+        // Show error message
+        setError(result.error);
+      }
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.");
+      console.error("Login error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleAdminLogin = () => {
@@ -46,18 +61,21 @@ const Login = () => {
           Administrator Login
         </button>
 
-        <button type="button" className="lgn-google-btn" onClick={handleGoogle}>
-          <img
-            className="lgn-google-icon"
-            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-            alt="Google"
-          />
-          Continue with Google
-        </button>
-
-        <div className="lgn-divider"><span>or</span></div>
-
         <form className="lgn-login-form" onSubmit={handleSubmit}>
+          {error && (
+            <div style={{
+              padding: '0.75rem',
+              marginBottom: '1rem',
+              backgroundColor: '#fee',
+              color: '#c33',
+              borderRadius: '0.5rem',
+              fontSize: '0.9rem',
+              border: '1px solid #fcc'
+            }}>
+              {error}
+            </div>
+          )}
+          
           <label className="lgn-login-label" htmlFor="email">Email</label>
           <input
             id="email"
@@ -67,6 +85,7 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
             className="lgn-login-input"
             required
+            disabled={loading}
           />
 
           <label className="lgn-login-label" htmlFor="password">Password</label>
@@ -78,17 +97,16 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             className="lgn-login-input"
             required
+            disabled={loading}
           />
 
           <div className="lgn-login-actions">
-            <label className="lgn-remember">
-              <input type="checkbox" />
-              <span>Remember me</span>
-            </label>
             <a href="#" className="lgn-forgot-link">Forgot password?</a>
           </div>
 
-          <button type="submit" className="lgn-login-btn">Sign In</button>
+          <button type="submit" className="lgn-login-btn" disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign In'}
+          </button>
 
         </form>
 

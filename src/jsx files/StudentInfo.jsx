@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { updateUserProfile } from "../firebase/auth";
 import "../css files/ProfileInfo.css";
 import ParticleBackground from "../components/StarBg";
 
@@ -8,10 +9,12 @@ const StudentInfo = () => {
     fullName: "",
     dateOfBirth: "",
     age: "",
-    grade: "",
-    school: "",
-    address: ""
+    guardianName: "",
+    guardianPhone: ""
   });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -35,10 +38,37 @@ const StudentInfo = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add profile creation logic here
-    navigate("/guardian-verification");
+    setError("");
+    setLoading(true);
+
+    try {
+      // Update user profile with all student and guardian information
+      const result = await updateUserProfile({
+        fullName: formData.fullName,
+        dateOfBirth: formData.dateOfBirth,
+        guardianName: formData.guardianName,
+        guardianPhone: formData.guardianPhone
+      });
+
+      if (result.success) {
+        // Navigate to guardian verification (OTP)
+        navigate("/guardian-verification", { 
+          state: { 
+            phoneNumber: formData.guardianPhone,
+            guardianName: formData.guardianName 
+          } 
+        });
+      } else {
+        setError(result.error || "Failed to save profile information");
+      }
+    } catch (err) {
+      console.error("Error saving student info:", err);
+      setError("An error occurred while saving your information");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,6 +78,20 @@ const StudentInfo = () => {
       <div className="profile-info-container">
         <h1 className="profile-info-title">Student Information</h1>
         <p className="profile-info-subtitle">Complete your profile details</p>
+
+        {error && (
+          <div style={{
+            padding: '0.75rem',
+            marginBottom: '1rem',
+            backgroundColor: '#fee',
+            color: '#c33',
+            borderRadius: '0.5rem',
+            fontSize: '0.9rem',
+            border: '1px solid #fcc'
+          }}>
+            {error}
+          </div>
+        )}
 
         <form className="profile-info-form" onSubmit={handleSubmit}>
           <div className="form-row">
@@ -60,6 +104,7 @@ const StudentInfo = () => {
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="Enter your full name"
+                disabled={loading}
                 required
               />
             </div>
@@ -72,6 +117,7 @@ const StudentInfo = () => {
                 name="dateOfBirth"
                 value={formData.dateOfBirth}
                 onChange={handleChange}
+                disabled={loading}
                 required
               />
             </div>
@@ -89,59 +135,46 @@ const StudentInfo = () => {
                 placeholder="Auto-calculated"
               />
             </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="guardianName">Guardian's Name *</label>
+              <input
+                type="text"
+                id="guardianName"
+                name="guardianName"
+                value={formData.guardianName}
+                onChange={handleChange}
+                placeholder="Enter guardian's full name"
+                disabled={loading}
+                required
+              />
+            </div>
 
             <div className="form-group">
-              <label htmlFor="grade">Grade/Class *</label>
-              <select
-                id="grade"
-                name="grade"
-                value={formData.grade}
+              <label htmlFor="guardianPhone">Guardian's Phone *</label>
+              <input
+                type="tel"
+                id="guardianPhone"
+                name="guardianPhone"
+                value={formData.guardianPhone}
                 onChange={handleChange}
+                placeholder="10-digit phone number"
+                pattern="[0-9]{10}"
+                maxLength="10"
+                disabled={loading}
                 required
-              >
-                <option value="">Select Grade</option>
-                <option value="1">Grade 1</option>
-                <option value="2">Grade 2</option>
-                <option value="3">Grade 3</option>
-                <option value="4">Grade 4</option>
-                <option value="5">Grade 5</option>
-                <option value="6">Grade 6</option>
-                <option value="7">Grade 7</option>
-                <option value="8">Grade 8</option>
-              </select>
+              />
             </div>
           </div>
 
-          <div className="form-group full-width">
-            <label htmlFor="school">School Name *</label>
-            <input
-              type="text"
-              id="school"
-              name="school"
-              value={formData.school}
-              onChange={handleChange}
-              placeholder="Enter your school name"
-              required
-            />
-          </div>
-
-          <div className="form-group full-width">
-            <label htmlFor="address">Address *</label>
-            <textarea
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              placeholder="Enter your complete address"
-              rows="2"
-              required
-            />
-          </div>
-
-          <button type="submit" className="profile-submit-btn">Complete Registration</button>
+          <button type="submit" className="profile-submit-btn" disabled={loading}>
+            {loading ? 'Saving...' : 'Continue to Verification'}
+          </button>
         </form>
 
-        <button className="profile-back-btn" onClick={() => navigate("/choose-role")}>
+        <button className="profile-back-btn" onClick={() => navigate("/choose-role")} disabled={loading}>
           Back
         </button>
       </div>

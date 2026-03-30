@@ -1,41 +1,113 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../css files/Profile.css';
 import MainNavbar from '../components/MainNavbar';
 import Footer from '../components/Footer';
+import { getUserProfile, updateUserProfile } from '../firebase/auth';
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
   
-  // Student profile data from registration
+  // Student profile data from Firebase
   const [studentInfo, setStudentInfo] = useState({
-    fullName: 'Sumedh Kumar',
-    email: 'sumedh.kumar@example.com',
-    dateOfBirth: '2010-05-15',
-    age: 14,
-    grade: '7',
-    school: 'Delhi Public School',
-    address: '123 Main Street, New Delhi, India',
-    guardianName: 'Rajesh Kumar',
-    guardianPhone: '9876543210'
+    uid: '',
+    fullName: '',
+    email: '',
+    dateOfBirth: '',
+    age: '',
+    guardianName: '',
+    guardianPhone: ''
   });
 
   const [tempInfo, setTempInfo] = useState({ ...studentInfo });
+
+  // Load user profile on component mount
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      const result = await getUserProfile();
+      
+      if (result.success) {
+        const profile = result.profile;
+        
+        // Calculate age from dateOfBirth if available
+        const age = profile.dateOfBirth ? calculateAge(profile.dateOfBirth) : '';
+        
+        const profileData = {
+          uid: profile.uid || '',
+          fullName: profile.fullName || '',
+          email: profile.email || '',
+          dateOfBirth: profile.dateOfBirth || '',
+          age: age,
+          guardianName: profile.guardianName || '',
+          guardianPhone: profile.guardianPhone || ''
+        };
+        
+        setStudentInfo(profileData);
+        setTempInfo(profileData);
+      } else {
+        setError('Failed to load profile. Please try again.');
+        // Redirect to login if not authenticated
+        if (result.error.includes('No user logged in')) {
+          navigate('/login');
+        }
+      }
+    } catch (err) {
+      console.error('Error loading profile:', err);
+      setError('An error occurred while loading your profile.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleEdit = () => {
     setIsEditing(true);
     setTempInfo({ ...studentInfo });
   };
 
-  const handleSave = () => {
-    setStudentInfo({ ...tempInfo });
-    setIsEditing(false);
-    // TODO: Save to backend
-    alert('Profile updated successfully!');
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      setError('');
+      
+      // Prepare data to update (exclude uid and email)
+      const updateData = {
+        fullName: tempInfo.fullName,
+        dateOfBirth: tempInfo.dateOfBirth,
+        guardianName: tempInfo.guardianName,
+        guardianPhone: tempInfo.guardianPhone
+      };
+      
+      const result = await updateUserProfile(updateData);
+      
+      if (result.success) {
+        setStudentInfo({ ...tempInfo });
+        setIsEditing(false);
+        alert('Profile updated successfully!');
+      } else {
+        setError(result.error || 'Failed to update profile');
+      }
+    } catch (err) {
+      console.error('Error saving profile:', err);
+      setError('An error occurred while saving your profile.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCancel = () => {
     setIsEditing(false);
     setTempInfo({ ...studentInfo });
+    setError('');
   };
 
   const handleInputChange = (field, value) => {
@@ -47,6 +119,7 @@ const Profile = () => {
 
   // Auto-calculate age when date of birth changes
   const calculateAge = (dob) => {
+    if (!dob) return '';
     const today = new Date();
     const birthDate = new Date(dob);
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -63,11 +136,41 @@ const Profile = () => {
     handleInputChange('age', newAge);
   };
 
+  if (loading) {
+    return (
+      <>
+        <MainNavbar />
+        <div className="profile-page">
+          <div className="profile-container">
+            <div style={{ textAlign: 'center', padding: '3rem' }}>
+              <p>Loading profile...</p>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
   return (
     <>
       <MainNavbar />
       <div className="profile-page">
         <div className="profile-container">
+          
+          {/* Error Message */}
+          {error && (
+            <div style={{ 
+              background: '#fee', 
+              color: '#c33', 
+              padding: '1rem', 
+              borderRadius: '8px', 
+              marginBottom: '1rem',
+              border: '1px solid #fcc'
+            }}>
+              {error}
+            </div>
+          )}
           
           {/* Profile Header with Avatar and Name */}
           <div className="profile-header-section">
@@ -87,11 +190,11 @@ const Profile = () => {
                 </button>
               ) : (
                 <div className="edit-actions">
-                  <button className="save-btn" onClick={handleSave}>
+                  <button className="save-btn" onClick={handleSave} disabled={saving}>
                     <span className="btn-icon">💾</span>
-                    Save Changes
+                    {saving ? 'Saving...' : 'Save Changes'}
                   </button>
-                  <button className="cancel-btn" onClick={handleCancel}>
+                  <button className="cancel-btn" onClick={handleCancel} disabled={saving}>
                     <span className="btn-icon">✖️</span>
                     Cancel
                   </button>
@@ -103,6 +206,26 @@ const Profile = () => {
           {/* Profile Details Cards */}
           <div className="profile-details-grid">
             
+            {/* Account Information */}
+            <div className="details-card">
+              <h2 className="card-title">🔐 Account Information</h2>
+              <div className="info-group">
+                <div className="info-item">
+                  <label className="info-label">User ID</label>
+                  <p className="info-value" style={{ fontFamily: 'monospace', fontSize: '0.9rem', color: '#666' }}>
+                    {studentInfo.uid}
+                  </p>
+                  <small style={{ color: '#999', fontSize: '0.75rem' }}>Unique identifier (cannot be changed)</small>
+                </div>
+
+                <div className="info-item">
+                  <label className="info-label">Email Address</label>
+                  <p className="info-value">{studentInfo.email}</p>
+                  <small style={{ color: '#999', fontSize: '0.75rem' }}>Email cannot be changed</small>
+                </div>
+              </div>
+            </div>
+            
             {/* Personal Information */}
             <div className="details-card">
               <h2 className="card-title">📋 Personal Information</h2>
@@ -110,7 +233,7 @@ const Profile = () => {
                 <div className="info-item">
                   <label className="info-label">Full Name</label>
                   {!isEditing ? (
-                    <p className="info-value">{studentInfo.fullName}</p>
+                    <p className="info-value">{studentInfo.fullName || 'Not set'}</p>
                   ) : (
                     <input
                       type="text"
@@ -122,26 +245,15 @@ const Profile = () => {
                   )}
                 </div>
 
-                <div className="info-item">
-                  <label className="info-label">Email Address</label>
-                  {!isEditing ? (
-                    <p className="info-value">{studentInfo.email}</p>
-                  ) : (
-                    <input
-                      type="email"
-                      className="info-input"
-                      value={tempInfo.email}
-                      onChange={(e) => handleInputChange('email', e.target.value)}
-                      placeholder="Enter email"
-                    />
-                  )}
-                </div>
-
                 <div className="info-row">
                   <div className="info-item">
                     <label className="info-label">Date of Birth</label>
                     {!isEditing ? (
-                      <p className="info-value">{new Date(studentInfo.dateOfBirth).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                      <p className="info-value">
+                        {studentInfo.dateOfBirth 
+                          ? new Date(studentInfo.dateOfBirth).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+                          : 'Not set'}
+                      </p>
                     ) : (
                       <input
                         type="date"
@@ -154,67 +266,12 @@ const Profile = () => {
 
                   <div className="info-item">
                     <label className="info-label">Age</label>
-                    <p className="info-value">{isEditing ? tempInfo.age : studentInfo.age} years</p>
+                    <p className="info-value">
+                      {(isEditing ? tempInfo.age : studentInfo.age) || 'Not set'}
+                      {(isEditing ? tempInfo.age : studentInfo.age) && ' years'}
+                    </p>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Academic Information */}
-            <div className="details-card">
-              <h2 className="card-title">🎓 Academic Information</h2>
-              <div className="info-group">
-                <div className="info-item">
-                  <label className="info-label">Grade</label>
-                  {!isEditing ? (
-                    <p className="info-value">Grade {studentInfo.grade}</p>
-                  ) : (
-                    <select
-                      className="info-input"
-                      value={tempInfo.grade}
-                      onChange={(e) => handleInputChange('grade', e.target.value)}
-                    >
-                      <option value="1">Grade 1</option>
-                      <option value="2">Grade 2</option>
-                      <option value="3">Grade 3</option>
-                      <option value="4">Grade 4</option>
-                      <option value="5">Grade 5</option>
-                      <option value="6">Grade 6</option>
-                      <option value="7">Grade 7</option>
-                      <option value="8">Grade 8</option>
-                    </select>
-                  )}
-                </div>
-
-                <div className="info-item">
-                  <label className="info-label">School Name</label>
-                  {!isEditing ? (
-                    <p className="info-value">{studentInfo.school}</p>
-                  ) : (
-                    <input
-                      type="text"
-                      className="info-input"
-                      value={tempInfo.school}
-                      onChange={(e) => handleInputChange('school', e.target.value)}
-                      placeholder="Enter school name"
-                    />
-                  )}
-                </div>
-
-                {/* <div className="info-item">
-                  <label className="info-label">Address</label>
-                  {!isEditing ? (
-                    <p className="info-value">{studentInfo.address}</p>
-                  ) : (
-                    <textarea
-                      className="info-input info-textarea"
-                      value={tempInfo.address}
-                      onChange={(e) => handleInputChange('address', e.target.value)}
-                      placeholder="Enter address"
-                      rows="3"
-                    />
-                  )}
-                </div> */}
               </div>
             </div>
 
@@ -226,7 +283,7 @@ const Profile = () => {
                   <div className="info-item">
                     <label className="info-label">Guardian Name</label>
                     {!isEditing ? (
-                      <p className="info-value">{studentInfo.guardianName}</p>
+                      <p className="info-value">{studentInfo.guardianName || 'Not set'}</p>
                     ) : (
                       <input
                         type="text"
@@ -241,7 +298,7 @@ const Profile = () => {
                   <div className="info-item">
                     <label className="info-label">Guardian Phone</label>
                     {!isEditing ? (
-                      <p className="info-value">{studentInfo.guardianPhone}</p>
+                      <p className="info-value">{studentInfo.guardianPhone || 'Not set'}</p>
                     ) : (
                       <input
                         type="tel"

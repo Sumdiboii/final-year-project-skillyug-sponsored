@@ -1,750 +1,627 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { fetchUserStatistics, getUserRank, fetchGlobalLeaderboard, checkAndAwardBadges } from '../firebase/firestore';
 import '../css files/Statistics.css';
 import MainNavbar from '../components/MainNavbar';
 import Footer from '../components/Footer';
 import ParticleBackground from '../components/StarBg';
 
 const Statistics = () => {
+  const { currentUser } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState(null);
+  const [rankData, setRankData] = useState(null);
+  const [badges, setBadges] = useState([]);
   const [activeTab, setActiveTab] = useState('overview');
-  const [timeRange, setTimeRange] = useState('month'); // week, month, year, all
-  const [selectedSubject, setSelectedSubject] = useState('all');
+  
+  // Badge definitions
+  const BADGE_DEFINITIONS = {
+    daily_quiz_50: { name: 'Quiz Master', icon: '🎯', desc: 'Complete 50 daily quizzes', color: '#3b82f6' },
+    exam_10: { name: 'Exam Pro', icon: '📝', desc: 'Complete 10 exams', color: '#10b981' },
+    perfect_10: { name: 'Perfectionist', icon: '💯', desc: 'Get perfect score 10 times', color: '#f59e0b' },
+    streak_7: { name: 'Week Warrior', icon: '🔥', desc: '7-day streak', color: '#ef4444' },
+    streak_30: { name: 'Monthly Master', icon: '⭐', desc: '30-day streak', color: '#8b5cf6' },
+    xp_1000: { name: 'XP Hunter', icon: '⚡', desc: 'Earn 1000 XP', color: '#ec4899' },
+    xp_5000: { name: 'XP Legend', icon: '👑', desc: 'Earn 5000 XP', color: '#fbbf24' },
+    quest_10: { name: 'Quest Seeker', icon: '🗺️', desc: 'Complete 10 quests', color: '#14b8a6' },
+    quest_40: { name: 'Quest Champion', icon: '🏆', desc: 'Complete all 40 quests', color: '#f97316' },
+    practice_100: { name: 'Practice Guru', icon: '📚', desc: 'Complete 100 practice sessions', color: '#06b6d4' }
+  };
 
-  // Comprehensive Analytics Data
-  const analyticsData = {
-    overview: {
-      totalTests: 156,
-      totalPractice: 89,
-      studyHours: 245.5,
-      currentStreak: 18,
-      longestStreak: 32,
-      averageScore: 78.5,
-      improvement: 15.2,
-      rank: 142,
-      totalStudents: 2450,
-      percentile: 94
-    },
-    
-    weeklyProgress: [
-      { week: 'Week 1', score: 65, tests: 4, hours: 8 },
-      { week: 'Week 2', score: 70, tests: 5, hours: 10 },
-      { week: 'Week 3', score: 73, tests: 6, hours: 12 },
-      { week: 'Week 4', score: 78, tests: 7, hours: 14 }
-    ],
-    
-    monthlyProgress: [
-      { month: 'Aug', score: 62, tests: 18, hours: 42 },
-      { month: 'Sep', score: 68, tests: 22, hours: 51 },
-      { month: 'Oct', score: 72, tests: 25, hours: 58 },
-      { month: 'Nov', score: 75, tests: 28, hours: 62 },
-      { month: 'Dec', score: 78, tests: 31, hours: 68 },
-      { month: 'Jan', score: 80, tests: 32, hours: 70 }
-    ],
-    
-    subjectPerformance: [
-      { subject: 'Mathematics', score: 82, tests: 45, improvement: 18, trend: 'up', color: '#3b82f6' },
-      { subject: 'Science', score: 76, tests: 38, improvement: 12, trend: 'up', color: '#10b981' },
-      { subject: 'English', score: 85, tests: 42, improvement: 8, trend: 'up', color: '#f59e0b' },
-      { subject: 'Social Studies', score: 74, tests: 31, improvement: 15, trend: 'up', color: '#8b5cf6' }
-    ],
-    
-    topicStrengths: [
-      { topic: 'Algebra', mastery: 92, tests: 28 },
-      { topic: 'Geometry', mastery: 88, tests: 24 },
-      { topic: 'Logical Reasoning', mastery: 95, tests: 32 },
-      { topic: 'Vocabulary', mastery: 90, tests: 26 },
-      { topic: 'Reading Comprehension', mastery: 86, tests: 22 }
-    ],
-    
-    topicWeaknesses: [
-      { topic: 'Physics - Mechanics', mastery: 58, tests: 15 },
-      { topic: 'Chemistry - Equations', mastery: 62, tests: 12 },
-      { topic: 'Trigonometry', mastery: 65, tests: 18 },
-      { topic: 'Grammar', mastery: 68, tests: 14 }
-    ],
-    
-    timeAnalysis: {
-      peakPerformanceTime: '10 AM - 12 PM',
-      averageStudySession: 45,
-      totalSessions: 156,
-      weekdayAvg: 52,
-      weekendAvg: 38,
-      hourlyDistribution: [
-        { hour: '6-8 AM', sessions: 12, score: 72 },
-        { hour: '8-10 AM', sessions: 28, score: 76 },
-        { hour: '10-12 PM', sessions: 35, score: 82 },
-        { hour: '2-4 PM', sessions: 22, score: 74 },
-        { hour: '4-6 PM', sessions: 18, score: 70 },
-        { hour: '6-8 PM', sessions: 25, score: 78 },
-        { hour: '8-10 PM', sessions: 16, score: 73 }
-      ]
-    },
-    
-    accuracyTrends: {
-      overall: 78.5,
-      easy: 94.2,
-      medium: 76.8,
-      hard: 58.3,
-      timeVsAccuracy: [
-        { time: '< 1 min', accuracy: 92 },
-        { time: '1-2 min', accuracy: 85 },
-        { time: '2-3 min', accuracy: 78 },
-        { time: '3-5 min', accuracy: 72 },
-        { time: '> 5 min', accuracy: 65 }
-      ]
-    },
-    
-    recentTests: [
-      { id: 1, name: 'MAT - Full Mock Test', date: '2026-01-20', score: 85, rank: 125, percentile: 95 },
-      { id: 2, name: 'SAT Math Practice', date: '2026-01-18', score: 82, rank: 142, percentile: 92 },
-      { id: 3, name: 'Science Quiz', date: '2026-01-15', score: 78, rank: 158, percentile: 90 },
-      { id: 4, name: 'English Comprehension', date: '2026-01-12', score: 88, rank: 98, percentile: 96 },
-      { id: 5, name: 'MAT - Reasoning', date: '2026-01-10', score: 80, rank: 135, percentile: 93 }
-    ],
-    
-    achievements: [
-      { id: 1, title: '100 Tests Completed', icon: '🎯', date: '2025-12-15', rarity: 'gold' },
-      { id: 2, title: '30-Day Streak', icon: '🔥', date: '2025-11-20', rarity: 'platinum' },
-      { id: 3, title: 'Top 10% Student', icon: '⭐', date: '2026-01-01', rarity: 'diamond' },
-      { id: 4, title: 'Perfect Score Master', icon: '💯', date: '2025-12-28', rarity: 'gold' },
-      { id: 5, title: '200+ Study Hours', icon: '📚', date: '2026-01-15', rarity: 'silver' }
-    ],
-    
-    recommendations: [
-      {
-        type: 'urgent',
-        title: 'Physics Mechanics Needs Attention',
-        description: 'Your performance in Physics Mechanics has dropped to 58%. Consider booking a tutoring session.',
-        action: 'Schedule Tutoring'
-      },
-      {
-        type: 'improvement',
-        title: 'Trigonometry Practice',
-        description: 'Regular practice in Trigonometry can boost your score by 15-20%.',
-        action: 'Start Practice'
-      },
-      {
-        type: 'strength',
-        title: 'Maintain Logical Reasoning Excellence',
-        description: 'You\'re in the top 5% for Logical Reasoning. Keep up the great work!',
-        action: 'View Details'
+  useEffect(() => {
+    if (currentUser) {
+      loadStatistics();
+    } else {
+      // If no user is logged in, stop loading
+      setLoading(false);
+    }
+  }, [currentUser]);
+
+  const loadStatistics = async () => {
+    try {
+      setLoading(true);
+      
+      console.log('Loading statistics for user:', currentUser.uid);
+      
+      // Fetch user statistics and ranking
+      const [statsResult, rankResult] = await Promise.all([
+        fetchUserStatistics(currentUser.uid),
+        getUserRank(currentUser.uid)
+      ]);
+      
+      console.log('Stats result:', statsResult);
+      console.log('Rank result:', rankResult);
+      
+      if (statsResult.success) {
+        setStats(statsResult);
+        
+        // Check for new badges
+        const badgeResult = await checkAndAwardBadges(currentUser.uid, statsResult);
+        if (badgeResult.success && badgeResult.newBadges.length > 0) {
+          console.log('New badges unlocked:', badgeResult.newBadges);
+        }
+        
+        // Set user badges
+        const userBadges = statsResult.userData?.badges || [];
+        setBadges(userBadges);
+      } else {
+        console.error('Failed to fetch stats:', statsResult.error);
       }
-    ]
+      
+      if (rankResult.success) {
+        setRankData(rankResult);
+      } else {
+        console.error('Failed to fetch rank:', rankResult.error);
+      }
+    } catch (error) {
+      console.error('Error loading statistics:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Progress Chart Component (SVG-based)
-  const ProgressChart = ({ data, type = 'line' }) => {
-    const maxScore = 100;
-    const chartHeight = 200;
-    const chartWidth = 600;
-    const padding = 40;
+  // Calculate analytics from real data
+  const calculateAnalytics = () => {
+    if (!stats) {
+      console.log('No stats available for analytics calculation');
+      // Return default empty analytics for new users
+      return {
+        totalExams: 0,
+        totalPractice: 0,
+        totalDailyQuiz: 0,
+        avgExamScore: 0,
+        avgPracticeScore: 0,
+        studyHours: 0,
+        totalTests: 0,
+        currentStreak: 0,
+        totalXP: 0,
+        questProgress: 0,
+        subjectPerformance: [],
+        weeklyProgress: [],
+        perfectScores: 0,
+        recentTests: []
+      };
+    }
+
+    const { examHistory = [], practiceHistory = [], dailyQuizHistory = [], userData = {} } = stats;
     
-    const points = data.map((item, index) => {
-      const x = (chartWidth - 2 * padding) / (data.length - 1) * index + padding;
-      const y = chartHeight - (item.score / maxScore * (chartHeight - 2 * padding)) - padding;
-      return `${x},${y}`;
-    }).join(' ');
+    console.log('Calculating analytics:', {
+      examHistory: examHistory?.length || 0,
+      practiceHistory: practiceHistory?.length || 0,
+      dailyQuizHistory: dailyQuizHistory?.length || 0
+    });
     
+    // Total tests and practice
+    const totalExams = examHistory.length;
+    const totalPractice = practiceHistory.length;
+    const totalDailyQuiz = dailyQuizHistory.length;
+    
+    // Calculate average scores
+    const examScores = examHistory.map(e => parseFloat(e.percentage) || 0);
+    const practiceScores = practiceHistory.map(p => parseFloat(p.percentage) || 0);
+    
+    const avgExamScore = examScores.length > 0 
+      ? (examScores.reduce((a, b) => a + b, 0) / examScores.length).toFixed(1) 
+      : 0;
+    
+    const avgPracticeScore = practiceScores.length > 0 
+      ? (practiceScores.reduce((a, b) => a + b, 0) / practiceScores.length).toFixed(1) 
+      : 0;
+    
+    // Calculate total study hours (from time spent in exams and practice)
+    const examMinutes = examHistory.reduce((total, exam) => total + (exam.timeSpent || 0), 0);
+    const practiceMinutes = practiceHistory.reduce((total, p) => total + (p.timeSpent || 0), 0);
+    const totalMinutes = examMinutes + practiceMinutes;
+    const studyHours = (totalMinutes / 60).toFixed(1);
+    
+    // Subject-wise performance
+    const subjectStats = {};
+    
+    [...examHistory, ...practiceHistory].forEach(item => {
+      const subject = item.subject || item.examType || 'General';
+      if (!subjectStats[subject]) {
+        subjectStats[subject] = { scores: [], count: 0 };
+      }
+      subjectStats[subject].scores.push(parseFloat(item.percentage) || 0);
+      subjectStats[subject].count++;
+    });
+    
+    const subjectPerformance = Object.entries(subjectStats).map(([subject, data]) => ({
+      subject,
+      avgScore: (data.scores.reduce((a, b) => a + b, 0) / data.scores.length).toFixed(1),
+      tests: data.count,
+      improvement: calculateImprovement(data.scores)
+    }));
+    
+    // Recent performance trend (last 30 days)
+    const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
+    const recentTests = [...examHistory, ...practiceHistory]
+      .filter(item => item.timestamp?.toMillis() > thirtyDaysAgo)
+      .sort((a, b) => (a.timestamp?.toMillis() || 0) - (b.timestamp?.toMillis() || 0));
+    
+    const weeklyProgress = groupByWeek(recentTests);
+    
+    // Perfect scores count
+    const perfectScores = examHistory.filter(e => parseFloat(e.percentage) >= 100).length;
+    
+    return {
+      totalExams,
+      totalPractice,
+      totalDailyQuiz,
+      avgExamScore,
+      avgPracticeScore,
+      studyHours,
+      totalTests: totalExams + totalPractice,
+      currentStreak: userData.streak || 0,
+      totalXP: userData.totalXP || 0,
+      questProgress: userData.questProgress || 0,
+      subjectPerformance,
+      weeklyProgress,
+      perfectScores,
+      recentTests: [...examHistory, ...practiceHistory]
+        .sort((a, b) => (b.timestamp?.toMillis() || 0) - (a.timestamp?.toMillis() || 0))
+        .slice(0, 10)
+    };
+  };
+
+  const calculateImprovement = (scores) => {
+    if (scores.length < 2) return 0;
+    const firstHalf = scores.slice(0, Math.floor(scores.length / 2));
+    const secondHalf = scores.slice(Math.floor(scores.length / 2));
+    const firstAvg = firstHalf.reduce((a, b) => a + b, 0) / firstHalf.length;
+    const secondAvg = secondHalf.reduce((a, b) => a + b, 0) / secondHalf.length;
+    return (secondAvg - firstAvg).toFixed(1);
+  };
+
+  const groupByWeek = (tests) => {
+    const weeks = {};
+    tests.forEach(test => {
+      const date = test.timestamp?.toDate();
+      if (!date) return;
+      
+      const weekStart = new Date(date);
+      weekStart.setDate(date.getDate() - date.getDay());
+      const weekKey = weekStart.toISOString().split('T')[0];
+      
+      if (!weeks[weekKey]) {
+        weeks[weekKey] = { tests: [], scores: [] };
+      }
+      weeks[weekKey].tests.push(test);
+      weeks[weekKey].scores.push(parseFloat(test.percentage) || 0);
+    });
+    
+    return Object.entries(weeks).map(([week, data]) => ({
+      week: new Date(week).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      tests: data.tests.length,
+      avgScore: (data.scores.reduce((a, b) => a + b, 0) / data.scores.length).toFixed(1)
+    }));
+  };
+
+  const analytics = calculateAnalytics();
+
+  if (loading) {
     return (
-      <svg className="progress-chart" viewBox={`0 0 ${chartWidth} ${chartHeight}`}>
-        {/* Grid lines */}
-        {[0, 25, 50, 75, 100].map(value => {
-          const y = chartHeight - (value / maxScore * (chartHeight - 2 * padding)) - padding;
-          return (
-            <g key={value}>
-              <line
-                x1={padding}
-                y1={y}
-                x2={chartWidth - padding}
-                y2={y}
-                stroke="rgba(255,255,255,0.1)"
-                strokeWidth="1"
-              />
-              <text x={padding - 10} y={y + 5} fill="rgba(255,255,255,0.5)" fontSize="12" textAnchor="end">
-                {value}
-              </text>
-            </g>
-          );
-        })}
-        
-        {/* Line chart */}
-        <polyline
-          points={points}
-          fill="none"
-          stroke="#cc4915"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        
-        {/* Gradient fill */}
-        <defs>
-          <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#cc4915" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#cc4915" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <polygon
-          points={`${padding},${chartHeight - padding} ${points} ${chartWidth - padding},${chartHeight - padding}`}
-          fill="url(#chartGradient)"
-        />
-        
-        {/* Data points */}
-        {data.map((item, index) => {
-          const x = (chartWidth - 2 * padding) / (data.length - 1) * index + padding;
-          const y = chartHeight - (item.score / maxScore * (chartHeight - 2 * padding)) - padding;
-          return (
-            <g key={index}>
-              <circle cx={x} cy={y} r="5" fill="#cc4915" stroke="white" strokeWidth="2" />
-              <text x={x} y={chartHeight - padding + 20} fill="rgba(255,255,255,0.7)" fontSize="12" textAnchor="middle">
-                {item.month || item.week || index + 1}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
+      <div className="stats-container">
+        <ParticleBackground />
+        <MainNavbar />
+        <div className="stats-content">
+          <div className="loading-message">Loading your statistics...</div>
+        </div>
+        <Footer />
+      </div>
     );
-  };
+  }
 
-  // Bar Chart Component
-  const BarChart = ({ data, metric = 'score' }) => {
-    const maxValue = Math.max(...data.map(item => item[metric]));
-    const chartHeight = 250;
-    
+  if (!currentUser) {
     return (
-      <div className="bar-chart">
-        {data.map((item, index) => (
-          <div key={index} className="bar-item">
-            <div className="bar-container">
-              <div 
-                className="bar-fill" 
-                style={{ 
-                  height: `${(item[metric] / maxValue) * 100}%`,
-                  backgroundColor: item.color || '#cc4915'
-                }}
-              >
-                <span className="bar-value">{item[metric]}{metric === 'mastery' ? '%' : ''}</span>
-              </div>
-            </div>
-            <span className="bar-label">{item.subject || item.topic}</span>
+      <div className="stats-container">
+        <ParticleBackground />
+        <MainNavbar />
+        <div className="stats-content">
+          <div className="error-message">Please log in to view your statistics.</div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Show stats even if empty (first time users)
+  if (!stats) {
+    return (
+      <div className="stats-container">
+        <ParticleBackground />
+        <MainNavbar />
+        <div className="stats-content">
+          <div className="error-message">
+            No statistics available yet. Start taking quizzes and exams to see your progress!
           </div>
-        ))}
+        </div>
+        <Footer />
       </div>
     );
-  };
-
-  // Circular Progress Component
-  const CircularProgress = ({ value, max = 100, size = 120, label }) => {
-    const percentage = (value / max) * 100;
-    const circumference = 2 * Math.PI * 45;
-    const strokeDashoffset = circumference - (percentage / 100) * circumference;
-    
-    return (
-      <div className="circular-progress">
-        <svg width={size} height={size} viewBox="0 0 100 100">
-          <circle
-            cx="50"
-            cy="50"
-            r="45"
-            fill="none"
-            stroke="rgba(255,255,255,0.1)"
-            strokeWidth="8"
-          />
-          <circle
-            cx="50"
-            cy="50"
-            r="45"
-            fill="none"
-            stroke="#cc4915"
-            strokeWidth="8"
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            strokeLinecap="round"
-            transform="rotate(-90 50 50)"
-            style={{ transition: 'stroke-dashoffset 1s ease' }}
-          />
-          <text
-            x="50"
-            y="50"
-            textAnchor="middle"
-            dy="7"
-            fontSize="20"
-            fontWeight="bold"
-            fill="white"
-          >
-            {Math.round(percentage)}%
-          </text>
-        </svg>
-        {label && <p className="progress-label">{label}</p>}
-      </div>
-    );
-  };
+  }
 
   return (
-    <>
-      <MainNavbar />
+    <div className="stats-container">
       <ParticleBackground />
-      <div className="stats-container">
-        <div className="stats-content">
-          
-          {/* Header */}
-          <div className="stats-header">
-            <div className="stats-header-left">
-              <h1 className="stats-title">Performance Analytics</h1>
-              <p className="stats-subtitle">Comprehensive insights into your learning journey</p>
-            </div>
-            <div className="stats-header-right">
-              <select 
-                className="time-range-select" 
-                value={timeRange}
-                onChange={(e) => setTimeRange(e.target.value)}
-              >
-                <option value="week">This Week</option>
-                <option value="month">This Month</option>
-                <option value="year">This Year</option>
-                <option value="all">All Time</option>
-              </select>
-            </div>
+      <MainNavbar />
+      
+      <div className="stats-content">
+        {/* Header */}
+        <div className="stats-header">
+          <div className="stats-header-left">
+            <h1 className="stats-title">Your Statistics</h1>
+            <p className="stats-subtitle">Track your progress and performance</p>
           </div>
+        </div>
 
-          {/* Navigation Tabs */}
-          <div className="stats-tabs">
-            <button 
-              className={`stats-tab ${activeTab === 'overview' ? 'active' : ''}`}
-              onClick={() => setActiveTab('overview')}
-            >
-              <span className="tab-icon">📊</span>
-              Overview
-            </button>
-            <button 
-              className={`stats-tab ${activeTab === 'performance' ? 'active' : ''}`}
-              onClick={() => setActiveTab('performance')}
-            >
-              <span className="tab-icon">📈</span>
-              Performance
-            </button>
-            <button 
-              className={`stats-tab ${activeTab === 'subjects' ? 'active' : ''}`}
-              onClick={() => setActiveTab('subjects')}
-            >
-              <span className="tab-icon">📚</span>
-              Subjects
-            </button>
-            <button 
-              className={`stats-tab ${activeTab === 'insights' ? 'active' : ''}`}
-              onClick={() => setActiveTab('insights')}
-            >
-              <span className="tab-icon">💡</span>
-              Insights
-            </button>
-          </div>
+        {/* Tabs */}
+        <div className="stats-tabs">
+          <button 
+            className={`stats-tab ${activeTab === 'overview' ? 'active' : ''}`}
+            onClick={() => setActiveTab('overview')}
+          >
+            📊 Overview
+          </button>
+          <button 
+            className={`stats-tab ${activeTab === 'performance' ? 'active' : ''}`}
+            onClick={() => setActiveTab('performance')}
+          >
+            📈 Performance
+          </button>
+          <button 
+            className={`stats-tab ${activeTab === 'badges' ? 'active' : ''}`}
+            onClick={() => setActiveTab('badges')}
+          >
+            🏆 Badges
+          </button>
+        </div>
 
-          {/* OVERVIEW TAB */}
-          {activeTab === 'overview' && (
-            <div className="stats-section">
+        {/* Overview Tab */}
+        {activeTab === 'overview' && (
+          <div className="stats-tab-content">
+            {/* Quick Stats Cards */}
+            <div className="stats-grid">
+              <div className="stat-card">
+                <div className="stat-icon">📝</div>
+                <div className="stat-value">{analytics.totalExams}</div>
+                <div className="stat-label">Exams Taken</div>
+              </div>
               
-              {/* Key Metrics */}
-              <div className="metrics-grid">
-                <div className="metric-card">
-                  <div className="metric-icon">🎯</div>
-                  <div className="metric-content">
-                    <h3 className="metric-value">{analyticsData.overview.totalTests}</h3>
-                    <p className="metric-label">Total Tests</p>
-                    <span className="metric-change positive">+12 this month</span>
-                  </div>
-                </div>
-                
-                <div className="metric-card">
-                  <div className="metric-icon">📝</div>
-                  <div className="metric-content">
-                    <h3 className="metric-value">{analyticsData.overview.totalPractice}</h3>
-                    <p className="metric-label">Practice Sessions</p>
-                    <span className="metric-change positive">+8 this week</span>
-                  </div>
-                </div>
-                
-                <div className="metric-card">
-                  <div className="metric-icon">⏱️</div>
-                  <div className="metric-content">
-                    <h3 className="metric-value">{analyticsData.overview.studyHours}h</h3>
-                    <p className="metric-label">Study Hours</p>
-                    <span className="metric-change positive">+15h this month</span>
-                  </div>
-                </div>
-                
-                <div className="metric-card">
-                  <div className="metric-icon">🔥</div>
-                  <div className="metric-content">
-                    <h3 className="metric-value">{analyticsData.overview.currentStreak}</h3>
-                    <p className="metric-label">Day Streak</p>
-                    <span className="metric-info">Best: {analyticsData.overview.longestStreak} days</span>
-                  </div>
-                </div>
-                
-                <div className="metric-card highlighted">
-                  <div className="metric-icon">⭐</div>
-                  <div className="metric-content">
-                    <h3 className="metric-value">{analyticsData.overview.averageScore}%</h3>
-                    <p className="metric-label">Average Score</p>
-                    <span className="metric-change positive">+{analyticsData.overview.improvement}% improvement</span>
-                  </div>
-                </div>
-                
-                <div className="metric-card highlighted">
-                  <div className="metric-icon">🏆</div>
-                  <div className="metric-content">
-                    <h3 className="metric-value">#{analyticsData.overview.rank}</h3>
-                    <p className="metric-label">Your Rank</p>
-                    <span className="metric-info">Top {analyticsData.overview.percentile}%</span>
-                  </div>
-                </div>
+              <div className="stat-card">
+                <div className="stat-icon">✏️</div>
+                <div className="stat-value">{analytics.totalPractice}</div>
+                <div className="stat-label">Practice Sessions</div>
               </div>
-
-              {/* Progress Chart */}
-              <div className="chart-card">
-                <div className="chart-header">
-                  <h3 className="chart-title">Score Progression</h3>
-                  <p className="chart-subtitle">Your performance trend over the last 6 months</p>
-                </div>
-                <ProgressChart data={analyticsData.monthlyProgress} />
+              
+              <div className="stat-card">
+                <div className="stat-icon">🎯</div>
+                <div className="stat-value">{analytics.totalDailyQuiz}</div>
+                <div className="stat-label">Daily Quizzes</div>
               </div>
+              
+              <div className="stat-card">
+                <div className="stat-icon">⏱️</div>
+                <div className="stat-value">{analytics.studyHours}h</div>
+                <div className="stat-label">Study Hours</div>
+              </div>
+              
+              <div className="stat-card highlight">
+                <div className="stat-icon">🔥</div>
+                <div className="stat-value">{analytics.currentStreak}</div>
+                <div className="stat-label">Day Streak</div>
+              </div>
+              
+              <div className="stat-card highlight">
+                <div className="stat-icon">⚡</div>
+                <div className="stat-value">{analytics.totalXP}</div>
+                <div className="stat-label">Total XP</div>
+              </div>
+              
+              {rankData && (
+                <>
+                  <div className="stat-card special">
+                    <div className="stat-icon">🏅</div>
+                    <div className="stat-value">#{rankData.rank}</div>
+                    <div className="stat-label">Global Rank</div>
+                  </div>
+                  
+                  <div className="stat-card special">
+                    <div className="stat-icon">📊</div>
+                    <div className="stat-value">{rankData.percentile}%</div>
+                    <div className="stat-label">Top Percentile</div>
+                  </div>
+                </>
+              )}
+            </div>
 
-              {/* Recent Achievements */}
-              <div className="achievements-section">
-                <h3 className="section-title">🏅 Recent Achievements</h3>
-                <div className="achievements-grid">
-                  {analyticsData.achievements.map(achievement => (
-                    <div key={achievement.id} className={`achievement-card ${achievement.rarity}`}>
-                      <div className="achievement-icon">{achievement.icon}</div>
-                      <h4 className="achievement-title">{achievement.title}</h4>
-                      <p className="achievement-date">{new Date(achievement.date).toLocaleDateString()}</p>
-                      <span className={`achievement-badge ${achievement.rarity}`}>{achievement.rarity}</span>
-                    </div>
-                  ))}
+            {/* Average Scores */}
+            <div className="stats-section">
+              <h2 className="section-title">Average Performance</h2>
+              <div className="score-cards">
+                <div className="score-card">
+                  <div className="score-header">
+                    <span className="score-label">Exam Average</span>
+                    <span className="score-value">{analytics.avgExamScore}%</span>
+                  </div>
+                  <div className="score-bar">
+                    <div 
+                      className="score-fill exam"
+                      style={{ width: `${analytics.avgExamScore}%` }}
+                    ></div>
+                  </div>
+                </div>
+                
+                <div className="score-card">
+                  <div className="score-header">
+                    <span className="score-label">Practice Average</span>
+                    <span className="score-value">{analytics.avgPracticeScore}%</span>
+                  </div>
+                  <div className="score-bar">
+                    <div 
+                      className="score-fill practice"
+                      style={{ width: `${analytics.avgPracticeScore}%` }}
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>
-          )}
 
-          {/* PERFORMANCE TAB */}
-          {activeTab === 'performance' && (
+            {/* Recent Tests */}
             <div className="stats-section">
-              
-              {/* Accuracy Analysis */}
-              <div className="performance-overview">
-                <div className="accuracy-card">
-                  <h3 className="card-title">Overall Accuracy</h3>
-                  <CircularProgress 
-                    value={analyticsData.accuracyTrends.overall} 
-                    size={150}
-                    label="Average Accuracy"
-                  />
-                </div>
-                
-                <div className="difficulty-breakdown">
-                  <h3 className="card-title">Difficulty-wise Accuracy</h3>
-                  <div className="difficulty-bars">
-                    <div className="difficulty-item">
-                      <span className="diff-label">Easy</span>
-                      <div className="diff-bar-container">
-                        <div className="diff-bar" style={{ width: `${analyticsData.accuracyTrends.easy}%`, backgroundColor: '#10b981' }}>
-                          <span className="diff-value">{analyticsData.accuracyTrends.easy}%</span>
+              <h2 className="section-title">Recent Tests</h2>
+              <div className="recent-tests">
+                {analytics.recentTests.length > 0 ? (
+                  analytics.recentTests.map((test, index) => (
+                    <div key={index} className="test-item">
+                      <div className="test-info">
+                        <div className="test-name">
+                          {test.examType || test.subject || 'Test'}
+                        </div>
+                        <div className="test-date">
+                          {test.timestamp?.toDate().toLocaleDateString()}
                         </div>
                       </div>
-                    </div>
-                    <div className="difficulty-item">
-                      <span className="diff-label">Medium</span>
-                      <div className="diff-bar-container">
-                        <div className="diff-bar" style={{ width: `${analyticsData.accuracyTrends.medium}%`, backgroundColor: '#f59e0b' }}>
-                          <span className="diff-value">{analyticsData.accuracyTrends.medium}%</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="difficulty-item">
-                      <span className="diff-label">Hard</span>
-                      <div className="diff-bar-container">
-                        <div className="diff-bar" style={{ width: `${analyticsData.accuracyTrends.hard}%`, backgroundColor: '#ef4444' }}>
-                          <span className="diff-value">{analyticsData.accuracyTrends.hard}%</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Time Analysis */}
-              <div className="chart-card">
-                <div className="chart-header">
-                  <h3 className="chart-title">⏰ Peak Performance Time</h3>
-                  <p className="chart-subtitle">Your best performance is at {analyticsData.timeAnalysis.peakPerformanceTime}</p>
-                </div>
-                <div className="time-distribution">
-                  {analyticsData.timeAnalysis.hourlyDistribution.map((slot, index) => (
-                    <div key={index} className="time-slot">
-                      <div className="slot-header">
-                        <span className="slot-time">{slot.hour}</span>
-                        <span className="slot-score">{slot.score}%</span>
-                      </div>
-                      <div className="slot-bar-container">
-                        <div 
-                          className="slot-bar" 
-                          style={{ 
-                            width: `${(slot.sessions / 35) * 100}%`,
-                            backgroundColor: slot.score >= 80 ? '#10b981' : slot.score >= 70 ? '#f59e0b' : '#ef4444'
-                          }}
-                        >
-                          <span className="slot-sessions">{slot.sessions} sessions</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Recent Tests Table */}
-              <div className="recent-tests-card">
-                <h3 className="card-title">📋 Recent Test Results</h3>
-                <div className="tests-table">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Test Name</th>
-                        <th>Date</th>
-                        <th>Score</th>
-                        <th>Rank</th>
-                        <th>Percentile</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {analyticsData.recentTests.map(test => (
-                        <tr key={test.id}>
-                          <td className="test-name">{test.name}</td>
-                          <td>{new Date(test.date).toLocaleDateString()}</td>
-                          <td className="test-score">{test.score}%</td>
-                          <td>#{test.rank}</td>
-                          <td className="test-percentile">{test.percentile}%</td>
-                          <td>
-                            <span className={`status-badge ${test.score >= 80 ? 'excellent' : test.score >= 60 ? 'good' : 'needs-work'}`}>
-                              {test.score >= 80 ? '🌟 Excellent' : test.score >= 60 ? '👍 Good' : '📈 Practice'}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* SUBJECTS TAB */}
-          {activeTab === 'subjects' && (
-            <div className="stats-section">
-              
-              {/* Subject Performance */}
-              <div className="chart-card">
-                <div className="chart-header">
-                  <h3 className="chart-title">Subject-wise Performance</h3>
-                  <p className="chart-subtitle">Overall performance across all subjects</p>
-                </div>
-                <BarChart data={analyticsData.subjectPerformance} metric="score" />
-              </div>
-
-              {/* Strengths and Weaknesses */}
-              <div className="strengths-weaknesses-grid">
-                <div className="strengths-card">
-                  <h3 className="card-title">💪 Your Strengths</h3>
-                  <div className="topic-list">
-                    {analyticsData.topicStrengths.map((topic, index) => (
-                      <div key={index} className="topic-item strength">
-                        <div className="topic-header">
-                          <span className="topic-name">{topic.topic}</span>
-                          <span className="topic-mastery">{topic.mastery}%</span>
-                        </div>
-                        <div className="topic-progress-bar">
-                          <div 
-                            className="topic-progress-fill" 
-                            style={{ width: `${topic.mastery}%`, backgroundColor: '#10b981' }}
-                          ></div>
-                        </div>
-                        <span className="topic-tests">{topic.tests} tests completed</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="weaknesses-card">
-                  <h3 className="card-title">🎯 Areas to Improve</h3>
-                  <div className="topic-list">
-                    {analyticsData.topicWeaknesses.map((topic, index) => (
-                      <div key={index} className="topic-item weakness">
-                        <div className="topic-header">
-                          <span className="topic-name">{topic.topic}</span>
-                          <span className="topic-mastery">{topic.mastery}%</span>
-                        </div>
-                        <div className="topic-progress-bar">
-                          <div 
-                            className="topic-progress-fill" 
-                            style={{ width: `${topic.mastery}%`, backgroundColor: '#ef4444' }}
-                          ></div>
-                        </div>
-                        <span className="topic-tests">{topic.tests} tests completed</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Subject Cards Grid */}
-              <div className="subject-cards-grid">
-                {analyticsData.subjectPerformance.map((subject, index) => (
-                  <div key={index} className="subject-detail-card" style={{ borderTopColor: subject.color }}>
-                    <div className="subject-card-header">
-                      <h4 className="subject-card-title">{subject.subject}</h4>
-                      <span className={`subject-trend ${subject.trend}`}>
-                        {subject.trend === 'up' ? '📈' : '📉'} {subject.improvement}%
-                      </span>
-                    </div>
-                    <div className="subject-card-body">
-                      <CircularProgress value={subject.score} size={100} />
-                      <div className="subject-stats">
-                        <div className="subject-stat">
-                          <span className="stat-label">Tests Taken</span>
-                          <span className="stat-value">{subject.tests}</span>
-                        </div>
-                        <div className="subject-stat">
-                          <span className="stat-label">Improvement</span>
-                          <span className="stat-value positive">+{subject.improvement}%</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* INSIGHTS TAB */}
-          {activeTab === 'insights' && (
-            <div className="stats-section">
-              
-              {/* AI Recommendations */}
-              <div className="recommendations-section">
-                <h3 className="section-title">🤖 Personalized Recommendations</h3>
-                <div className="recommendations-grid">
-                  {analyticsData.recommendations.map((rec, index) => (
-                    <div key={index} className={`recommendation-card ${rec.type}`}>
-                      <div className="rec-header">
-                        <span className={`rec-badge ${rec.type}`}>
-                          {rec.type === 'urgent' ? '⚠️ Urgent' : rec.type === 'improvement' ? '📈 Improve' : '✨ Strength'}
+                      <div className="test-score">
+                        <span className={`score ${parseFloat(test.percentage) >= 75 ? 'good' : parseFloat(test.percentage) >= 50 ? 'average' : 'poor'}`}>
+                          {parseFloat(test.percentage).toFixed(1)}%
                         </span>
                       </div>
-                      <h4 className="rec-title">{rec.title}</h4>
-                      <p className="rec-description">{rec.description}</p>
-                      <button className="rec-action-btn">{rec.action} →</button>
+                    </div>
+                  ))
+                ) : (
+                  <p className="no-data">No tests taken yet. Start practicing to see your progress!</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Performance Tab */}
+        {activeTab === 'performance' && (
+          <div className="stats-tab-content">
+            {/* Subject Performance */}
+            <div className="stats-section">
+              <h2 className="section-title">Subject-wise Performance</h2>
+              <div className="subject-performance">
+                {analytics.subjectPerformance.length > 0 ? (
+                  analytics.subjectPerformance.map((subject, index) => (
+                    <div key={index} className="subject-card">
+                      <div className="subject-header">
+                        <h3 className="subject-name">{subject.subject}</h3>
+                        <span className="subject-score">{subject.avgScore}%</span>
+                      </div>
+                      <div className="subject-stats">
+                        <span className="subject-tests">{subject.tests} tests</span>
+                        <span className={`subject-improvement ${parseFloat(subject.improvement) >= 0 ? 'positive' : 'negative'}`}>
+                          {parseFloat(subject.improvement) >= 0 ? '↑' : '↓'} {Math.abs(parseFloat(subject.improvement))}%
+                        </span>
+                      </div>
+                      <div className="subject-bar">
+                        <div 
+                          className="subject-fill"
+                          style={{ 
+                            width: `${subject.avgScore}%`,
+                            backgroundColor: `hsl(${subject.avgScore * 1.2}, 70%, 50%)`
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="no-data">No subject data available yet.</p>
+                )}
+              </div>
+            </div>
+
+            {/* Weekly Progress */}
+            {analytics.weeklyProgress.length > 0 && (
+              <div className="stats-section">
+                <h2 className="section-title">Weekly Progress (Last 30 Days)</h2>
+                <div className="weekly-chart">
+                  {analytics.weeklyProgress.map((week, index) => (
+                    <div key={index} className="week-bar">
+                      <div 
+                        className="bar-fill"
+                        style={{ height: `${week.avgScore}%` }}
+                        title={`${week.avgScore}% avg`}
+                      ></div>
+                      <div className="bar-label">{week.week}</div>
+                      <div className="bar-count">{week.tests} tests</div>
                     </div>
                   ))}
                 </div>
               </div>
+            )}
 
-              {/* Study Patterns */}
-              <div className="study-patterns-card">
-                <h3 className="card-title">📊 Study Patterns Analysis</h3>
-                <div className="patterns-grid">
-                  <div className="pattern-item">
-                    <div className="pattern-icon">⏱️</div>
-                    <div className="pattern-content">
-                      <h4 className="pattern-value">{analyticsData.timeAnalysis.averageStudySession} min</h4>
-                      <p className="pattern-label">Avg Session Length</p>
-                      <span className="pattern-insight">Optimal: 45-60 minutes</span>
-                    </div>
-                  </div>
-                  
-                  <div className="pattern-item">
-                    <div className="pattern-icon">📅</div>
-                    <div className="pattern-content">
-                      <h4 className="pattern-value">{analyticsData.timeAnalysis.totalSessions}</h4>
-                      <p className="pattern-label">Total Sessions</p>
-                      <span className="pattern-insight">Great consistency!</span>
-                    </div>
-                  </div>
-                  
-                  <div className="pattern-item">
-                    <div className="pattern-icon">🌅</div>
-                    <div className="pattern-content">
-                      <h4 className="pattern-value">{analyticsData.timeAnalysis.weekdayAvg} min</h4>
-                      <p className="pattern-label">Weekday Average</p>
-                      <span className="pattern-insight">vs {analyticsData.timeAnalysis.weekendAvg} min weekend</span>
-                    </div>
-                  </div>
-                  
-                  <div className="pattern-item">
-                    <div className="pattern-icon">🎯</div>
-                    <div className="pattern-content">
-                      <h4 className="pattern-value">{analyticsData.timeAnalysis.peakPerformanceTime}</h4>
-                      <p className="pattern-label">Peak Time</p>
-                      <span className="pattern-insight">Schedule important tests here</span>
-                    </div>
-                  </div>
+            {/* Key Achievements */}
+            <div className="stats-section">
+              <h2 className="section-title">Key Achievements</h2>
+              <div className="achievements-grid">
+                <div className="achievement-card">
+                  <div className="achievement-icon">💯</div>
+                  <div className="achievement-value">{analytics.perfectScores}</div>
+                  <div className="achievement-label">Perfect Scores</div>
                 </div>
-              </div>
-
-              {/* Guardian Summary */}
-              <div className="guardian-summary-card">
-                <h3 className="card-title">👨‍👩‍👧 Guardian Summary Report</h3>
-                <div className="summary-content">
-                  <div className="summary-section">
-                    <h4 className="summary-section-title">📈 Overall Progress</h4>
-                    <p className="summary-text">
-                      Your child has shown <strong className="highlight-positive">+{analyticsData.overview.improvement}% improvement</strong> over the past month. 
-                      They've completed <strong>{analyticsData.overview.totalTests} tests</strong> and maintained a <strong>{analyticsData.overview.currentStreak}-day study streak</strong>. 
-                      Current rank: <strong>#{analyticsData.overview.rank}</strong> out of {analyticsData.overview.totalStudents} students (Top {analyticsData.overview.percentile}%).
-                    </p>
-                  </div>
-                  
-                  <div className="summary-section">
-                    <h4 className="summary-section-title">💪 Key Strengths</h4>
-                    <ul className="summary-list">
-                      {analyticsData.topicStrengths.slice(0, 3).map((topic, index) => (
-                        <li key={index}>
-                          <strong>{topic.topic}</strong> - {topic.mastery}% mastery ({topic.tests} tests)
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="summary-section">
-                    <h4 className="summary-section-title">🎯 Areas Needing Attention</h4>
-                    <ul className="summary-list warning">
-                      {analyticsData.topicWeaknesses.slice(0, 3).map((topic, index) => (
-                        <li key={index}>
-                          <strong>{topic.topic}</strong> - {topic.mastery}% (Needs practice)
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="summary-section">
-                    <h4 className="summary-section-title">💡 Recommendations</h4>
-                    <ul className="summary-list">
-                      <li>Schedule regular practice sessions for weaker topics (30 min daily)</li>
-                      <li>Maintain current study streak - consistency is key</li>
-                      <li>Focus on {analyticsData.timeAnalysis.peakPerformanceTime} for important tests</li>
-                      <li>Consider tutoring for Physics and Chemistry topics</li>
-                    </ul>
-                  </div>
-                  
-                  <button className="download-report-btn">
-                    📄 Download Detailed PDF Report
-                  </button>
+                
+                <div className="achievement-card">
+                  <div className="achievement-icon">🗺️</div>
+                  <div className="achievement-value">{analytics.questProgress}/40</div>
+                  <div className="achievement-label">Quests Completed</div>
+                </div>
+                
+                <div className="achievement-card">
+                  <div className="achievement-icon">📚</div>
+                  <div className="achievement-value">{analytics.totalTests}</div>
+                  <div className="achievement-label">Total Tests</div>
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {/* Badges Tab */}
+        {activeTab === 'badges' && (
+          <div className="stats-tab-content">
+            <div className="stats-section">
+              <h2 className="section-title">Your Badges ({badges.length}/{Object.keys(BADGE_DEFINITIONS).length})</h2>
+              <p className="section-subtitle">Unlock badges by completing achievements</p>
+              
+              <div className="badges-grid">
+                {Object.entries(BADGE_DEFINITIONS).map(([badgeId, badge]) => {
+                  const isUnlocked = badges.includes(badgeId);
+                  return (
+                    <div 
+                      key={badgeId} 
+                      className={`badge-card ${isUnlocked ? 'unlocked' : 'locked'}`}
+                      style={{ borderColor: isUnlocked ? badge.color : '#333' }}
+                    >
+                      <div 
+                        className="badge-icon"
+                        style={{ 
+                          backgroundColor: isUnlocked ? badge.color : '#1a1a2e',
+                          opacity: isUnlocked ? 1 : 0.3
+                        }}
+                      >
+                        {badge.icon}
+                      </div>
+                      <div className="badge-info">
+                        <h3 className="badge-name">{badge.name}</h3>
+                        <p className="badge-desc">{badge.desc}</p>
+                        {isUnlocked && <span className="badge-status">✓ Unlocked</span>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Badge Progress Hints */}
+            <div className="stats-section">
+              <h2 className="section-title">Progress to Next Badges</h2>
+              <div className="badge-progress-list">
+                {Object.entries(BADGE_DEFINITIONS)
+                  .filter(([badgeId]) => !badges.includes(badgeId))
+                  .slice(0, 5)
+                  .map(([badgeId, badge]) => {
+                    let progress = 0;
+                    let total = 100;
+                    let progressText = '';
+                    
+                    // Calculate progress based on badge type
+                    if (badgeId === 'daily_quiz_50') {
+                      progress = analytics.totalDailyQuiz;
+                      total = 50;
+                      progressText = `${progress}/50 daily quizzes`;
+                    } else if (badgeId === 'exam_10') {
+                      progress = analytics.totalExams;
+                      total = 10;
+                      progressText = `${progress}/10 exams`;
+                    } else if (badgeId === 'perfect_10') {
+                      progress = analytics.perfectScores;
+                      total = 10;
+                      progressText = `${progress}/10 perfect scores`;
+                    } else if (badgeId === 'streak_7') {
+                      progress = analytics.currentStreak;
+                      total = 7;
+                      progressText = `${progress}/7 days streak`;
+                    } else if (badgeId === 'streak_30') {
+                      progress = analytics.currentStreak;
+                      total = 30;
+                      progressText = `${progress}/30 days streak`;
+                    } else if (badgeId === 'xp_1000') {
+                      progress = analytics.totalXP;
+                      total = 1000;
+                      progressText = `${progress}/1000 XP`;
+                    } else if (badgeId === 'xp_5000') {
+                      progress = analytics.totalXP;
+                      total = 5000;
+                      progressText = `${progress}/5000 XP`;
+                    } else if (badgeId === 'quest_10') {
+                      progress = analytics.questProgress;
+                      total = 10;
+                      progressText = `${progress}/10 quests`;
+                    } else if (badgeId === 'quest_40') {
+                      progress = analytics.questProgress;
+                      total = 40;
+                      progressText = `${progress}/40 quests`;
+                    } else if (badgeId === 'practice_100') {
+                      progress = analytics.totalPractice;
+                      total = 100;
+                      progressText = `${progress}/100 practice sessions`;
+                    }
+                    
+                    const percentage = Math.min((progress / total) * 100, 100);
+                    
+                    return (
+                      <div key={badgeId} className="badge-progress-item">
+                        <div className="badge-progress-header">
+                          <span className="badge-progress-icon">{badge.icon}</span>
+                          <div className="badge-progress-info">
+                            <span className="badge-progress-name">{badge.name}</span>
+                            <span className="badge-progress-text">{progressText}</span>
+                          </div>
+                        </div>
+                        <div className="badge-progress-bar">
+                          <div 
+                            className="badge-progress-fill"
+                            style={{ 
+                              width: `${percentage}%`,
+                              backgroundColor: badge.color
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+      
       <Footer />
-    </>
+    </div>
   );
 };
 

@@ -18,7 +18,8 @@ const ChooseRole = () => {
         "Earn badges and rewards",
         "Access learning library",
         "Participate in puzzle challenges"
-      ]
+      ],
+      enabled: true
     },
     admin: {
       title: "Admin",
@@ -30,19 +31,25 @@ const ChooseRole = () => {
         "Manage assessments and grades",
         "Configure system settings",
         "Monitor platform activity"
-      ]
+      ],
+      enabled: false,
+      disabledMessage: "Admin accounts are managed by the system administrator"
     }
   };
 
   const handleRoleClick = (role) => {
-    setSelectedRole(selectedRole === role ? null : role);
+    // Only allow selection if role is enabled
+    if (roles[role].enabled) {
+      setSelectedRole(selectedRole === role ? null : role);
+    }
   };
 
   const handleContinue = () => {
-    if (selectedRole) {
-      // Navigate to profile info page based on selected role
-      navigate(selectedRole === "student" ? "/student-info" : "/admin-info");
+    if (selectedRole === "student") {
+      // Only allow students to continue through UI registration
+      navigate("/student-info");
     }
+    // Admin selection is disabled, so this won't be reached
   };
 
   return (
@@ -72,9 +79,32 @@ const ChooseRole = () => {
           </div>
 
           <div 
-            className={`role-panel ${selectedRole === "admin" ? "selected" : ""}`}
+            className={`role-panel ${selectedRole === "admin" ? "selected" : ""} ${!roles.admin.enabled ? "disabled" : ""}`}
             onClick={() => handleRoleClick("admin")}
+            style={{
+              opacity: roles.admin.enabled ? 1 : 0.5,
+              cursor: roles.admin.enabled ? 'pointer' : 'not-allowed',
+              pointerEvents: roles.admin.enabled ? 'auto' : 'none'
+            }}
           >
+            {!roles.admin.enabled && (
+              <div style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                background: '#f0f0f0',
+                color: '#666',
+                padding: '0.5rem 1rem',
+                borderRadius: '1rem',
+                fontSize: '0.85rem',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                🔒 Restricted
+              </div>
+            )}
             <div className="role-panel-header">
               <span className="role-icon">{roles.admin.icon}</span>
               <h2>{roles.admin.title}</h2>
@@ -87,6 +117,19 @@ const ChooseRole = () => {
                 ))}
               </ul>
             </div>
+            {!roles.admin.enabled && (
+              <div style={{
+                marginTop: '1rem',
+                padding: '0.75rem',
+                background: 'rgba(255, 193, 7, 0.1)',
+                border: '1px solid rgba(255, 193, 7, 0.3)',
+                borderRadius: '0.5rem',
+                fontSize: '0.9rem',
+                color: '#856404'
+              }}>
+                ℹ️ {roles.admin.disabledMessage}
+              </div>
+            )}
           </div>
         </div>
 

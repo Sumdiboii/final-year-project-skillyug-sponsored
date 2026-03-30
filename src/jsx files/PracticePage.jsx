@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { fetchRandomQuestionsFlat, fetchQuestionsBySubject, fetchQuestionsByChapter } from '../firebase/firestore';
 import '../css files/PracticePage.css';
 import MainNavbar from "../components/MainNavbar";
 import Footer from "../components/Footer";
@@ -15,9 +16,16 @@ const PracticePage = () => {
     title: 'Practice Quiz',
     questions: 25,
     duration: '30 min',
-    difficulty: 'Medium'
+    difficulty: 'Medium',
+    subject: null
   };
+  
+  console.log('🎯 PracticePage received quizData:', quizData);
+  console.log('📍 Location state:', location.state);
 
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [answers, setAnswers] = useState({});
@@ -25,65 +33,80 @@ const PracticePage = () => {
   const [quizStarted, setQuizStarted] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const [showExplanation, setShowExplanation] = useState(true);
+
+  // Debug logging
+  console.log('🔍 DEBUG - Component State:', {
+    loading,
+    error,
+    questionsCount: questions.length,
+    quizStarted,
+    quizData
+  });
 
   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Sample questions - In real app, this would come from API based on quiz type
-  const questions = [
-    {
-      id: 1,
-      question: "If CODING is written as DPEJOH, how is FLOWER written?",
-      options: ["GMPXFS", "GMPXFR", "GMPWFS", "HMPXFS"],
-      correct: 0,
-      type: "coding-decoding",
-      explanation: "Each letter is shifted by +1 position in the alphabet. C→D, O→P, D→E, I→J, N→O, G→H. Similarly, F→G, L→M, O→P, W→X, E→F, R→S."
-    },
-    {
-      id: 2,
-      question: "Find the odd one out: 3, 7, 11, 14, 17",
-      options: ["3", "7", "14", "17"],
-      correct: 2,
-      type: "classification",
-      explanation: "All numbers except 14 are prime numbers. 14 is divisible by 2 and 7, making it a composite number."
-    },
-    {
-      id: 3,
-      question: "Complete the series: 2, 6, 12, 20, 30, ?",
-      options: ["42", "40", "38", "44"],
-      correct: 0,
-      type: "series",
-      explanation: "The pattern is n×(n+1): 1×2=2, 2×3=6, 3×4=12, 4×5=20, 5×6=30, 6×7=42."
-    },
-    {
-      id: 4,
-      question: "If North becomes South, East becomes West, what does North-East become?",
-      options: ["South-West", "North-West", "South-East", "North-East"],
-      correct: 0,
-      type: "direction",
-      explanation: "When directions are inverted, North becomes South and East becomes West. Therefore, North-East becomes South-West."
-    },
-    {
-      id: 5,
-      question: "A is B's brother. B is C's father. How is A related to C?",
-      options: ["Father", "Uncle", "Brother", "Son"],
-      correct: 1,
-      type: "blood-relations",
-      explanation: "A is B's brother, and B is C's father. This makes A the brother of C's father, which means A is C's uncle."
-    },
-    // Generate more questions up to 20
-    ...Array.from({ length: 15 }, (_, i) => ({
-      id: i + 6,
-      question: `Sample question ${i + 6} for ${quizData.title}. This would be dynamically generated based on the quiz type and difficulty level.`,
-      options: ["Option A", "Option B", "Option C", "Option D"],
-      correct: Math.floor(Math.random() * 4),
-      type: "general",
-      explanation: `This is a sample explanation for question ${i + 6}. In a real application, this would provide detailed reasoning for the correct answer and help students understand the concept better.`
-    }))
-  ];
+  // Fetch questions from Firestore
+  useEffect(() => {
+    const loadQuestions = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        let result;
+        
+        console.log('📚 Quiz Data:', quizData);
+        
+        // If chapter-wise quiz, fetch questions for specific chapter
+        if (quizData.isChapterWise && quizData.subject && quizData.chapter) {
+          console.log(`📖 Loading chapter-wise: Subject="${quizData.subject}", Chapter="${quizData.chapter}"`);
+          result = await fetchQuestionsByChapter(quizData.subject, quizData.chapter, quizData.questions || 20);
+        }
+        // If subject is specified in quizData, fetch subject-specific questions
+        else if (quizData.subject) {
+          console.log(`📊 Loading subject-wise: Subject="${quizData.subject}"`);
+          result = await fetchQuestionsBySubject(quizData.subject, quizData.questions || 25);
+        } 
+        // Otherwise fetch random questions
+        else {
+          console.log('🎲 Loading random questions');
+          result = await fetchRandomQuestionsFlat(null, quizData.questions || 25);
+        }
+        
+        console.log('📥 Fetch result:', result);
+        
+        if (result && result.success && result.questions && result.questions.length > 0) {
+          // Transform questions to match component format
+          const transformedQuestions = result.questions.map((q, index) => ({
+            id: q.id || index + 1,
+            question: q.question,
+            options: q.options || [q.opt1, q.opt2, q.opt3, q.opt4],
+            correct: q.correct,
+            type: q.subject,
+            chapter: q.chapter
+          }));
+          console.log(`✅ Loaded ${transformedQuestions.length} questions`);
+          setQuestions(transformedQuestions);
+          setError(null); // Clear any previous errors
+        } else {
+          console.log('❌ No questions found in result');
+          const errorMsg = result?.error || `No questions found for ${quizData.subject || 'this topic'}${quizData.chapter ? ` - ${quizData.chapter}` : ''}`;
+          console.log('Setting error:', errorMsg);
+          setError(errorMsg);
+          setQuestions([]); // Make sure questions is empty
+        }
+      } catch (err) {
+        console.error('❌ Error loading questions:', err);
+        setError(`Failed to load questions: ${err.message}`);
+        setQuestions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadQuestions();
+  }, [quizData.subject, quizData.chapter, quizData.isChapterWise]); // Added specific dependencies
 
   // Timer effect
   useEffect(() => {
@@ -182,6 +205,70 @@ const PracticePage = () => {
     if (percentage >= 60) return { message: "Not bad! Room for improvement. 📚", color: "#0284c7" };
     return { message: "Keep practicing! You'll get better! 💪", color: "#dc2626" };
   };
+
+  if (loading) {
+    return (
+      <>
+        <MainNavbar />
+        <div className="pp-practice-page-container">
+          <div className="pp-loading-container">
+            <div className="pp-loading-spinner"></div>
+            <p>Loading questions from database...</p>
+            <div style={{ marginTop: '20px', padding: '10px', background: 'rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '0.9rem' }}>
+              <strong>Debug Info:</strong><br />
+              Subject: {quizData.subject || 'None'}<br />
+              Chapter: {quizData.chapter || 'None'}<br />
+              Is Chapter-wise: {quizData.isChapterWise ? 'Yes' : 'No'}
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <MainNavbar />
+        <div className="pp-practice-page-container">
+          <div className="pp-error-container">
+            <h2>⚠️ Unable to Load Questions</h2>
+            <p>{error}</p>
+            <p style={{ fontSize: '0.9rem', marginTop: '1rem', opacity: 0.8 }}>
+              Check browser console for more details
+            </p>
+            <button onClick={() => navigate('/practice')} className="pp-back-button">
+              Back to Practice
+            </button>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+  
+  if (questions.length === 0 && !loading) {
+    return (
+      <>
+        <MainNavbar />
+        <div className="pp-practice-page-container">
+          <div className="pp-error-container">
+            <h2>📚 No Questions Available</h2>
+            <p>No questions found for this topic.</p>
+            <p style={{ fontSize: '0.9rem', marginTop: '0.5rem', opacity: 0.8 }}>
+              Subject: {quizData.subject || 'Not specified'}<br />
+              Chapter: {quizData.chapter || 'Not specified'}
+            </p>
+            <button onClick={() => navigate('/practice')} className="pp-back-button">
+              Back to Practice
+            </button>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   if (!quizStarted) {
     return (
@@ -427,46 +514,6 @@ const PracticePage = () => {
                     );
                   })}
                 </div>
-              </div>
-
-              {/* Explanation Box */}
-              <div className="pp-explanation-panel">
-                <div className="pp-explanation-header">
-                  <div className="pp-explanation-left">
-                    <span className="pp-explanation-icon">💡</span>
-                    <span className="pp-explanation-title">Explanation</span>
-                  </div>
-                  <button 
-                    className="pp-explanation-toggle"
-                    onClick={() => setShowExplanation(!showExplanation)}
-                    title={showExplanation ? "Hide explanation" : "Show explanation"}
-                  >
-                    {showExplanation ? '🔽' : '▶️'}
-                  </button>
-                </div>
-                {showExplanation && (
-                  <div className="pp-explanation-content">
-                    {answers[currentQuestion] !== undefined ? (
-                      <>
-                        <div className={`pp-answer-status ${answers[currentQuestion] === questions[currentQuestion].correct ? 'pp-correct' : 'pp-incorrect'}`}>
-                          {answers[currentQuestion] === questions[currentQuestion].correct ? (
-                            <><span className="pp-status-icon">✓</span> Correct Answer!</>
-                          ) : (
-                            <><span className="pp-status-icon">✗</span> Incorrect. Correct answer: {String.fromCharCode(65 + questions[currentQuestion].correct)}</>
-                          )}
-                        </div>
-                        <div className="pp-explanation-text">
-                          {questions[currentQuestion].explanation}
-                        </div>
-                      </>
-                    ) : (
-                      <div className="pp-no-answer">
-                        <span className="pp-no-answer-icon">📝</span>
-                        <span className="pp-no-answer-text">Select an answer to see the explanation</span>
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
 
               {/* Stats Panel */}
