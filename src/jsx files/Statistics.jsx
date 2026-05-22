@@ -1,13 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { fetchUserStatistics, getUserRank, fetchGlobalLeaderboard, checkAndAwardBadges } from '../firebase/firestore';
+import { 
+  Chart as ChartJS, 
+  CategoryScale, 
+  LinearScale, 
+  PointElement, 
+  LineElement, 
+  BarElement, 
+  Title, 
+  Tooltip, 
+  Legend, 
+  RadialLinearScale,
+  ArcElement
+} from 'chart.js';
+import { Line, Bar, PolarArea } from 'react-chartjs-2';
 import '../css files/Statistics.css';
 import MainNavbar from '../components/MainNavbar';
 import Footer from '../components/Footer';
 import ParticleBackground from '../components/StarBg';
 
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  RadialLinearScale,
+  ArcElement
+);
+
 const Statistics = () => {
-  const { currentUser } = useAuth();
+  const { user } = useAuth();
+  // We use `user` because AuthContext exports `user`, not `currentUser`
+  const currentUser = user;
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
   const [rankData, setRankData] = useState(null);
@@ -52,7 +82,7 @@ const Statistics = () => {
       console.log('Stats result:', statsResult);
       console.log('Rank result:', rankResult);
       
-      if (statsResult.success) {
+      if (statsResult.success && statsResult.examHistory) {
         setStats(statsResult);
         
         // Check for new badges
@@ -65,7 +95,32 @@ const Statistics = () => {
         const userBadges = statsResult.userData?.badges || [];
         setBadges(userBadges);
       } else {
-        console.error('Failed to fetch stats:', statsResult.error);
+        // Fallback to local storage
+        console.log('Falling back to local storage stats');
+        const localExamHistory = JSON.parse(localStorage.getItem('examHistory') || '[]');
+        // Need to parse local storage times safely
+        const parsedExams = localExamHistory.map(log => ({
+          ...log,
+          timestamp: { toMillis: () => new Date(log.date).getTime(), toDate: () => new Date(log.date) }
+        }));
+        
+        const localPracticeHistory = JSON.parse(localStorage.getItem('practiceLogs') || '[]');
+        const parsedPractice = localPracticeHistory.map(log => ({
+          ...log,
+          percentage: log.score && log.totalQuestions ? ((log.score / log.totalQuestions) * 100).toFixed(1) : 0,
+          timestamp: { toMillis: () => new Date(log.date).getTime(), toDate: () => new Date(log.date) }
+        }));
+
+        setStats({
+          success: true,
+          examHistory: parsedExams,
+          practiceHistory: parsedPractice,
+          dailyQuizHistory: [],
+          userData: {
+            streak: parseInt(localStorage.getItem('userStreak') || '0'),
+            totalXP: parseInt(localStorage.getItem('totalXP') || '0'),
+          }
+        });
       }
       
       if (rankResult.success) {
@@ -296,6 +351,125 @@ const Statistics = () => {
             🏆 Badges
           </button>
         </div>
+
+        {/* Charts & Graphs Setup */}
+        {activeTab === 'performance' && (
+          <div className="stats-tab-content performance-tab">
+            <div className="charts-grid">
+              
+              {/* Line Chart for Weekly Progress */}
+              <div className="chart-card">
+                <h3>Weekly Trend</h3>
+                {analytics.weeklyProgress.length > 0 ? (
+                  <div className="chart-wrapper">
+                    <Line 
+                      data={{
+                        labels: analytics.weeklyProgress.map(w => w.week),
+                        datasets: [
+                          {
+                            label: 'Average Score (%)',
+                            data: analytics.weeklyProgress.map(w => w.avgScore),
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                            tension: 0.4,
+                            fill: true,
+                          }
+                        ]
+                      }} 
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                          legend: { position: 'bottom', labels: { color: '#fff' } }
+                        },
+                        scales: {
+                          y: { min: 0, max: 100, ticks: { color: '#bbb' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                          x: { ticks: { color: '#bbb' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                        }
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <p className="no-data-msg">Not enough weekly data yet.</p>
+                )}
+              </div>
+
+              {/* Bar Chart for Subject Performance */}
+              <div className="chart-card">
+                <h3>Performance by Subject</h3>
+                {analytics.subjectPerformance.length > 0 ? (
+                  <div className="chart-wrapper">
+                    <Bar 
+                      data={{
+                        labels: analytics.subjectPerformance.map(s => s.subject),
+                        datasets: [
+                          {
+                            label: 'Average Score (%)',
+                            data: analytics.subjectPerformance.map(s => s.avgScore),
+                            backgroundColor: '#10b981',
+                            borderRadius: 6
+                          }
+                        ]
+                      }} 
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                          legend: { position: 'bottom', labels: { color: '#fff' } }
+                        },
+                        scales: {
+                          y: { min: 0, max: 100, ticks: { color: '#bbb' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                          x: { ticks: { color: '#bbb' }, grid: { display: false } }
+                        }
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <p className="no-data-msg">Take some tests to see your subject breakdown.</p>
+                )}
+              </div>
+
+              {/* Polar Area Chart for Activity Breakdown */}
+              <div className="chart-card activity-breakdown">
+                <h3>Activity Breakdown</h3>
+                <div className="chart-wrapper">
+                  <PolarArea 
+                    data={{
+                      labels: ['Exams', 'Practice', 'Daily Quizzes'],
+                      datasets: [
+                        {
+                          data: [
+                            analytics.totalExams, 
+                            analytics.totalPractice, 
+                            analytics.totalDailyQuiz
+                          ],
+                          backgroundColor: [
+                            'rgba(239, 68, 68, 0.6)',   // red
+                            'rgba(16, 185, 129, 0.6)',  // green
+                            'rgba(59, 130, 246, 0.6)'   // blue
+                          ],
+                          borderWidth: 1,
+                          borderColor: 'rgba(255,255,255,0.2)'
+                        }
+                      ]
+                    }}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: { position: 'bottom', labels: { color: '#fff' } }
+                      },
+                      scales: {
+                        r: { ticks: { display: false }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
 
         {/* Overview Tab */}
         {activeTab === 'overview' && (

@@ -28,7 +28,7 @@ const MainNavbar = () => {
 			</button>
 
 			<ul className={`main-navbar-menu ${open ? "open" : ""}`}>
-				<li><Link to="/settings" onClick={close}>Settings</Link></li>
+				{/* <li><Link to="/settings" onClick={close}>Settings</Link></li> */}
 				<li><Link to="/statistics" onClick={close}>Statistics</Link></li>
 				<li><Link to="/practice" onClick={close}>Practice</Link></li>
 				<li><Link to="/exams" onClick={close}>Exams</Link></li>

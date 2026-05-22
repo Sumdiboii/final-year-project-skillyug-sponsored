@@ -125,6 +125,7 @@
 
 .lp-lp25-video-wrap{
     min-width:100% !important;
+    position: relative;
     
 }
 
@@ -367,8 +368,89 @@
 .lp-landingpage-2-5{ display:flex; flex-direction:row; align-items:center; justify-content:center; width:100vw; gap:2rem;  box-sizing:border-box; min-height: fit-content !important; }
 .lp-lp25-left, .lp-lp25-right { flex:1; display:flex; align-items:center; justify-content:center; flex-direction: column; gap:2.5rem; }
 .lp-vid-title-text { color: #ffffff; font-size: 2rem; font-weight: 700; text-align: center; font-family: 'Poppins', Arial, sans-serif; }
-.lp-lp25-video-wrap{ width:100%; min-width: 720px; border-radius: 18px; overflow:hidden; border:1px solid rgba(255,255,255,.18); box-shadow: 0 12px 32px rgba(0,0,0,.25); background: rgba(255,255,255,.06); backdrop-filter: blur(6px); }
-.lp-lp25-video{ width:100%; height:auto; display:block; }
+.lp-lp25-video-wrap{ width:100%; min-width: 720px; aspect-ratio: 16 / 9; border-radius: 18px; overflow:hidden; border:1px solid rgba(255,255,255,.18); box-shadow: 0 12px 32px rgba(0,0,0,.25); background: rgba(7, 10, 28, 0.6); backdrop-filter: blur(6px); position: relative; }
+.lp-lp25-video{ width:100%; height:100%; display:block; object-fit: contain; background: rgba(7, 10, 28, 0.8); }
+
+.lp-video-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,0.25);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.lp-lp25-video-wrap:hover .lp-video-controls {
+    opacity: 1;
+}
+
+.lp-play-button {
+    background: rgba(10, 15, 35, 0.7);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 999px;
+    width: 72px;
+    height: 72px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.35);
+    transition: transform 0.2s, background 0.2s, border-color 0.2s;
+    pointer-events: auto;
+}
+
+.lp-play-button svg {
+    width: 32px;
+    height: 32px;
+}
+
+.lp-play-button:hover {
+    transform: scale(1.04);
+    background: rgba(10, 15, 35, 0.85);
+    border-color: rgba(255,255,255,0.7);
+}
+
+.lp-controls-bar {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.lp-mute-button {
+    background: rgba(10, 15, 35, 0.7);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 12px;
+    width: 3rem;
+    height: 3rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+    transition: transform 0.2s, background 0.2s, border-color 0.2s;
+    pointer-events: auto;
+}
+
+.lp-mute-button svg {
+    width: 2rem;
+    height: 2rem;
+}
+
+.lp-mute-button:hover {
+    transform: translateY(-1px);
+    background: rgba(10, 15, 35, 0.85);
+    border-color: rgba(255,255,255,0.6);
+}
 
 @media (max-width: 900px){
     .lp-landingpage-2-5{ flex-direction: column; padding: 2rem 1rem}

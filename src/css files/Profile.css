@@ -273,6 +273,139 @@ select.info-input option {
   color: #ffffff;
 }
 
+/* XP and Achievements Section */
+.achievements-section {
+  margin-top: 1rem;
+}
+
+.profile-xp-container {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-xp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.profile-xp-level-badge {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+
+.profile-xp-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+}
+
+.profile-xp-current {
+  color: #10b981;
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin-right: 0.3rem;
+}
+
+.profile-xp-bar-bg {
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.profile-xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  border-radius: 6px;
+  transition: width 1s ease-out;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.profile-xp-hint {
+  text-align: right;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Badges Grid */
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.badge-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.badge-card.unlocked {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.badge-card.unlocked:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+}
+
+.badge-card.locked {
+  opacity: 0.6;
+  filter: grayscale(100%);
+}
+
+.badge-icon {
+  font-size: 3.5rem !important;
+  line-height: 1;
+}
+
+.badge-card.unlocked .badge-icon {
+  filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.5));
+}
+
+.badge-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+.badge-info p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+}
+
+.badge-lock {
+  position: absolute;
+  bottom: -10px;
+  background: #374151;
+  color: white;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .profile-details-grid {

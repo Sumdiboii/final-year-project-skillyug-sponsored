@@ -24,6 +24,7 @@ const Profile = () => {
   });
 
   const [tempInfo, setTempInfo] = useState({ ...studentInfo });
+  const [totalXP, setTotalXP] = useState(0);
 
   // Load user profile on component mount
   useEffect(() => {
@@ -54,6 +55,9 @@ const Profile = () => {
         
         setStudentInfo(profileData);
         setTempInfo(profileData);
+
+        const userXP = profile.totalXP || parseInt(localStorage.getItem('totalXP') || '0');
+        setTotalXP(userXP);
       } else {
         setError('Failed to load profile. Please try again.');
         // Redirect to login if not authenticated
@@ -135,6 +139,20 @@ const Profile = () => {
     const newAge = calculateAge(value);
     handleInputChange('age', newAge);
   };
+
+  // XP and Badge Calculations
+  const XP_PER_LEVEL = 100;
+  const xpLevel = Math.floor(totalXP / XP_PER_LEVEL) + 1;
+  const xpInCurrentLevel = totalXP % XP_PER_LEVEL;
+  const xpProgress = (xpInCurrentLevel / XP_PER_LEVEL) * 100;
+
+  const BADGES = [
+    { levelRequirement: 1, name: "Novice Explorer", icon: "🌱", desc: "Started the learning journey" },
+    { levelRequirement: 5, name: "Quiz Whiz", icon: "🧠", desc: "Reached Level 5" },
+    { levelRequirement: 10, name: "Persistent Scholar", icon: "📚", desc: "Reached Level 10" },
+    { levelRequirement: 25, name: "Mastermind", icon: "💡", desc: "Reached Level 25" },
+    { levelRequirement: 50, name: "PrepMark Champion", icon: "👑", desc: "Reached Level 50" },
+  ];
 
   if (loading) {
     return (
@@ -312,6 +330,40 @@ const Profile = () => {
                     )}
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Achievements and XP Section */}
+            <div className="details-card full-width achievements-section">
+              <h2 className="card-title">🏆 Badges & Achievements</h2>
+              
+              <div className="profile-xp-container">
+                <div className="profile-xp-header">
+                  <div className="profile-xp-level-badge">Lv. {xpLevel}</div>
+                  <div className="profile-xp-text">
+                    <span className="profile-xp-current">{totalXP} XP</span> Total
+                  </div>
+                </div>
+                <div className="profile-xp-bar-bg">
+                  <div className="profile-xp-bar-fill" style={{ width: `${xpProgress}%` }}></div>
+                </div>
+                <div className="profile-xp-hint">{XP_PER_LEVEL - xpInCurrentLevel} XP to next level</div>
+              </div>
+
+              <div className="badges-grid">
+                {BADGES.map((badge, idx) => {
+                  const unlocked = xpLevel >= badge.levelRequirement;
+                  return (
+                    <div key={idx} className={`badge-card ${unlocked ? 'unlocked' : 'locked'}`}>
+                      <div className="badge-icon">{badge.icon}</div>
+                      <div className="badge-info">
+                        <h3>{badge.name}</h3>
+                        <p>{badge.desc}</p>
+                      </div>
+                      {!unlocked && <div className="badge-lock">🔒 Unlocks at Lv. {badge.levelRequirement}</div>}
+                    </div>
+                  );
+                })}
               </div>
             </div>
 

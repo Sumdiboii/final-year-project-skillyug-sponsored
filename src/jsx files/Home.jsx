@@ -11,7 +11,8 @@ import { getUserProfile, updateUserProfile } from "../firebase/auth";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { user } = useAuth();
+  const currentUser = user;
   
   // XP System Configuration
   const XP_PER_LEVEL = 100; // 100 XP needed per level
@@ -205,13 +206,10 @@ const Home = () => {
     setTotalXP(newTotalXP);
     localStorage.setItem('totalXP', newTotalXP.toString());
     
-    // Update streak only if all questions are correct
-    let newStreak = streak;
-    if (correctCount === dailyQuizQuestions.length) {
-      newStreak = streak + 1;
-      setStreak(newStreak);
-      localStorage.setItem('userStreak', newStreak.toString());
-    }
+    // Update streak for completing the daily quiz (regardless of score)
+    const newStreak = streak + 1;
+    setStreak(newStreak);
+    localStorage.setItem('userStreak', newStreak.toString());
     
     // Mark quiz as completed for today
     const today = new Date().toDateString();

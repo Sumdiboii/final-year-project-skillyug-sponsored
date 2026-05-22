@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css files/LandingPage.css";
 import Navbar from "../components/Navbar";
@@ -16,6 +16,53 @@ const LandingPage = () => {
     const [scrolledDown, setScrolledDown] = React.useState(false);
     const [skillyugFlipped, setSkillyugFlipped] = useState(false);
     const lastScroll = React.useRef(window.scrollY);
+    const videoRef = useRef(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isMuted, setIsMuted] = useState(true);
+
+    const handlePlay = () => {
+        if (videoRef.current) {
+            videoRef.current.play();
+            setIsPlaying(true);
+        }
+    };
+
+    const handleMute = () => {
+        if (videoRef.current) {
+            videoRef.current.muted = !videoRef.current.muted;
+            setIsMuted(videoRef.current.muted);
+        }
+    };
+
+    const handleTogglePlayback = (event) => {
+        if (event) {
+            event.stopPropagation();
+        }
+        if (!videoRef.current) {
+            return;
+        }
+        if (videoRef.current.paused) {
+            videoRef.current.play();
+            setIsPlaying(true);
+        } else {
+            videoRef.current.pause();
+            setIsPlaying(false);
+        }
+    };
+
+    const handleVideoPlay = () => {
+        setIsPlaying(true);
+    };
+
+    const handleVideoPause = () => {
+        setIsPlaying(false);
+    };
+
+    const handleVideoLoaded = () => {
+        if (videoRef.current) {
+            videoRef.current.currentTime = 0.1;
+        }
+    };
 
     React.useEffect(() => {
         const handleScroll = () => {
@@ -176,18 +223,36 @@ const LandingPage = () => {
                  </div>
                 <div className="lp-lp25-left">
                     <div className="lp-vid-title-text">Experience our app in action</div>
-                    <div className="lp-lp25-video-wrap">
+                    <div className="lp-lp25-video-wrap" onClick={handleTogglePlayback}>
                         <video
-                                                                                    className="lp-lp25-video"
-                                                                                    src="/assets/276047_small.mp4"
-                                                                                    autoPlay
-                                                                                    loop
-                                                                                    muted
-                                                                                    controls
-                                                                                    playsInline
-                                                                                    preload="metadata"
-                                                                                    poster="/assets/app-poster.jpg"
-                                                                                ></video>
+                            ref={videoRef}
+                            className="lp-lp25-video"
+                            src="/assets/prepmarkvidfinal.mp4"
+                            playsInline
+                            loop
+                            muted={isMuted}
+                            preload="auto"
+                            onPlay={handleVideoPlay}
+                            onPause={handleVideoPause}
+                            onLoadedData={handleVideoLoaded}
+                        ></video>
+                        <div className="lp-video-controls">
+                            {!isPlaying && (
+                                <button className="lp-play-button" onClick={handleTogglePlayback}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                                </button>
+                            )}
+                            {(isPlaying) && (
+                                <div className="lp-controls-bar">
+                                    <button className="lp-mute-button" onClick={(event) => { event.stopPropagation(); handleMute(); }}>
+                                        {isMuted ? 
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0a6.5 6.5 0 0 1-1.18 3.89L21 19.07A8.47 8.47 0 0 0 21 12h-2zm-1.5-6.13L15.87 4.4A8.47 8.47 0 0 1 21 12h-2a6.48 6.48 0 0 0-4-5.87zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25A6.43 6.43 0 0 1 19 12a6.48 6.48 0 0 0-2.13-4.87L3 4.27zM12 4L7.83 8.17 12 12.34V4z"/></svg> : 
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                                        }
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className="lp-lp25-right">

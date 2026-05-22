@@ -595,3 +595,54 @@
     width: 40px;
   }
 }
+
+/* Charts Grid */
+.performance-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.chart-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.chart-card h3 {
+  margin: 0 0 1.5rem;
+  color: #fff;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.chart-wrapper {
+  width: 100%;
+  height: 300px;
+  position: relative;
+}
+
+.no-data-msg {
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  margin: auto;
+}
+
+.activity-breakdown {
+  grid-column: 1 / -1;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}

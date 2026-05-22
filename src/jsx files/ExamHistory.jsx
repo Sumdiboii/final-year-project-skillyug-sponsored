@@ -15,7 +15,11 @@ const ExamHistory = () => {
     const storedLogs = localStorage.getItem('examHistory');
     if (storedLogs) {
       const logs = JSON.parse(storedLogs);
-      setExamLogs(logs);
+      const sanitizedLogs = logs.map(log => ({
+        ...log,
+        percentage: Number(log.percentage || 0)
+      }));
+      setExamLogs(sanitizedLogs);
     }
   }, []);
 
