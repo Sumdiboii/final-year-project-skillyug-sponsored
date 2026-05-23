@@ -35,7 +35,7 @@ ChartJS.register(
 );
 
 const Statistics = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   // We use `user` because AuthContext exports `user`, not `currentUser`
   const currentUser = user;
   const [loading, setLoading] = useState(true);
@@ -61,11 +61,39 @@ const Statistics = () => {
   useEffect(() => {
     if (currentUser) {
       loadStatistics();
-    } else {
-      // If no user is logged in, stop loading
+    } else if (!authLoading) {
+      // If no user is logged in and auth finished loading, load local stats
+      loadLocalStats();
       setLoading(false);
     }
-  }, [currentUser]);
+  }, [currentUser, authLoading]);
+
+  const loadLocalStats = () => {
+    console.log('Loading local storage stats for unauthenticated user');
+    const localExamHistory = JSON.parse(localStorage.getItem('examHistory') || '[]');
+    const parsedExams = localExamHistory.map(log => ({
+      ...log,
+      timestamp: { toMillis: () => new Date(log.date).getTime(), toDate: () => new Date(log.date) }
+    }));
+    
+    const localPracticeHistory = JSON.parse(localStorage.getItem('practiceLogs') || '[]');
+    const parsedPractice = localPracticeHistory.map(log => ({
+      ...log,
+      percentage: log.score && log.totalQuestions ? ((log.score / log.totalQuestions) * 100).toFixed(1) : 0,
+      timestamp: { toMillis: () => new Date(log.date).getTime(), toDate: () => new Date(log.date) }
+    }));
+
+    setStats({
+      success: true,
+      examHistory: parsedExams,
+      practiceHistory: parsedPractice,
+      dailyQuizHistory: [],
+      userData: {
+        streak: parseInt(localStorage.getItem('userStreak') || '0'),
+        totalXP: parseInt(localStorage.getItem('totalXP') || '0'),
+      }
+    });
+  };
 
   const loadStatistics = async () => {
     try {
@@ -274,26 +302,13 @@ const Statistics = () => {
 
   const analytics = calculateAnalytics();
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="stats-container">
         <ParticleBackground />
         <MainNavbar />
         <div className="stats-content">
           <div className="loading-message">Loading your statistics...</div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  if (!currentUser) {
-    return (
-      <div className="stats-container">
-        <ParticleBackground />
-        <MainNavbar />
-        <div className="stats-content">
-          <div className="error-message">Please log in to view your statistics.</div>
         </div>
         <Footer />
       </div>
