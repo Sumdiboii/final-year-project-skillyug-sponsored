@@ -14,7 +14,7 @@ import {
   RadialLinearScale,
   ArcElement
 } from 'chart.js';
-import { Line, Bar, PolarArea } from 'react-chartjs-2';
+import { Line, Bar, PolarArea, Doughnut, Scatter } from 'react-chartjs-2';
 import '../css files/Statistics.css';
 import MainNavbar from '../components/MainNavbar';
 import Footer from '../components/Footer';
@@ -247,6 +247,32 @@ const Statistics = () => {
     // Perfect scores count
     const perfectScores = examHistory.filter(e => parseFloat(e.percentage) >= 100).length;
     
+    // Score Distribution
+    const scoreDistribution = {
+      excellent: 0, // >= 90
+      veryGood: 0,  // 75-89
+      good: 0,      // 60-74
+      average: 0,   // 40-59
+      needsImprovement: 0 // < 40
+    };
+
+    [...examHistory, ...practiceHistory].forEach(item => {
+      const score = parseFloat(item.percentage) || 0;
+      if (score >= 90) scoreDistribution.excellent++;
+      else if (score >= 75) scoreDistribution.veryGood++;
+      else if (score >= 60) scoreDistribution.good++;
+      else if (score >= 40) scoreDistribution.average++;
+      else scoreDistribution.needsImprovement++;
+    });
+
+    // Scatter Plot Data (Time Spent vs Score)
+    const timeVsScore = [...examHistory, ...practiceHistory]
+      .filter(item => item.timeSpent && item.percentage)
+      .map(item => ({
+        x: Math.round(item.timeSpent / 60), // Time in minutes
+        y: parseFloat(item.percentage)
+      }));
+    
     return {
       totalExams,
       totalPractice,
@@ -261,6 +287,8 @@ const Statistics = () => {
       subjectPerformance,
       weeklyProgress,
       perfectScores,
+      scoreDistribution,
+      timeVsScore,
       recentTests: [...examHistory, ...practiceHistory]
         .sort((a, b) => (b.timestamp?.toMillis() || 0) - (a.timestamp?.toMillis() || 0))
         .slice(0, 10)
@@ -445,7 +473,7 @@ const Statistics = () => {
               </div>
 
               {/* Polar Area Chart for Activity Breakdown */}
-              <div className="chart-card activity-breakdown">
+              <div className="chart-card">
                 <h3>Activity Breakdown</h3>
                 <div className="chart-wrapper">
                   <PolarArea 
@@ -459,9 +487,9 @@ const Statistics = () => {
                             analytics.totalDailyQuiz
                           ],
                           backgroundColor: [
-                            'rgba(239, 68, 68, 0.6)',   // red
-                            'rgba(16, 185, 129, 0.6)',  // green
-                            'rgba(59, 130, 246, 0.6)'   // blue
+                            'rgba(239, 68, 68, 0.6)',
+                            'rgba(16, 185, 129, 0.6)',
+                            'rgba(59, 130, 246, 0.6)'
                           ],
                           borderWidth: 1,
                           borderColor: 'rgba(255,255,255,0.2)'
@@ -480,6 +508,96 @@ const Statistics = () => {
                     }}
                   />
                 </div>
+              </div>
+
+              {/* Score Distribution Doughnut Chart */}
+              <div className="chart-card">
+                <h3>Score Distribution</h3>
+                <div className="chart-wrapper">
+                  <Doughnut 
+                    data={{
+                      labels: ['Excellent (90%+)', 'Very Good (75-89%)', 'Good (60-74%)', 'Average (40-59%)', 'Needs Improvement (<40%)'],
+                      datasets: [
+                        {
+                          data: [
+                            analytics.scoreDistribution?.excellent || 0,
+                            analytics.scoreDistribution?.veryGood || 0,
+                            analytics.scoreDistribution?.good || 0,
+                            analytics.scoreDistribution?.average || 0,
+                            analytics.scoreDistribution?.needsImprovement || 0,
+                          ],
+                          backgroundColor: [
+                            '#10b981', // green
+                            '#3b82f6', // blue
+                            '#f59e0b', // yellow
+                            '#f97316', // orange
+                            '#ef4444'  // red
+                          ],
+                          borderWidth: 1,
+                          borderColor: '#1a103c'
+                        }
+                      ]
+                    }}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: { position: 'bottom', labels: { color: '#fff', font: { size: 11 } } }
+                      },
+                      cutout: '65%'
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Time Spent vs Score Scatter Plot */}
+              <div className="chart-card activity-breakdown">
+                <h3>Time Spent vs. Score Correlation</h3>
+                {analytics.timeVsScore?.length > 0 ? (
+                  <div className="chart-wrapper">
+                    <Scatter 
+                      data={{
+                        datasets: [
+                          {
+                            label: 'Tests Taken',
+                            data: analytics.timeVsScore,
+                            backgroundColor: '#ec4899',
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                          }
+                        ]
+                      }} 
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                          legend: { display: false },
+                          tooltip: {
+                            callbacks: {
+                              label: (ctx) => `Time: ${ctx.raw.x} mins, Score: ${ctx.raw.y}%`
+                            }
+                          }
+                        },
+                        scales: {
+                          y: { 
+                            min: 0, 
+                            max: 100, 
+                            title: { display: true, text: 'Score (%)', color: '#fff' },
+                            ticks: { color: '#bbb' }, 
+                            grid: { color: 'rgba(255,255,255,0.1)' } 
+                          },
+                          x: { 
+                            title: { display: true, text: 'Duration (Minutes)', color: '#fff' },
+                            ticks: { color: '#bbb' }, 
+                            grid: { color: 'rgba(255,255,255,0.1)' } 
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <p className="no-data-msg">Complete a test with a timer to see correlation data.</p>
+                )}
               </div>
 
             </div>

@@ -1,6 +1,6 @@
 /* Statistics Container */
 .stats-container {
-  min-width: 100vw;
+  width: 100vw;
   min-height: 100vh;
   padding: 8rem 2rem 4rem;
   position: relative;
